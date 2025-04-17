@@ -1,6 +1,13 @@
 {
 	"pages": [ //pages数组中第一项表示应用启动页，参考：https://uniapp.dcloud.io/collocation/pages
 	{
+		"path" : "pages/map/map",
+		"style" : 
+		{
+			"navigationBarTitleText" : "地图"
+		}
+	},
+	{
 		"path" : "pages/PreLogin/PreLogin",
 		"style" : 
 		{
@@ -23,7 +30,21 @@
 			"path" : "pages/more/more",
 			"style" : 
 			{
-				"navigationBarTitleText" : ""
+				"navigationBarTitleText" : "更多详情"
+			}
+		},
+		{
+			"path" : "pages/list/list",
+			"style" : 
+			{
+				"navigationBarTitleText" : "列表"
+			}
+		},
+		{
+			"path" : "pages/settings/settings",
+			"style" : 
+			{
+				"navigationBarTitleText" : "设置"
 			}
 		}
 	],
@@ -32,6 +53,27 @@
 		"navigationBarTitleText": "uni-app",
 		"navigationBarBackgroundColor": "#F8F8F8",
 		"backgroundColor": "#F8F8F8"
+	},
+	"tabBar": {
+		 "color": "#7A7E83",
+		        "selectedColor": "#3cc51f",
+		       
+		"list": [
+			{
+				"text": "地图",
+				"pagePath" : "pages/map/map"
+				
+			},
+			{
+				"text": "列表",
+				"pagePath": "pages/list/list"
+			}	
+			,{
+				"text": "设置",
+				"pagePath": "pages/settings/settings"
+			}
+			
+		]
 	},
 	"uniIdRouter": {}
 }
