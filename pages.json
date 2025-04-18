@@ -46,6 +46,48 @@
 			{
 				"navigationBarTitleText" : "设置"
 			}
+		},
+		{
+			"path" : "pages/user/user",
+			"style" : 
+			{
+				"navigationBarTitleText" : "用户管理"
+			}
+		},
+		{
+			"path" : "pages/error/error",
+			"style" : 
+			{
+				"navigationBarTitleText" : "异常信息"
+			}
+		},
+		{
+			"path" : "pages/account/account",
+			"style" : 
+			{
+				"navigationBarTitleText" : "账号管理"
+			}
+		},
+		{
+			"path" : "pages/card-record/card-record",
+			"style" : 
+			{
+				"navigationBarTitleText" : "发卡记录"
+			}
+		},
+		{
+			"path" : "pages/setting/setting",
+			"style" : 
+			{
+				"navigationBarTitleText" : "设置"
+			}
+		},
+		{
+			"path" : "pages/remote-charge/remote-charge",
+			"style" : 
+			{
+				"navigationBarTitleText" : "远程充值"
+			}
 		}
 	],
 	"globalStyle": {

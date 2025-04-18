@@ -20,32 +20,32 @@ const menuList = ref([
   {
     title: '用户管理',
     icon: '/static/user_icon.png',
-    url: '/pages/user/index'
+    url: '/pages/user/user'
   },
   {
     title: '账号管理',
     icon: '/static/account_icon.png',
-    url: '/pages/account/index'
+    url: '/pages/account/account'
   },
   {
     title: '异常信息',
     icon: '/static/alarm_icon.png',
-    url: '/pages/error/index'
+    url: '/pages/error/error'
   },
   {
     title: '发卡记录',
     icon: '/static/charge_icon.png',
-    url: '/pages/card-record/index'
+    url: '/pages/card-record/card-record'
   },
   {
     title: '设置',
     icon: '/static/setting_icon.png',
-    url: '/pages/setting/index'
+    url: '/pages/setting/setting'
   },
   {
     title: '远程充值',
     icon: '/static/icons/remote-charge.png',
-    url: '/pages/remote-charge/index'
+    url: '/pages/remote-charge/remote-charge'
   }
 ])
 
