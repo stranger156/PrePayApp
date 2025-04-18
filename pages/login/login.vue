@@ -13,14 +13,14 @@
       </view>
     </view>
     <!-- 记住密码和自动登录复选框 -->
-    <view class="checkbox-container">
+ <!--   <view class="checkbox-container">
       <view class="checkbox-item">
         <checkbox v-model="rememberPasswords">记住密码</checkbox>
       </view>
       <view class="checkbox-item">
         <checkbox v-model="loginAuto">自动登录</checkbox>
       </view>
-    </view>
+    </view> -->
     <!-- 登录按钮 -->
     <button  class="login-button" @click="login">登录</button>
    
@@ -37,11 +37,11 @@ import { ref, onMounted, getCurrentInstance } from 'vue';
 // import { useStorage } from '@/utils/storage.js'; // 假设你已经封装了存储工具函数
 
 // // 定义页面数据
-// const account = ref('');
-// const passwords = ref('');
-// const rememberPasswords = ref(false);
-// const loginAuto = ref(false);
-// const { proxy } = getCurrentInstance();
+const account = ref('');
+const passwords = ref('');
+const rememberPasswords = ref(false);
+const loginAuto = ref(false);
+const { proxy } = getCurrentInstance();
 
 // // 检查并请求权限（这里以示例权限为例，实际需根据需求调整）
 // const checkAndRequestPermissions = async () => {

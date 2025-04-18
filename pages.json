@@ -4,7 +4,8 @@
 		"path" : "pages/map/map",
 		"style" : 
 		{
-			"navigationBarTitleText" : "地图"
+			"navigationBarTitleText" : "地图",
+			"navigationBarBackgroundColor": "#007AFF"
 		}
 	},
 	{
@@ -75,5 +76,8 @@
 			
 		]
 	},
-	"uniIdRouter": {}
+	"uniIdRouter": {},
+	"usingComponents": {
+	    "map": "/uni_modules/@dcloudio/uni-map/components/uni-map/uni-map"
+	  }
 }

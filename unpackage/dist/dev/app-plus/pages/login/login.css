@@ -1,0 +1,60 @@
+
+.container[data-v-e4e4508d] {
+	background-image: url(../../static/background_main.jpg);
+	background-size: cover;
+ padding: 20px;
+  background-color: #fff;
+}
+.header[data-v-e4e4508d] {
+  text-align: center;
+  margin-bottom: 20px;
+}
+.title[data-v-e4e4508d] {
+  font-size: 24px;
+  font-weight: bold;
+}
+.input-container[data-v-e4e4508d] {
+  margin-top: 30vh;
+}
+.input-item[data-v-e4e4508d] {
+  margin-bottom: 20px;
+  display: flex;
+  align-items: center;
+  justify-items: center;
+}
+.input-item uni-input[data-v-e4e4508d] {
+  width: 60vw;
+  padding: 10px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+}
+.checkbox-container[data-v-e4e4508d] {
+  margin-bottom: 20px;
+}
+.checkbox-item[data-v-e4e4508d] {
+  margin-bottom: 10px;
+  float: left;
+ margin-left: 10%;
+}
+.login-button[data-v-e4e4508d] {
+
+  width: 100%;
+  padding: 10px;
+  background-color: #007AFF;
+  color: #fff;
+  border: none;
+  border-radius: 5px;
+  font-size: 16px;
+}
+.phone-call[data-v-e4e4508d] {
+  text-align: center;
+  margin-top: 20px;
+  color: #007AFF;
+  cursor: pointer;
+}
+.detail-button[data-v-e4e4508d] {
+  text-align: center;
+  margin-top: 20px;
+  color: #007AFF;
+  cursor: pointer;
+}
