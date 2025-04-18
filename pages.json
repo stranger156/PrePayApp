@@ -66,24 +66,27 @@
 	},
 	"tabBar": {
 		 "color": "#7A7E83",
-		        "selectedColor": "#3cc51f",
-		       
-		"list": [
-			{
-				"text": "地图",
-				"pagePath" : "pages/map/map"
-				
-			},
-			{
-				"text": "列表",
-				"pagePath": "pages/list/list"
-			}	
-			,{
-				"text": "设置",
-				"pagePath": "pages/settings/settings"
-			}
-			
-		]
+		 	 "selectedColor": "#3cc51f",
+		 	 "backgroundColor": "#ffffff",
+		 	 "borderStyle": "black",
+		 	 "fontSize": 0,   
+		 	"list": [
+		   {
+		     "pagePath": "pages/map/map",
+		     "iconPath": "static/map_icon_dark.png",
+		     "selectedIconPath": "/static/map_icon_blue.png"
+		   },
+		   {
+		     "pagePath": "pages/list/list",
+		     "iconPath": "/static/list_icon_dark.png",
+		     "selectedIconPath": "static/list_icon_blue.png"
+		   },
+		   {
+		     "pagePath": "pages/settings/settings",
+		     "iconPath": "static/setting_icon_dark.png",
+		     "selectedIconPath": "static/setting_icon_blue.png"
+		   }
+		 ]
 	},
 	"uniIdRouter": {}
 }
