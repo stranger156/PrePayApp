@@ -99,6 +99,13 @@
 			{
 				"navigationBarTitleText" : "远程充值"
 			}
+		},
+		{
+			"path" : "pages/change-password/change-password",
+			"style" : 
+			{
+				"navigationBarTitleText" : "修改密码"
+			}
 		}
 	],
 	"globalStyle": {
