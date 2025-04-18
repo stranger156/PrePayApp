@@ -133,6 +133,7 @@
 	"tabBar": {
 		 "color": "#7A7E83",
 		 	 "selectedColor": "#3cc51f",
+			  "iconWidth": "100px",
 		 	 "backgroundColor": "#ffffff",
 		 	 "borderStyle": "black",
 		 	 "fontSize": 0,   
