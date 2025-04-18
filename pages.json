@@ -35,9 +35,19 @@
 		},
 		{
 			"path" : "pages/list/list",
-			"style" : 
-			{
-				"navigationBarTitleText" : "列表"
+			"style": {
+			  "navigationBarTitleText": "我的换热站",
+			  "navigationBarBackgroundColor": "#1E90FF",
+			  "navigationBarTextStyle": "white",
+			  "app-plus": {
+			    "titleNView": {
+			      "backgroundColor": "#1E90FF",
+			      "titleText": "我的换热站",
+			      "titleColor": "#FFFFFF",
+			      "type": "default",
+			      "titleSize": "18px"
+			    }
+			  }
 			}
 		},
 		{
