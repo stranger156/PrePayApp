@@ -96,11 +96,11 @@ const navigateToDetail = (station) => {
 </script>
 
 <style lang="scss" scoped>
-.container {
-  padding: 20rpx;
-  background-color: #f5f5f5;
-  min-height: 100vh;
-}
+// .container {
+//   padding: 20rpx;
+//   background-color: #f5f5f5;
+//   min-height: 100vh;
+// }
 
 .header {
   margin-bottom: 30rpx;
