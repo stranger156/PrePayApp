@@ -69,8 +69,8 @@
         </view>
         
         <view class="popup-buttons">
-          <button class="popup-button" @click="viewDeviceDetail">查看详情</button>
-          <button class="popup-button primary" @click="controlDevice">远程控制</button>
+          <button class="popup-button" @click="viewDeviceDetail">导航到换热站</button>
+          <button class="popup-button primary" @click="controlDevice">查看实时数据</button>
         </view>
       </view>
     </view>
