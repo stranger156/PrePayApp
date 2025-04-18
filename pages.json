@@ -36,9 +36,19 @@
 		},
 		{
 			"path" : "pages/list/list",
-			"style" : 
-			{
-				"navigationBarTitleText" : "列表"
+			"style": {
+			  "navigationBarTitleText": "我的换热站",
+			  "navigationBarBackgroundColor": "#1E90FF",
+			  "navigationBarTextStyle": "white",
+			  "app-plus": {
+			    "titleNView": {
+			      "backgroundColor": "#1E90FF",
+			      "titleText": "我的换热站",
+			      "titleColor": "#FFFFFF",
+			      "type": "default",
+			      "titleSize": "18px"
+			    }
+			  }
 			}
 		},
 		{
@@ -46,6 +56,48 @@
 			"style" : 
 			{
 				"navigationBarTitleText" : "设置"
+			}
+		},
+		{
+			"path" : "pages/user/user",
+			"style" : 
+			{
+				"navigationBarTitleText" : "用户管理"
+			}
+		},
+		{
+			"path" : "pages/error/error",
+			"style" : 
+			{
+				"navigationBarTitleText" : "异常信息"
+			}
+		},
+		{
+			"path" : "pages/account/account",
+			"style" : 
+			{
+				"navigationBarTitleText" : "账号管理"
+			}
+		},
+		{
+			"path" : "pages/card-record/card-record",
+			"style" : 
+			{
+				"navigationBarTitleText" : "发卡记录"
+			}
+		},
+		{
+			"path" : "pages/setting/setting",
+			"style" : 
+			{
+				"navigationBarTitleText" : "设置"
+			}
+		},
+		{
+			"path" : "pages/remote-charge/remote-charge",
+			"style" : 
+			{
+				"navigationBarTitleText" : "远程充值"
 			}
 		}
 	],
@@ -57,24 +109,27 @@
 	},
 	"tabBar": {
 		 "color": "#7A7E83",
-		        "selectedColor": "#3cc51f",
-		       
-		"list": [
-			{
-				"text": "地图",
-				"pagePath" : "pages/map/map"
-				
-			},
-			{
-				"text": "列表",
-				"pagePath": "pages/list/list"
-			}	
-			,{
-				"text": "设置",
-				"pagePath": "pages/settings/settings"
-			}
-			
-		]
+		 	 "selectedColor": "#3cc51f",
+		 	 "backgroundColor": "#ffffff",
+		 	 "borderStyle": "black",
+		 	 "fontSize": 0,   
+		 	"list": [
+		   {
+		     "pagePath": "pages/map/map",
+		     "iconPath": "static/map_icon_dark.png",
+		     "selectedIconPath": "/static/map_icon_blue.png"
+		   },
+		   {
+		     "pagePath": "pages/list/list",
+		     "iconPath": "/static/list_icon_dark.png",
+		     "selectedIconPath": "static/list_icon_blue.png"
+		   },
+		   {
+		     "pagePath": "pages/settings/settings",
+		     "iconPath": "static/setting_icon_dark.png",
+		     "selectedIconPath": "static/setting_icon_blue.png"
+		   }
+		 ]
 	},
 	"uniIdRouter": {},
 	"usingComponents": {
