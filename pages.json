@@ -116,6 +116,7 @@
 	},
 	"tabBar": {
 		 "color": "#7A7E83",
+		 "iconWidth": "100px",
 		 	 "selectedColor": "#3cc51f",
 		 	 "backgroundColor": "#ffffff",
 		 	 "borderStyle": "black",
