@@ -12,28 +12,39 @@
     <view class="map-container">
       <map 
         id="stationMap"
-        style="width: 100%; height: 300px;"
+        style="width: 100%; height: 100%;"
         :latitude="mapCenter.latitude"
         :longitude="mapCenter.longitude"
         :markers="markers"
         show-location
         @markertap="handleMarkerTap"
       ></map>
-    </view>
 
-    <!-- 换热站列表 -->
-    <view class="station-list">
-      <view 
-        v-for="(station, index) in stations" 
-        :key="index" 
-        class="station-item"
-        @click="navigateToDetail(station)"
-      >
-        <view class="station-name">
-          <text class="chinese-name">{{ station.chineseName }}</text>
-          <text class="english-name">{{ station.englishName }}</text>
+      <!-- 信息弹窗 -->
+      <view v-if="selectedStation" class="info-window">
+        <view class="info-header">
+          <text class="title">{{ selectedStation.chineseName }}</text>
+          <uni-icons 
+            type="close" 
+            size="20" 
+            color="#999" 
+            @click="selectedStation = null"
+          ></uni-icons>
         </view>
-   <!--     <uni-icons type="arrowright" size="16" color="#999"></uni-icons> -->
+        <view class="info-content">
+          <view class="info-item">
+            <text class="label">英文名称：</text>
+            <text class="value">{{ selectedStation.englishName }}</text>
+          </view>
+          <view class="info-item">
+            <text class="label">设备状态：</text>
+            <text class="value status-active">正常运行</text>
+          </view>
+          <view class="info-item">
+            <text class="label">最后上报：</text>
+            <text class="value">2023-08-20 14:30</text>
+          </view>
+        </view>
       </view>
     </view>
   </view>
@@ -42,14 +53,14 @@
 <script setup>
 import { ref } from 'vue';
 
-// 统计数据
+// 响应式数据
+const selectedStation = ref(null);
 const totalStations = ref(986);
 const totalDevices = ref(1462);
 
-// 地图中心点和标记点 - 修改为北京坐标便于测试
 const mapCenter = ref({
-  latitude: 39.9042,  // 北京纬度
-  longitude: 116.4074 // 北京经度
+  latitude: 39.9042,
+  longitude: 116.4074
 });
 
 const markers = ref([
@@ -58,13 +69,13 @@ const markers = ref([
     latitude: 39.9042,
     longitude: 116.4074,
     title: '测试标记',
-    iconPath: '../../static/marker.png', // 确保此路径有图片
+    iconPath: '../../static/mapLogo.png',
     width: 30,
     height: 30
-  }
+  },
+ 
 ]);
 
-// 换热站列表数据
 const stations = ref([
   { 
     chineseName: '海沃德', 
@@ -78,45 +89,36 @@ const stations = ref([
   }
 ]);
 
-// 点击地图标记
+// 处理标记点击
 const handleMarkerTap = (e) => {
-  const markerId = e.markerId;
-  const station = stations.value.find(item => item.id === markerId);
-  if (station) {
-    navigateToDetail(station);
-  }
-};
-
-// 跳转到详情页
-const navigateToDetail = (station) => {
-  uni.navigateTo({
-    url: `/pages/stationDetail/stationDetail?name=${encodeURIComponent(station.chineseName)}`
-  });
+  const markerId = e.detail.markerId;
+  selectedStation.value = stations.value.find(item => item.id === markerId);
 };
 </script>
 
 <style lang="scss" scoped>
-// .container {
-//   padding: 20rpx;
-//   background-color: #f5f5f5;
-//   min-height: 100vh;
-// }
+.container {
+  display: flex;
+  flex-direction: column;
+  height: 85vh;
+}
 
 .header {
-  margin-bottom: 30rpx;
+  flex: 0 0 100rpx;
+  padding: 10rpx 20rpx;
   
   .stats {
     background-color: #fff;
-    border-radius: 12rpx;
-    padding: 30rpx;
-    box-shadow: 0 4rpx 12rpx rgba(0, 0, 0, 0.05);
+    border-radius: 10rpx;
+    padding: 10rpx;
+    box-shadow: 0 4rpx 10rpx rgba(0, 0, 0, 0.05);
     
     &-title {
       display: block;
       font-size: 36rpx;
       font-weight: bold;
       color: #333;
-      margin-bottom: 15rpx;
+      margin-bottom: 10rpx;
     }
     
     &-info {
@@ -127,41 +129,56 @@ const navigateToDetail = (station) => {
 }
 
 .map-container {
-  margin-bottom: 30rpx;
-  border-radius: 12rpx;
-  overflow: hidden;
+  flex: 1;
+  border-radius: 10rpx;
   box-shadow: 0 4rpx 12rpx rgba(0, 0, 0, 0.05);
-  height: 300px; /* 确保高度 */
+  margin: 0 20rpx 20rpx;
+  overflow: hidden;
+  position: relative;
 }
 
-.station-list {
-  background-color: #fff;
+.info-window {
+  position: absolute;
+  bottom: 20rpx;
+  left: 20rpx;
+  right: 20rpx;
+  background: white;
   border-radius: 12rpx;
-  overflow: hidden;
-  box-shadow: 0 4rpx 12rpx rgba(0, 0, 0, 0.05);
-  
-  .station-item {
+  padding: 25rpx;
+  box-shadow: 0 8rpx 24rpx rgba(0, 0, 0, 0.1);
+  z-index: 999;
+
+  .info-header {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    padding: 30rpx;
-    border-bottom: 1rpx solid #f0f0f0;
+    margin-bottom: 20rpx;
     
-    &:last-child {
-      border-bottom: none;
+    .title {
+      font-size: 32rpx;
+      font-weight: 600;
+      color: #333;
     }
-    
-    .station-name {
-      .chinese-name {
-        display: block;
-        font-size: 32rpx;
-        color: #333;
-        margin-bottom: 8rpx;
-      }
+  }
+
+  .info-content {
+    .info-item {
+      display: flex;
+      justify-content: space-between;
+      margin-bottom: 15rpx;
+      font-size: 28rpx;
       
-      .english-name {
-        font-size: 26rpx;
-        color: #999;
+      .label {
+        color: #666;
+      }
+
+      .value {
+        color: #333;
+        font-weight: 500;
+        
+        &.status-active {
+          color: #67C23A;
+        }
       }
     }
   }
