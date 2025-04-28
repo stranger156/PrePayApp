@@ -33,9 +33,9 @@ const menuList = ref([
     url: '/pages/error/error'
   },
   {
-    title: '发卡记录',
+    title: '充值记录',
     icon: '/static/charge_icon.png',
-    url: '/pages/card-record/card-record'
+    url: '/pages/recharge-record/recharge-record'
   },
   {
     title: '设置',
