@@ -185,7 +185,10 @@ export const getStationList=async()=>{
 		url: "/web/stations/page",
 		method: 'GET', 
 		headers: {
-			'token': token
-		}
+                "token": token
+            },
+		data:{
+			page:1,
+			size:10000}
 	})
 }
