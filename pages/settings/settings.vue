@@ -18,7 +18,7 @@ import { ref } from 'vue'
 
 const menuList = ref([
   {
-    title: '用户管理',
+    title: '企业管理',
     icon: '/static/user_icon.png',
     url: '/pages/user/user'
   },
