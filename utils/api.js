@@ -25,7 +25,11 @@ export const getStationList=async()=>{
 		url: "/web/stations/page",
 		method: 'GET', 
 		headers: {
-                'Authorization': `Bearer ${token}`
-            }
+                "token": token
+            },
+		data:{
+			page:1,
+			size:10000
+		}
 	})
 }

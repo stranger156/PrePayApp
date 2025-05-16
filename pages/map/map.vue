@@ -2,12 +2,7 @@
   <view class="container">
     <!-- 顶部统计信息 -->
     <view class="header">
-    <!--  <view class="stats">
-        <text class="stats-title">我的换热站</text>
-        <input class="stats-info" placeholder="Q 共计{{ totalStations }}个换热站，{{ totalDevices }}台设备..."></input>
-      </view> -->
 	  <view class="stats">
-	    <text class="stats-title">我的换热站</text>
 	    <view class="search-container">
 	      <uni-icons 
 	        type="search" 
@@ -17,8 +12,14 @@
 	      ></uni-icons>
 	      <input 
 	        class="stats-info" 
-	        placeholder="Q 共计{{ totalStations }}个换热站，{{ totalDevices }}台设备..."
-	      >
+			v-model=input
+	        :placeholder="`共计${totalStations}个换热站`"
+	      > <button 
+      class="search-btn" 
+     @click="handleEnter"
+    >
+      搜索
+    </button>
 	    </view>
 	  </view>
     </view>
@@ -39,7 +40,7 @@
       <!-- 信息弹窗 -->
       <view v-if="selectedStation" class="info-window">
         <view class="info-header">
-          <text class="title">{{ selectedStation.chineseName }}</text>
+          <text class="title">{{ selectedStation.stationName }}</text>
           <uni-icons 
             type="close" 
             size="20" 
@@ -49,9 +50,25 @@
         </view>
         <view class="info-content">
           <view class="info-item">
-            <text class="label">英文名称：</text>
-            <text class="value">{{ selectedStation.englishName }}</text>
+            <text class="label">所属公司：</text>
+            <text class="value">{{ selectedStation.company }}</text>
           </view>
+		  <view class="info-item">
+		    <text class="label">负责人：</text>
+		    <text class="value">{{ selectedStation.username }}</text>
+		  </view>
+		  <view class="info-item">
+		    <text class="label">联系电话：</text>
+		    <text class="value">{{ selectedStation.phone }}</text>
+		  </view>
+		  <view class="info-item">
+		    <text class="label">详细地址：</text>
+		    <text class="value">{{ selectedStation.address }}</text>
+		  </view>
+		  <view class="info-item">
+		    <text class="label">站点简介：</text>
+		    <text class="value">{{ selectedStation.detail }}</text>
+		  </view>
           <view class="info-item">
             <text class="label">设备状态：</text>
             <text class="value status-active">正常运行</text>
@@ -67,66 +84,64 @@
 </template>
 
 <script setup>
-import { onMounted, ref } from 'vue';
+import { onMounted, reactive, ref } from 'vue';
 import uniIcons from '@dcloudio/uni-ui/lib/uni-icons/uni-icons.vue'
 import { getStationList } from '../../utils/api';
 
 // 响应式数据
 const selectedStation = ref(null);
-const totalStations = ref(986);
-const totalDevices = ref(1462);
+const totalStations = ref(0);
+const input=ref(null)
 
 const mapCenter = ref({
   latitude: 39.9042,
   longitude: 116.4074
 });
 
-const markers = ref([
-  {
-    id: 1,
-    latitude: 39.9042,
-    longitude: 116.4074,
-    iconPath: '../../static/mapLogo.png',
-    width: 30,
-    height: 30
-  },
- {
-   id: 2,
-   latitude: 50.9042,
-   longitude: 116.4074,
-   iconPath: '../../static/mapLogo.png',
-   width: 30,
-   height: 30
- },
-]);
+const markers = reactive([]);
 
-const stations = ref([
-  { 
-    chineseName: '海沃德', 
-    englishName: 'Hayward',
-    id: 1
-  },
-  { 
-    chineseName: '雷德伍德城', 
-    englishName: 'Redwood City',
-    id: 2
-  }
-]);
+const stations = reactive([]);
 
 // 处理标记点击
 const handleMarkerTap = (e) => {
   const markerId = e.detail.markerId;
-  selectedStation.value = stations.value.find(item => item.id === markerId);
+  selectedStation.value = stations.find(item => item.id === markerId);
 };
 
 // 在script中添加
 const handleMapTap = () => {
   selectedStation.value = null;
 }
+
+//处理输入框
+const handleEnter=()=>{
+	selectedStation.value = stations.find(item => item.address.includes(input.value.toLowerCase()))||null;
+}
+
 onMounted:{
-	console.log(888)
 getStationList().then(res=>{
-	console.log(res)
+	let num=0;
+	totalStations.value=res.data.records.length
+	res.data.records.forEach(item=>{
+		num++;
+		markers.push({
+			id: num,
+			latitude: item.latitude,
+			longitude: item.longitude,
+			iconPath: '../../static/mapLogo.png',
+			width: 30,
+			height: 30
+  })
+  stations.push( { 
+    phone:item.phone,
+	company:item.company,
+    id: num,
+	address: item.address,
+	detail: item.detail,
+	stationName: item.stationName,
+	userName: item.userName
+  })
+	})
 })
 }
 </script>
@@ -160,13 +175,25 @@ getStationList().then(res=>{
 	  position: relative;
 	  display: flex;
 	  align-items: center;
+	  padding: 12rpx;
 	  
 	  .search-icon {
 	    position: absolute;
 	    left: 15rpx;
 	    z-index: 1;
 	  }
-	
+	.search-btn {
+	  /* 按钮样式自定义 */
+	  min-width: 60rpx;
+	  height: 60rpx;
+	  line-height: 60rpx;
+	  padding: 0 16rpx;
+	  border-radius: 4rpx;
+	  font-size: 28rpx;
+	  border: none;
+	  outline: none;
+	   box-shadow: 0 4rpx 10rpx rgba(0, 0, 0, 0.05);
+	}
 	  .stats-info {
 	    flex: 1;
 	    padding-left: 70rpx;  // 给图标留出空间
@@ -174,7 +201,7 @@ getStationList().then(res=>{
 	    font-size: 28rpx;
 	    color: #666;
 	    background-color: #fff;
-	    border-radius: 30rpx;
+	   
 	    box-shadow: 0 4rpx 10rpx rgba(0, 0, 0, 0.05);
 	    
 	    // 调整placeholder颜色
