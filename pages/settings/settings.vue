@@ -10,6 +10,10 @@
       <text class="title">{{ item.title }}</text>
       <image class="arrow" src="/static/enter_icon.png" mode="aspectFit" />
     </view>
+	
+	 <view class="logout-wrapper">
+	   <button class="logout-button" @click="logout">退出登录</button>
+	 </view>
   </view>
 </template>
 
@@ -38,19 +42,27 @@ const menuList = ref([
     url: '/pages/recharge-record/recharge-record'
   },
   {
-    title: '设置',
+    title: '修改密码',
     icon: '/static/setting_icon.png',
-    url: '/pages/setting/setting'
+    url: '/pages/change-password/change-password'
   },
-  {
-    title: '远程充值',
-    icon: '/static/icons/remote-charge.png',
-    url: '/pages/remote-charge/remote-charge'
-  }
 ])
 
 function navigate(url) {
   uni.navigateTo({ url })
+}
+function logout() {
+  uni.showModal({
+    title: '提示',
+    content: '确定要退出登录吗？',
+    success(res) {
+      if (res.confirm) {
+        uni.redirectTo({
+          url: '/pages/login/login' // 退出后跳转到登录页
+        })
+      }
+    }
+  })
 }
 </script>
 
@@ -77,5 +89,17 @@ function navigate(url) {
 .arrow {
   width: 18px;
   height: 18px;
+}
+.logout-wrapper {
+  margin-top: 32px;
+  padding: 0 16px;
+}
+
+.logout-button {
+  background-color: #007aff;
+  color: white;
+  border-radius: 8px;
+  font-size: 16px;
+  padding: 6px 0;
 }
 </style>

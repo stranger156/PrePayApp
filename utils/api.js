@@ -1,4 +1,4 @@
-import {getTokenFromLocalStorage}from "../store/user.js"
+import {getTokenFromLocalStorage, getUser}from "../store/user.js"
 import  request from "./request";
 
 // 登录接口
@@ -10,21 +10,19 @@ export const login = (params) => {
     });
 };
 
-// 注册接口
-export const register = (params) => {
-    return request({
-        url: "/web/user/add",
-        method: 'POST',
-		params
-    });
-};
-
 // 获取公司列表接口
-export const fetchCompanyList = (params) => {
+export const fetchCompanyList =async()=> {
+	const token = await getTokenFromLocalStorage();
 	return request({
-		url: "web/company/page",
+		url: "/web/company/page",
 		method: 'GET',
-		params
+		headers: {
+			'token': token
+		},
+		data: {
+			page: 1,
+			size: 10000
+		}
 	});
 };
 
@@ -64,11 +62,64 @@ export const deleteStation = (params) => {
 };
 
 // 获取用户列表接口
-export const fetchUserList = (params) => {
+export const fetchUserList=async()=> {
+	const token = await getTokenFromLocalStorage();
 	return request({
 		url: "/web/user/page",
 		method: 'GET',
-		params
+		headers: {
+			'token': token
+		},
+		data: {
+			page: 1,
+			size: 10000
+		}
+	});
+};
+
+// 获取登录信息接口
+export const fetchLoginList=async()=> {
+	const token = await getTokenFromLocalStorage();
+	return request({
+		url: "/web/login/errors",
+		method: 'GET',
+		headers: {
+			'token': token
+		}
+	});
+};
+
+// 获取充值记录接口
+export const fetchRechargeList=async()=> {
+	const token = await getTokenFromLocalStorage();
+	return request({
+		url: "/web/recharge/page",
+		method: 'GET',
+		headers: {
+			'token': token
+		},
+		data: {
+			'page': 1,
+			'size': 10000
+		}
+	});
+};
+
+// 修改密码接口
+export const revisePwd=async(params)=> {
+	const token = await getTokenFromLocalStorage();
+	const user = await getUser();
+	return request({
+		url: "/web/user/changePassword",
+		method: 'POST',
+		headers: {
+			'token': token
+		},
+		data: {
+			'userName': user,
+			'oldPassword': params.oldpassword,
+			'newPassword': params.newpassword
+		}
 	});
 };
 
