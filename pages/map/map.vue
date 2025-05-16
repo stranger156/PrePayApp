@@ -67,8 +67,9 @@
 </template>
 
 <script setup>
-import { ref } from 'vue';
+import { onMounted, ref } from 'vue';
 import uniIcons from '@dcloudio/uni-ui/lib/uni-icons/uni-icons.vue'
+import { getStationList } from '../../utils/api';
 
 // 响应式数据
 const selectedStation = ref(null);
@@ -122,7 +123,12 @@ const handleMarkerTap = (e) => {
 const handleMapTap = () => {
   selectedStation.value = null;
 }
-
+onMounted:{
+	console.log(888)
+getStationList().then(res=>{
+	console.log(res)
+})
+}
 </script>
 
 <style lang="scss" scoped>

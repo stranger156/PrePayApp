@@ -17,3 +17,15 @@ export const login = (params) => {
 //     });
 // };
 
+export const getStationList=async()=>{
+	  const token = await getTokenFromLocalStorage();  
+	  console.log(111)
+	  console.log(token)
+	return request({
+		url: "/web/stations/page",
+		method: 'GET', 
+		headers: {
+                'Authorization': `Bearer ${token}`
+            }
+	})
+}

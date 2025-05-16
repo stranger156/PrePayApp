@@ -33,6 +33,7 @@
 <script setup>
 import { ref, onMounted, getCurrentInstance, reactive } from 'vue';
 import { login } from '../../utils/api';
+import { saveTokenToLocalStorage } from '../../store/user';
 // import { useStorage } from '@/utils/storage.js'; // 假设你已经封装了存储工具函数
 
 // // 定义页面数据
@@ -96,7 +97,7 @@ const loginButton=()=>{
   console.log(1111)
   console.log(user)
   login(user).then((res)=>{
-	  console.log(res)
+	  console.log(res.data.token)
 	  if(res.code===200){
 		saveTokenToLocalStorage(res.data.token)
 		  console.log(res.data.token)
