@@ -2,10 +2,25 @@
   <view class="container">
     <!-- 顶部统计信息 -->
     <view class="header">
-      <view class="stats">
+    <!--  <view class="stats">
         <text class="stats-title">我的换热站</text>
-        <text class="stats-info">Q 共计{{ totalStations }}个换热站，{{ totalDevices }}台设备...</text>
-      </view>
+        <input class="stats-info" placeholder="Q 共计{{ totalStations }}个换热站，{{ totalDevices }}台设备..."></input>
+      </view> -->
+	  <view class="stats">
+	    <text class="stats-title">我的换热站</text>
+	    <view class="search-container">
+	      <uni-icons 
+	        type="search" 
+	        size="18" 
+	        color="#999" 
+	        class="search-icon"
+	      ></uni-icons>
+	      <input 
+	        class="stats-info" 
+	        placeholder="Q 共计{{ totalStations }}个换热站，{{ totalDevices }}台设备..."
+	      >
+	    </view>
+	  </view>
     </view>
 
     <!-- 地图容器 -->
@@ -18,6 +33,7 @@
         :markers="markers"
         show-location
         @markertap="handleMarkerTap"
+		@tap="handleMapTap"
       ></map>
 
       <!-- 信息弹窗 -->
@@ -52,6 +68,7 @@
 
 <script setup>
 import { ref } from 'vue';
+import uniIcons from '@dcloudio/uni-ui/lib/uni-icons/uni-icons.vue'
 
 // 响应式数据
 const selectedStation = ref(null);
@@ -68,12 +85,18 @@ const markers = ref([
     id: 1,
     latitude: 39.9042,
     longitude: 116.4074,
-    title: '测试标记',
     iconPath: '../../static/mapLogo.png',
     width: 30,
     height: 30
   },
- 
+ {
+   id: 2,
+   latitude: 50.9042,
+   longitude: 116.4074,
+   iconPath: '../../static/mapLogo.png',
+   width: 30,
+   height: 30
+ },
 ]);
 
 const stations = ref([
@@ -94,6 +117,12 @@ const handleMarkerTap = (e) => {
   const markerId = e.detail.markerId;
   selectedStation.value = stations.value.find(item => item.id === markerId);
 };
+
+// 在script中添加
+const handleMapTap = () => {
+  selectedStation.value = null;
+}
+
 </script>
 
 <style lang="scss" scoped>
@@ -121,10 +150,33 @@ const handleMarkerTap = (e) => {
       margin-bottom: 10rpx;
     }
     
-    &-info {
-      font-size: 28rpx;
-      color: #666;
-    }
+	.search-container {
+	  position: relative;
+	  display: flex;
+	  align-items: center;
+	  
+	  .search-icon {
+	    position: absolute;
+	    left: 15rpx;
+	    z-index: 1;
+	  }
+	
+	  .stats-info {
+	    flex: 1;
+	    padding-left: 70rpx;  // 给图标留出空间
+	    height: 60rpx;
+	    font-size: 28rpx;
+	    color: #666;
+	    background-color: #fff;
+	    border-radius: 30rpx;
+	    box-shadow: 0 4rpx 10rpx rgba(0, 0, 0, 0.05);
+	    
+	    // 调整placeholder颜色
+	    &::placeholder {
+	      color: #999;
+	    }
+	  }
+	}
   }
 }
 

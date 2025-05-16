@@ -5,15 +5,15 @@ export const login = (params) => {
     return request({
         url: "/web/user/login",
         method: 'POST',
-		  data:params
+		data:params
     });
 };
 //注册接口
-export const register = (params) => {
-    return request({
-        url: "/web/user/add",
-        method: 'POST',
-		  data:params
-    });
-};
+// export const register = (params) => {
+//     return request({
+//         url: "/web/user/add",
+//         method: 'POST',
+// 		params
+//     });
+// };
 
