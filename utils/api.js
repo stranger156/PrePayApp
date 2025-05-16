@@ -9,6 +9,7 @@ export const login = (params) => {
 		data:params
     });
 };
+<<<<<<< HEAD
 
 // 注册接口
 export const register = (params) => {
@@ -125,3 +126,26 @@ export const addStation = (params) => {
 		params
 	});
 };
+=======
+//注册接口
+// export const register = (params) => {
+//     return request({
+//         url: "/web/user/add",
+//         method: 'POST',
+// 		params
+//     });
+// };
+
+export const getStationList=async()=>{
+	  const token = await getTokenFromLocalStorage();  
+	  console.log(111)
+	  console.log(token)
+	return request({
+		url: "/web/stations/page",
+		method: 'GET', 
+		headers: {
+                'Authorization': `Bearer ${token}`
+            }
+	})
+}
+>>>>>>> dc453cc17a1b10d0f7376bd678a0168f6a701a78
