@@ -1,19 +1,18 @@
 <template>
   <view class="container">
     <!-- 标题和输入框区域 -->
- 
     <view class="input-container">
       <view class="input-item">
-       <img style="margin-right: 10px;" src="/static/username_icon.png"  />
-        <input  v-model="account" placeholder="请输入用户名" />
+       <img style="margin-left: 20rpx;height: 5vh;" src="/static/username_icon.png"  />
+        <input  v-model="user.username" placeholder="请输入用户名" />
       </view>
       <view class="input-item">
-        <img style="margin-right: 10px;" src="/static/passwords_icon.png"  />
-        <input  v-model="passwords" type="password" placeholder="请输入密码" />
+        <img style="margin-left:20rpx;height: 5vh;" src="/static/passwords_icon.png"  />
+        <input  v-model="user.password" type="password" placeholder="请输入密码" />
       </view>
     </view>
     <!-- 记住密码和自动登录复选框 -->
- <!--   <view class="checkbox-container">
+<!--  <view class="checkbox-container">
       <view class="checkbox-item">
         <checkbox v-model="rememberPasswords">记住密码</checkbox>
       </view>
@@ -22,7 +21,7 @@
       </view>
     </view> -->
     <!-- 登录按钮 -->
-    <button  class="login-button" @click="login">登录</button>
+    <button  class="login-button" @click="loginButton">登录</button>
    
     <!-- 详情按钮 -->
     <view class="detail-button" @click="goToDetail">了解波思环球</view>
@@ -32,13 +31,15 @@
 </template>
 
 <script setup>
-import { ref, onMounted, getCurrentInstance } from 'vue';
-// import { uniFetch } from '@/utils/uniFetch.js'; // 假设你已经封装了uni.request的网络请求工具函数
+import { ref, onMounted, getCurrentInstance, reactive } from 'vue';
+import { login } from '../../utils/api';
 // import { useStorage } from '@/utils/storage.js'; // 假设你已经封装了存储工具函数
 
 // // 定义页面数据
-const account = ref('');
-const passwords = ref('');
+const user=reactive({
+	username:'',
+	password:''
+})
 const rememberPasswords = ref(false);
 const loginAuto = ref(false);
 const { proxy } = getCurrentInstance();
@@ -83,96 +84,28 @@ const { proxy } = getCurrentInstance();
 //   }
 // });
 
-// // 登录函数
-// const login = async () => {
-//   if (account.value === '' || passwords.value === '') {
-//     uni.showToast({
-//       title: '用户名和密码不能为空!',
-//       icon: 'none'
-//     });
-//     return;
-//   }
+// 登录函数
 
-//   const random = getRandom(15);
-//   const json = {
-//     method: 'login',
-//     username: account.value,
-//     imme: random,
-//     passwords: passwords.value
-//   };
-
-//   try {
-//     const response = await uniFetch(json);
-//     const loginInfo = response.data;
-//     if (loginInfo.authority === 'nouser' || loginInfo.authority === 'passerror') {
-//       uni.showToast({
-//         title: '用户名或密码错误！',
-//         icon: 'none'
-//       });
-//     } else if (loginInfo.authority === 'errorLogin') {
-//       uni.showToast({
-//         title: '密码输入错误超过三次，请联系超级管理员解除锁定',
-//         icon: 'none'
-//       });
-//     } else if (
-//       loginInfo.authority ==='superadmin' ||
-//       loginInfo.authority === 'admin' ||
-//       loginInfo.authority === 'accountant' ||
-//       loginInfo.authority === 'user' ||
-//       loginInfo.authority ==='sale'
-//     ) {
-//       const storedData = useStorage('data');
-//       if (rememberPasswords.value) {
-//         storedData.set('rememberPasswords', true);
-//         storedData.set('account', account.value);
-//         storedData.set('passwords', passwords.value);
-//         storedData.set('authority', loginInfo.authority);
-//         if (loginAuto.value) {
-//           storedData.set('loginAuto', true);
-//         } else {
-//           storedData.set('loginAuto', false);
-//         }
-//       } else {
-//         storedData.clear();
-//       }
-
-//       // 这里假设你有一个DeviceList页面，根据实际路由配置调整
-//       proxy.$router.push({
-//         name: 'DeviceList',
-//         params: {
-//           info: [loginInfo.authority, account.value]
-//         }
-//       });
-//       uni.showToast({
-//         title: '登录成功',
-//         icon: 'none'
-//       });
-//     } else {
-//       uni.showToast({
-//         title: '未知登录错误',
-//         icon: 'none'
-//       });
-//     }
-//   } catch (error) {
-//     uni.showToast({
-//       title: '网络连接失败',
-//       icon: 'none'
-//     });
-//   }
-// };
-
-// 生成随机数函数
-// const getRandom = (n) => {
-//   const radmon = ['0', '1', '2', '3', '4', '5', '6', '7', '8', '9'];
-//   let sb = '';
-//   const rd = Math.random();
-//   for (let i = 0; i < n; i++) {
-//     const s = radmon[Math.floor(rd * 10)];
-//     sb += s;
-//   }
-//   return sb;
-// };
-
+const loginButton=()=>{
+  if (user.username === '' || user.password === '') {
+    uni.showToast({
+      title: '用户名和密码不能为空!',
+      icon: 'none'
+    })
+  }
+  console.log(1111)
+  console.log(user)
+  login(user).then((res)=>{
+	  console.log(res)
+	  if(res.code===200){
+		saveTokenToLocalStorage(res.data.token)
+		  console.log(res.data.token)
+		  uni.switchTab({
+		      url: '/pages/map/map' // 假设这是一个 tabBar 页面
+		  })
+	  }
+  })
+}
 // 拨打电话函数
 const callPhone = () => {
   uni.makePhoneCall({
@@ -219,30 +152,29 @@ const goToDetail = () => {
 }
 
 .input-item input {
-  width: 60vw;
-  padding: 10px;
+  width: 65vw;
+  padding: 5px;
+  margin-left: 2vw;
   border: 1px solid #ccc;
   border-radius: 5px;
 }
 
 .checkbox-container {
-  margin-bottom: 20px;
+  margin-top: 50rpx;
 }
 
 .checkbox-item {
   margin-bottom: 10px;
   float: left;
- margin-left: 10%;
+ margin-left: 100rpx;
 }
 
 .login-button {
-
-  width: 100%;
-  padding: 10px;
+  width: 80vw;
   background-color: #007AFF;
   color: #fff;
   border: none;
-  border-radius: 5px;
+  border-radius: 100rpx;
   font-size: 16px;
 }
 
@@ -251,6 +183,7 @@ const goToDetail = () => {
   margin-top: 20px;
   color: #007AFF;
   cursor: pointer;
+   font-size: 20rpx;
 }
 
 .detail-button {
@@ -258,5 +191,6 @@ const goToDetail = () => {
   margin-top: 20px;
   color: #007AFF;
   cursor: pointer;
+   font-size: 20rpx;
 }
 </style>

@@ -1,45 +1,36 @@
+const baseUrl = 'http://47.95.208.71:80';
 
-const baseUrl = 'http://106.55.177.226:5000'; // 替换为实际的 API 根路径
-
-// 封装请求方法
 const request = (options) => {
     return new Promise((resolve, reject) => {
         uni.request({
             url: baseUrl + options.url,
             method: options.method || 'GET',
-            data: options.data || {},
-            header: options.headers||
-			{
-                'Content-Type': 'application/x-www-form-urlencoded'
+            data: options.data || {},  // 改为 data 而不是 params
+            header: {
+                'Content-Type': 'application/json',
+                ...options.headers  // 合并自定义 headers
             },
             success: (res) => {
-                if (res.statusCode === 200||res.statusCode === 201) {
+                if ([200, 201].includes(res.statusCode)) {
                     resolve(res.data);
-                } else { 
-					if (res.statusCode === 409) {
-                        // 从响应数据中获取错误信息
-                        const errorMessage = res.data.message;
-                        uni.showToast({
-                            title: errorMessage,
-                            icon: 'none'
-                        });
-                    }
-					if (res.statusCode === 400) {
-					    // 从响应数据中获取错误信息
-					    const errorMessage = res.data.message;
-					    uni.showToast({
-					        title: errorMessage,
-					        icon: 'none'
-					    });
-					}
-                    // reject(new Error(`请求失败,状态码: ${res.statusCode}`));
+                } else {
+                    const errorMessage = res.data?.message || `请求失败,状态码: ${res.statusCode}`;
+                    uni.showToast({
+                        title: errorMessage,
+                        icon: 'none'
+                    });
+                    reject(new Error(errorMessage));
                 }
             },
             fail: (err) => {
+                uni.showToast({
+                    title: '网络请求失败',
+                    icon: 'none'
+                });
                 reject(err);
             }
         });
     });
 };
 
-export default request
+export default request;

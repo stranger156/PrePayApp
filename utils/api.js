@@ -6,7 +6,7 @@ export const login = (params) => {
     return request({
         url: "/web/user/login",
         method: 'POST',
-		params
+		data:params
     });
 };
 
@@ -73,19 +73,11 @@ export const fetchUserList = (params) => {
 };
 
 // 修改公司接口
-export const addCompany = (params) => {
-	return request({
-		url: "/web/company/update",
-		method: 'PUT,
-		params
-	});
-};
-
-// 删除公司接口
 export const reviseCompany = (params) => {
 	return request({
-		url: `/web/company/delete/${params}`,
-		method: 'DELETE',
+		url: "/web/company/update",
+		method: 'PUT',
+		params
 	});
 };
 
