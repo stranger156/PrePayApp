@@ -25,5 +25,32 @@ const getTokenFromLocalStorage = () => {
         });
     });
 };
+const saveUser = (user) => {
+    uni.setStorage({
+        key: 'user',
+        data: user,
+        success: () => {
+            console.log('user存储成功');
+        },
+        fail: (err) => {
+            console.error('user存储失败:', err);
+        }
+    });
+};
 
-export{saveTokenToLocalStorage,getTokenFromLocalStorage}
+const getUser = () => {
+    return new Promise((resolve, reject) => {
+        uni.getStorage({
+            key: 'user',
+            success: (res) => {
+                resolve(res.data);
+            },
+            fail: (err) => {
+                console.error('user获取失败:', err);
+                reject(err);
+            }
+        });
+    });
+};
+
+export{saveTokenToLocalStorage,getTokenFromLocalStorage,saveUser,getUser}
