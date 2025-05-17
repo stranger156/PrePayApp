@@ -23,37 +23,57 @@
 
 <script setup>
 import { ref } from 'vue'
-
+import { revisePwd } from '../../utils/api' // 假设API路径
+ 
 const oldPassword = ref('')
 const newPassword = ref('')
 const confirmPassword = ref('')
-
-function submit() {
+const isSubmitting = ref(false) // 新增提交状态
+ 
+ function submit() {
+  // 基础校验
   if (!oldPassword.value || !newPassword.value || !confirmPassword.value) {
+    uni.showToast({ title: '请填写完整信息', icon: 'none' })
+    return
+  }
+ 
+  if (newPassword.value !== confirmPassword.value) {
+    uni.showToast({ title: '两次输入的密码不一致', icon: 'none' })
+    return
+  }
+ 
+ 
+  try {
+    isSubmitting.value = true // 启用提交状态
+	
+    revisePwd({
+      oldpassword: oldPassword.value,
+      newpassword: newPassword.value
+    }).then(res=>{
+		console.log(res)
+		
+		if (res.code === 200) {
+		  uni.showToast({ title: '修改成功', icon: 'success' })
+		  setTimeout(() => {
+		    uni.navigateBack()
+		  }, 1500)
+		} else {
+		  uni.showToast({ 
+		    title: res.msg || '密码修改失败',
+		    icon: 'none'
+		
+	})
+   }
+    })
+  } catch (error) {
+    console.error('修改密码失败:', error)
     uni.showToast({
-      title: '请填写完整信息',
+      title: error?.message || '网络异常，请稍后重试',
       icon: 'none'
     })
-    return
+  } finally {
+    isSubmitting.value = false // 恢复提交状态
   }
-
-  if (newPassword.value !== confirmPassword.value) {
-    uni.showToast({
-      title: '两次输入的密码不一致，请重新确认密码',
-      icon: 'none',
-    })
-    return
-  }
-
-  // 模拟后端处理
-  uni.showToast({
-    title: '修改成功',
-    icon: 'success'
-  })
-
-  setTimeout(() => {
-    uni.navigateBack()
-  }, 1000)
 }
 </script>
 

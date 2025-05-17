@@ -2,13 +2,13 @@
   <view class="container">
     <!-- 标题 -->
     <view class="header">
-      <text class="title">用户列表</text>
+      <text class="title">企业管理</text>
     </view>
 
     <!-- 搜索框 -->
     <view class="search-box">
       <uni-search-bar 
-        placeholder="请输入企业商标关键字" 
+        placeholder="请输入企业名称关键字" 
         radius="100"
         @confirm="handleSearch"
       ></uni-search-bar>
@@ -20,40 +20,88 @@
         v-for="(user, index) in filteredUsers" 
         :key="index" 
         class="user-item"
-        @click="navigateToDetail(user)"
+        @click="showDetailModal(user)"
       >
         <view class="user-info">
           <text class="user-name">{{ user.name }}</text>
-          <text class="device-count">设备数量：{{ user.deviceCount }}台</text>
         </view>
         <uni-icons type="arrowright" size="16" color="#999"></uni-icons>
       </view>
     </view>
+
+    <!-- 详情弹窗 -->
+    <uni-popup ref="detailPopup" type="center">
+      <view class="modal-content">
+        <view class="modal-header">
+          <text class="modal-title">{{ currentUser?.name }}</text>
+          <uni-icons 
+            type="closeempty" 
+            size="20" 
+            color="#666"
+            @click="closeDetailModal"
+          ></uni-icons>
+        </view>
+        
+        <view class="modal-body">
+          <view class="info-item">
+            <text class="label">联系电话：</text>
+            <text class="value">{{ currentUser?.phone || '暂无信息' }}</text>
+          </view>
+          
+          <view class="info-item">
+            <text class="label">负责人：</text>
+            <text class="value">{{ currentUser?.userName || '暂无信息' }}</text>
+          </view>
+          
+          <view class="info-item">
+            <text class="label">管理员：</text>
+            <text class="value">{{ currentUser?.admin || '暂无信息' }}</text>
+          </view>
+          
+          <view class="info-item">
+            <text class="label">销售代表：</text>
+            <text class="value">{{ currentUser?.sale || '暂无信息' }}</text>
+          </view>
+        </view>
+      </view>
+    </uni-popup>
   </view>
 </template>
 
 <script setup>
-import { ref, computed } from 'vue';
+import { ref, computed, onMounted } from 'vue';
 import UniSearchBar from '@dcloudio/uni-ui/lib/uni-search-bar/uni-search-bar.vue';
 import UniIcons from '@dcloudio/uni-ui/lib/uni-icons/uni-icons.vue';
+import UniPopup from '@dcloudio/uni-ui/lib/uni-popup/uni-popup.vue';
+import { fetchCompanyList } from '../../utils/api';
 
 // 用户数据
-const users = ref([
-  { id: '00001', name: '00001demo', deviceCount: 2 },
-  { id: '00002', name: '00002demo', deviceCount: 0 },
-  { id: '00003', name: '00003demo', deviceCount: 0 },
-  { id: '00004', name: '00004demo', deviceCount: 0 },
-  { id: '2020', name: '2020年滕州热力', deviceCount: 22 },
-  { id: '213', name: '213工程 北京台基厂项目热力工程', deviceCount: 12 },
-  { id: '丰台', name: '北京丰台北燃热力公司', deviceCount: 11 },
-  { id: '华源', name: '北京华源泰盟寿光晨鸣热电三厂厂', deviceCount: 5 },
-  { id: '延庆', name: '北京华源热力延庆分公司', deviceCount: 5 },
-  { id: '天成', name: '北京华通天成供热有限公司', deviceCount: 3 },
-  { id: '协和', name: '北京协和医院西院', deviceCount: 2 }
-]);
-
-// 搜索关键字
+const users = ref([]);
+const currentUser = ref(null);
 const searchKeyword = ref('');
+const detailPopup = ref(null);
+
+// 页面加载时获取数据
+onMounted(async () => {
+  try {
+    const res = await fetchCompanyList();
+    users.value = res.data?.records?.map((item, index) => ({
+      id: String(index),
+      name: item.companyName || '未知企业',
+      phone: item.phone,
+	  userName: item.userName,
+      admin: item.admin,
+      user: item.user,
+      sale: item.sale
+    })) || [];
+  } catch (error) {
+    console.error('获取企业列表失败:', error);
+    uni.showToast({
+      title: '数据加载失败',
+      icon: 'none'
+    });
+  }
+});
 
 // 过滤后的用户列表
 const filteredUsers = computed(() => {
@@ -68,11 +116,16 @@ const handleSearch = (e) => {
   searchKeyword.value = e.value;
 };
 
-// 跳转到详情页
-const navigateToDetail = (user) => {
-  uni.navigateTo({
-    url: `/pages/userDetail/userDetail?id=${user.id}`
-  });
+// 显示详情弹窗
+const showDetailModal = (user) => {
+  currentUser.value = user;
+  detailPopup.value.open();
+};
+
+// 关闭详情弹窗
+const closeDetailModal = () => {
+  currentUser.value = null;
+  detailPopup.value.close();
 };
 </script>
 
@@ -121,12 +174,46 @@ const navigateToDetail = (user) => {
         display: block;
         font-size: 32rpx;
         color: #333;
-        margin-bottom: 10rpx;
+      }
+    }
+  }
+}
+
+/* 弹窗样式 */
+.modal-content {
+  width: 600rpx;
+  background: #fff;
+  border-radius: 16rpx;
+  padding: 40rpx;
+  
+  .modal-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 40rpx;
+    
+    .modal-title {
+      font-size: 36rpx;
+      font-weight: bold;
+      color: #333;
+    }
+  }
+  
+  .modal-body {
+    .info-item {
+      display: flex;
+      margin-bottom: 24rpx;
+      
+      .label {
+        width: 160rpx;
+        font-size: 28rpx;
+        color: #666;
       }
       
-      .device-count {
-        font-size: 26rpx;
-        color: #999;
+      .value {
+        flex: 1;
+        font-size: 28rpx;
+        color: #333;
       }
     }
   }
