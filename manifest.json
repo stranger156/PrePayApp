@@ -81,7 +81,13 @@
     "vueVersion" : "3",
     "h5" : {
         "sdkConfigs" : {
-            "maps" : {}
+            "maps" : {
+                "amap" : {
+                    "key" : "39542c6416160b29cb59a72937a7b4a1",
+                    "securityJsCode" : "6cd057872162114c45d452ecf2e3ef9a",
+                    "serviceHost" : ""
+                }
+            }
         }
     }
 }
