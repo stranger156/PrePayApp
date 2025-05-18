@@ -25,6 +25,7 @@ const getTokenFromLocalStorage = () => {
         });
     });
 };
+
 const saveUser= (user) => {
     uni.setStorage({
         key: 'user',
@@ -52,4 +53,6 @@ const getUser = () => {
         });
     });
 };
+
+
 export{saveTokenToLocalStorage,getTokenFromLocalStorage,saveUser,getUser}

@@ -23,27 +23,26 @@
   justify-items: center;
 }
 .input-item uni-input[data-v-e4e4508d] {
-  width: 60vw;
-  padding: 10px;
+  width: 65vw;
+  padding: 5px;
+  margin-left: 2vw;
   border: 1px solid #ccc;
   border-radius: 5px;
 }
 .checkbox-container[data-v-e4e4508d] {
-  margin-bottom: 20px;
+  margin-top: 1.5625rem;
 }
 .checkbox-item[data-v-e4e4508d] {
   margin-bottom: 10px;
   float: left;
- margin-left: 10%;
+ margin-left: 3.125rem;
 }
 .login-button[data-v-e4e4508d] {
-
-  width: 100%;
-  padding: 10px;
+  width: 80vw;
   background-color: #007AFF;
   color: #fff;
   border: none;
-  border-radius: 5px;
+  border-radius: 3.125rem;
   font-size: 16px;
 }
 .phone-call[data-v-e4e4508d] {
@@ -51,10 +50,12 @@
   margin-top: 20px;
   color: #007AFF;
   cursor: pointer;
+   font-size: 0.625rem;
 }
 .detail-button[data-v-e4e4508d] {
   text-align: center;
   margin-top: 20px;
   color: #007AFF;
   cursor: pointer;
+   font-size: 0.625rem;
 }
