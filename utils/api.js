@@ -179,8 +179,6 @@ export const addStation = (params) => {
 
 export const getStationList=async()=>{
 	  const token = await getTokenFromLocalStorage();  
-	  console.log(111)
-	  console.log(token)
 	return request({
 		url: "/web/stations/page",
 		method: 'GET', 
@@ -189,6 +187,7 @@ export const getStationList=async()=>{
             },
 		data:{
 			page:1,
-			size:10000}
+			size:10000
+			}
 	})
 }

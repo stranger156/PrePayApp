@@ -1,0 +1,101 @@
+
+.container {
+	  display: flex;
+	  flex-direction: column;
+	  height: 100vh;
+	  background-color: #f5f5f5;
+	  position: relative;
+}
+	
+	/* 顶部标题栏 */
+.header {
+	  height: 2.8125rem;
+	  background-color: #4285f4;
+	  display: flex;
+	  align-items: center;
+	  justify-content: center;
+	  padding-top: 0.625rem;
+}
+.header-title {
+	  color: #FFFFFF;
+	  font-size: 1.125rem;
+	  font-weight: bold;
+}
+	
+	/* 错误记录列表 */
+.error-list {
+	  flex: 1;
+}
+.error-item {
+	  padding: 0.625rem 0.9375rem;
+	  background-color: #FFFFFF;
+	  border-bottom: 0.03125rem solid #EEEEEE;
+	  display: flex;
+	  flex-direction: row;
+	  align-items: center;
+}
+.error-icon {
+	  width: 2.8125rem;
+	  height: 2.8125rem;
+	  margin-right: 0.9375rem;
+}
+.error-info {
+	  flex: 1;
+	  display: flex;
+	  flex-direction: column;
+}
+.error-title {
+	  display: flex;
+	  flex-direction: row;
+	  align-items: center;
+	  margin-bottom: 0.25rem;
+}
+.error-username {
+	  font-size: 1.0625rem;
+	  color: #666666;
+	  margin-right: 0.625rem;
+}
+.error-count {
+	  font-size: 0.9375rem;
+	  color: #666666;
+}
+.error-time {
+	  font-size: 0.625rem;
+	  color: #999999;
+}
+	
+	/* 浮动添加按钮 */
+.add-button {
+	  position: fixed;
+	  right: 1.25rem;
+	  bottom: 1.25rem;
+	  width: 3.125rem;
+	  height: 3.125rem;
+	  background-color: #FFFFFF;
+	  border-radius: 50%;
+	  display: flex;
+	  align-items: center;
+	  justify-content: center;
+	  box-shadow: 0 0.125rem 0.3125rem rgba(0, 0, 0, 0.1);
+}
+.add-icon {
+	  font-size: 1.875rem;
+	  color: #666666;
+	  line-height: 2.8125rem;
+}
+/* 新增点击效果 */
+.error-item {
+  transition: all 0.2s;
+}
+.error-item:active {
+  background-color: #f0f0f0;
+  transform: scale(0.98);
+}
+
+/* 优化时间显示 */
+.error-time {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  max-width: 12.5rem;
+}
