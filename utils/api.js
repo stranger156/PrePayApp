@@ -26,6 +26,26 @@ export const fetchCompanyList =async()=> {
 	});
 };
 
+// 添加公司接口
+export const addCompany =async(params)=> {
+	const token = await getTokenFromLocalStorage();
+	return request({
+		url: "/web/company/add",
+		method: 'POST',
+		headers: {
+			'token': token
+		},
+		data: {
+			'companyName': params.name,
+			'phone': params.phone,
+			'userName': params.userName,
+			'admin': params.admin,
+			'user': params.user,
+			'sale': params.sale
+		}
+	});
+};
+
 // 获取换热站列表接口
 export const fetchStationList = (params) => {
 	return request({
@@ -50,6 +70,38 @@ export const adviseStation = (params) => {
 		url: "/web/stations/update",
 		method: 'PUT',
 		params
+	});
+};
+
+// 删除公司接口
+export const deleteCompany = async(params) => {
+	const token = await getTokenFromLocalStorage();
+	return request({
+		url: `/web/company/${params}`,
+		method: 'DELETE',
+		headers: {
+			'token': token
+		},
+	});
+};
+
+// 更新公司接口
+export const updateCompany = async(params) => {
+	const token = await getTokenFromLocalStorage();
+	return request({
+		url: '/web/company/update',
+		method: 'PUT',
+		headers: {
+			'token': token
+		},
+		data: {
+			'companyName': params.name,
+			'phone': params.phone,
+			'userName': params.userName,
+			'admin': params.admin,
+			'user': params.user,
+			'sale': params.sale
+		}
 	});
 };
 
@@ -155,15 +207,6 @@ export const searchSaleUsers = (params) => {
 	return request({
 		url: "/web/user/page",
 		method: 'GET',
-		params
-	});
-};
-
-// 添加公司接口
-export const addCompany = (params) => {
-	return request({
-		url: "/web/company/add",
-		method: 'POST',
 		params
 	});
 };
