@@ -10,6 +10,9 @@ export const login = (params) => {
     });
 };
 
+
+
+
 // 获取公司列表接口
 export const fetchCompanyList =async()=> {
 	const token = await getTokenFromLocalStorage();
@@ -26,14 +29,7 @@ export const fetchCompanyList =async()=> {
 	});
 };
 
-// 获取换热站列表接口
-export const fetchStationList = (params) => {
-	return request({
-		url: "/web/stations/list",
-		method: 'GET',
-		params
-	});
-};
+
 
 // 添加设备接口
 export const addDevice = (params) => {
@@ -178,17 +174,46 @@ export const addStation = (params) => {
 };
 
 export const getStationList=async()=>{
-	  const token = await getTokenFromLocalStorage();  
-	  console.log(111)
-	  console.log(token)
-	return request({
-		url: "/web/stations/page",
-		method: 'GET', 
-		headers: {
+      const token = await getTokenFromLocalStorage();  
+     
+    return request({
+        url: "/web/stations/page",
+        method: 'GET', 
+        headers: {
                 "token": token
             },
-		data:{
-			page:1,
-			size:10000}
-	})
+        data:{
+            page:1,
+            size:10000}
+    })
+}
+
+// // 获取站点设备列表
+// export const getStationDevices = (stationName) => {
+//   return request({
+//     url: `/web/stations/${encodeURIComponent(stationName)}`,
+//     method: 'GET'
+//   });
+// };
+// // 在api.js中添加
+export const getStationDevices = async (stationName) => {
+  const token = await getTokenFromLocalStorage();
+  return request({
+    url: `/web/stations/${stationName}`,
+    method: 'GET',
+    headers: {
+      "token": token
+    }
+  })
+}
+
+export const getDetailDevices = async (deviceNumber) => {
+  const token = await getTokenFromLocalStorage();
+  return request({
+    url: `/web/device/${deviceNumber}`,
+    method: 'GET',
+    headers: {
+      "token": token
+    }
+  })
 }

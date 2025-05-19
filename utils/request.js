@@ -14,6 +14,7 @@ const request = (options) => {
                 if ([200, 201].includes(res.statusCode)) {
                     resolve(res.data);
                 } else {
+					console.log(res)
                     const errorMessage = res.data?.message || `请求失败,状态码: ${res.statusCode}`;
                     uni.showToast({
                         title: errorMessage,

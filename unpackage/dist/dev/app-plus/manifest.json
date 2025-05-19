@@ -4,7 +4,7 @@
     "iPhone",
     "iPad"
   ],
-  "id": "",
+  "id": "__UNI__75F13A5",
   "name": "PrePayApp",
   "version": {
     "name": "1.0.0",
@@ -79,7 +79,7 @@
     },
     "allowsInlineMediaPlayback": true,
     "safearea": {
-      "background": "#FFFFFF",
+      "background": "#ffffff",
       "bottom": {
         "offset": "auto"
       }
@@ -87,7 +87,7 @@
     "uni-app": {
       "control": "uni-v3",
       "vueVersion": "3",
-      "compilerVersion": "4.56",
+      "compilerVersion": "4.57",
       "nvueCompiler": "uni-app",
       "renderer": "auto",
       "nvue": {
@@ -104,30 +104,30 @@
       "selectedColor": "#3cc51f",
       "borderStyle": "rgba(0,0,0,0.4)",
       "blurEffect": "none",
-      "fontSize": "10px",
-      "iconWidth": "24px",
+      "fontSize": 0,
+      "iconWidth": "100px",
       "spacing": "3px",
       "height": "50px",
       "list": [
         {
-          "text": "地图",
-          "pagePath": "pages/map/map"
+          "pagePath": "pages/map/map",
+          "iconPath": "/static/map_icon_dark.png",
+          "selectedIconPath": "/static/map_icon_blue.png"
         },
         {
-          "text": "列表",
-          "pagePath": "pages/list/list"
+          "pagePath": "pages/list/list",
+          "iconPath": "/static/list_icon_dark.png",
+          "selectedIconPath": "/static/list_icon_blue.png"
         },
         {
-          "text": "设置",
-          "pagePath": "pages/settings/settings"
+          "pagePath": "pages/settings/settings",
+          "iconPath": "/static/setting_icon_dark.png",
+          "selectedIconPath": "/static/setting_icon_blue.png"
         }
       ],
+      "backgroundColor": "#ffffff",
       "selectedIndex": 0,
-      "shown": true,
-      "child": [
-        "lauchwebview"
-      ],
-      "selected": 0
+      "shown": true
     }
   },
   "app-harmony": {
@@ -139,7 +139,7 @@
       "enable": false
     },
     "safearea": {
-      "background": "#FFFFFF",
+      "background": "#ffffff",
       "bottom": {
         "offset": "auto"
       }
