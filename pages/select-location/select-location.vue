@@ -40,9 +40,9 @@ const handleMapTap = (e) => {
     id: Date.now(),
     latitude: e.detail.latitude,
     longitude: e.detail.longitude,
-    iconPath: '/static/marker.png',
-    width: 30,
-    height: 30
+    iconPath: '../../static/maker.png',
+    width: 100,
+    height: 100
   }]
   
   // 调用逆地理编码（需要后端API支持）

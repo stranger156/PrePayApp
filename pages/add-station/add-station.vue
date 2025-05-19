@@ -78,13 +78,14 @@
 </template>
 
 <script setup>
-import { ref } from 'vue';
+import { onMounted, ref } from 'vue';
 import { onLoad } from '@dcloudio/uni-app';
+import { getDevice } from '../../store/user';
 
 // 表单数据
 const formData = ref({
   stationName: '',
-  company: '02test',
+  company: '',
   userName: '',
   phone: '',
   longitude: '',
@@ -165,6 +166,11 @@ const submitForm = () => {
     console.log('表单验证失败:', err);
   });
 };
+onMounted(()=>{
+	getDevice().then(res=>{
+		formData.value.company=res
+	})
+})
 </script>
 
 <style lang="scss">

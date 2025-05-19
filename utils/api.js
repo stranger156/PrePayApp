@@ -85,11 +85,17 @@ export const updateUser =async(params)=> {
 };
 
 // 获取换热站列表接口
-export const fetchStationList = (params) => {
+export const fetchStationList = async(params) => {
+	const token = await getTokenFromLocalStorage();
 	return request({
 		url: "/web/stations/list",
 		method: 'GET',
-		params
+		headers: {
+			'token': token
+		},
+		data:{
+			companyName:params
+		}
 	});
 };
 
