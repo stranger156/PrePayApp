@@ -100,6 +100,32 @@ if (uni.restoreGlobal) {
       });
     });
   };
+  const saveDevice = (device) => {
+    uni.setStorage({
+      key: "device",
+      data: device,
+      success: () => {
+        formatAppLog("log", "at store/user.js:61", "device存储成功");
+      },
+      fail: (err) => {
+        formatAppLog("error", "at store/user.js:64", "device存储失败:", err);
+      }
+    });
+  };
+  const getDevice = () => {
+    return new Promise((resolve, reject) => {
+      uni.getStorage({
+        key: "device",
+        success: (res) => {
+          resolve(res.data);
+        },
+        fail: (err) => {
+          formatAppLog("error", "at store/user.js:77", "device获取失败:", err);
+          reject(err);
+        }
+      });
+    });
+  };
   const baseUrl = "http://47.95.208.71:80";
   const request = (options) => {
     return new Promise((resolve, reject) => {
@@ -172,6 +198,19 @@ if (uni.restoreGlobal) {
         "admin": params.admin,
         "user": params.user,
         "sale": params.sale
+      }
+    });
+  };
+  const fetchStationList = async (params) => {
+    const token = await getTokenFromLocalStorage();
+    return request({
+      url: "/web/stations/list",
+      method: "GET",
+      headers: {
+        "token": token
+      },
+      data: {
+        companyName: params
       }
     });
   };
@@ -271,7 +310,7 @@ if (uni.restoreGlobal) {
       }
     });
   };
-  const _imports_0$7 = "/static/passwords_icon.png";
+  const _imports_0$8 = "/static/passwords_icon.png";
   const _export_sfc = (sfc, props) => {
     const target = sfc.__vccOpts || sfc;
     for (const [key, val] of props) {
@@ -280,7 +319,7 @@ if (uni.restoreGlobal) {
     return target;
   };
   const userIcon = "/static/username_icon.png";
-  const _sfc_main$o = {
+  const _sfc_main$p = {
     __name: "login",
     setup(__props, { expose: __expose }) {
       __expose();
@@ -330,7 +369,7 @@ if (uni.restoreGlobal) {
       return __returned__;
     }
   };
-  function _sfc_render$n(_ctx, _cache, $props, $setup, $data, $options) {
+  function _sfc_render$o(_ctx, _cache, $props, $setup, $data, $options) {
     return vue.openBlock(), vue.createElementBlock("view", { class: "container" }, [
       vue.createCommentVNode(" 标题和输入框区域 "),
       vue.createElementVNode("view", { class: "input-container" }, [
@@ -355,7 +394,7 @@ if (uni.restoreGlobal) {
         vue.createElementVNode("view", { class: "input-item" }, [
           vue.createElementVNode("image", {
             style: { "margin-left": "20rpx", "width": "70rpx", "height": "70rpx" },
-            src: _imports_0$7
+            src: _imports_0$8
           }),
           vue.withDirectives(vue.createElementVNode(
             "input",
@@ -391,7 +430,7 @@ if (uni.restoreGlobal) {
       }, "24小时客户服务电话：400 858 1855")
     ]);
   }
-  const PagesLoginLogin = /* @__PURE__ */ _export_sfc(_sfc_main$o, [["render", _sfc_render$n], ["__scopeId", "data-v-e4e4508d"], ["__file", "C:/Users/86158/Documents/HBuilderProjects/PrePayApp/pages/login/login.vue"]]);
+  const PagesLoginLogin = /* @__PURE__ */ _export_sfc(_sfc_main$p, [["render", _sfc_render$o], ["__scopeId", "data-v-e4e4508d"], ["__file", "C:/Users/86158/Documents/HBuilderProjects/PrePayApp/pages/login/login.vue"]]);
   const fontData = [
     {
       "font_class": "arrow-down",
@@ -1042,7 +1081,7 @@ if (uni.restoreGlobal) {
     const reg = /^[0-9]*$/g;
     return typeof val === "number" || reg.test(val) ? val + "px" : val;
   };
-  const _sfc_main$n = {
+  const _sfc_main$o = {
     name: "UniIcons",
     emits: ["click"],
     props: {
@@ -1096,7 +1135,7 @@ if (uni.restoreGlobal) {
       }
     }
   };
-  function _sfc_render$m(_ctx, _cache, $props, $setup, $data, $options) {
+  function _sfc_render$n(_ctx, _cache, $props, $setup, $data, $options) {
     return vue.openBlock(), vue.createElementBlock(
       "text",
       {
@@ -1111,8 +1150,8 @@ if (uni.restoreGlobal) {
       /* CLASS, STYLE */
     );
   }
-  const UniIcons = /* @__PURE__ */ _export_sfc(_sfc_main$n, [["render", _sfc_render$m], ["__scopeId", "data-v-946bce22"], ["__file", "C:/Users/86158/Documents/HBuilderProjects/PrePayApp/node_modules/@dcloudio/uni-ui/lib/uni-icons/uni-icons.vue"]]);
-  const _sfc_main$m = {
+  const UniIcons = /* @__PURE__ */ _export_sfc(_sfc_main$o, [["render", _sfc_render$n], ["__scopeId", "data-v-946bce22"], ["__file", "C:/Users/86158/Documents/HBuilderProjects/PrePayApp/node_modules/@dcloudio/uni-ui/lib/uni-icons/uni-icons.vue"]]);
+  const _sfc_main$n = {
     __name: "map",
     setup(__props, { expose: __expose }) {
       __expose();
@@ -1127,7 +1166,11 @@ if (uni.restoreGlobal) {
       const stations = vue.reactive([]);
       const handleMarkerTap = (e2) => {
         const markerId = e2.detail.markerId;
-        selectedStation.value = stations.find((item) => item.id === markerId);
+        const station = stations.find((item) => item.id === markerId);
+        selectedStation.value = JSON.parse(JSON.stringify(station));
+        setTimeout(() => {
+          selectedStation.value = { ...selectedStation.value };
+        }, 50);
       };
       const handleMapTap = () => {
         selectedStation.value = null;
@@ -1137,22 +1180,21 @@ if (uni.restoreGlobal) {
       };
       {
         getStationList().then((res) => {
-          let num = 0;
           totalStations.value = res.data.records.length;
-          res.data.records.forEach((item) => {
-            num++;
+          res.data.records.forEach((item, index) => {
             markers.push({
-              id: num,
+              id: index + 1,
               latitude: item.latitude,
               longitude: item.longitude,
               iconPath: "../../static/mapLogo.png",
-              width: 30,
-              height: 30
+              width: 10,
+              height: 10,
+              anchor: { x: 0.5, y: 1 }
             });
             stations.push({
               phone: item.phone,
               company: item.company,
-              id: num,
+              id: index + 1,
               address: item.address,
               detail: item.detail,
               stationName: item.stationName,
@@ -1168,7 +1210,8 @@ if (uni.restoreGlobal) {
       return __returned__;
     }
   };
-  function _sfc_render$l(_ctx, _cache, $props, $setup, $data, $options) {
+  function _sfc_render$m(_ctx, _cache, $props, $setup, $data, $options) {
+    var _a;
     return vue.openBlock(), vue.createElementBlock("view", { class: "container" }, [
       vue.createCommentVNode(" 顶部统计信息 "),
       vue.createElementVNode("view", { class: "header" }, [
@@ -1199,7 +1242,7 @@ if (uni.restoreGlobal) {
       vue.createElementVNode("view", { class: "map-container" }, [
         vue.createElementVNode("map", {
           id: "stationMap",
-          style: { "width": "100%", "height": "100%" },
+          style: { "width": "100%", "height": "60%" },
           latitude: $setup.mapCenter.latitude,
           longitude: $setup.mapCenter.longitude,
           markers: $setup.markers,
@@ -1207,7 +1250,6 @@ if (uni.restoreGlobal) {
           onMarkertap: $setup.handleMarkerTap,
           onTap: $setup.handleMapTap
         }, null, 40, ["latitude", "longitude", "markers"]),
-        vue.createCommentVNode(" 信息弹窗 "),
         $setup.selectedStation ? (vue.openBlock(), vue.createElementBlock("view", {
           key: 0,
           class: "info-window"
@@ -1216,16 +1258,11 @@ if (uni.restoreGlobal) {
             vue.createElementVNode(
               "text",
               { class: "title" },
-              vue.toDisplayString($setup.selectedStation.stationName),
+              vue.toDisplayString(((_a = $setup.selectedStation) == null ? void 0 : _a.stationName) || "加载中..."),
               1
               /* TEXT */
             ),
-            vue.createVNode($setup["uniIcons"], {
-              type: "close",
-              size: "20",
-              color: "#999",
-              onClick: _cache[1] || (_cache[1] = ($event) => $setup.selectedStation = null)
-            })
+            vue.createCommentVNode(' <uni-icons \n   		       type="close" \n   		       size="20" \n   		       color="#999" \n   		       @click="selectedStation = null"\n   		     ></uni-icons> ')
           ]),
           vue.createElementVNode("view", { class: "info-content" }, [
             vue.createElementVNode("view", { class: "info-item" }, [
@@ -1291,9 +1328,9 @@ if (uni.restoreGlobal) {
       ])
     ]);
   }
-  const PagesMapMap = /* @__PURE__ */ _export_sfc(_sfc_main$m, [["render", _sfc_render$l], ["__scopeId", "data-v-e06b858f"], ["__file", "C:/Users/86158/Documents/HBuilderProjects/PrePayApp/pages/map/map.vue"]]);
-  const _imports_0$6 = "/static/background.png";
-  const _sfc_main$l = {
+  const PagesMapMap = /* @__PURE__ */ _export_sfc(_sfc_main$n, [["render", _sfc_render$m], ["__scopeId", "data-v-e06b858f"], ["__file", "C:/Users/86158/Documents/HBuilderProjects/PrePayApp/pages/map/map.vue"]]);
+  const _imports_0$7 = "/static/background.png";
+  const _sfc_main$m = {
     __name: "PreLogin",
     setup(__props, { expose: __expose }) {
       __expose();
@@ -1309,18 +1346,18 @@ if (uni.restoreGlobal) {
       return __returned__;
     }
   };
-  function _sfc_render$k(_ctx, _cache, $props, $setup, $data, $options) {
+  function _sfc_render$l(_ctx, _cache, $props, $setup, $data, $options) {
     return vue.openBlock(), vue.createElementBlock("view", { class: "main" }, [
       vue.createElementVNode("img", {
-        src: _imports_0$6,
+        src: _imports_0$7,
         alt: "",
         class: "img"
       })
     ]);
   }
-  const PagesPreLoginPreLogin = /* @__PURE__ */ _export_sfc(_sfc_main$l, [["render", _sfc_render$k], ["__scopeId", "data-v-6f7f9871"], ["__file", "C:/Users/86158/Documents/HBuilderProjects/PrePayApp/pages/PreLogin/PreLogin.vue"]]);
-  const _imports_0$5 = "/static/logo.png";
-  const _sfc_main$k = {
+  const PagesPreLoginPreLogin = /* @__PURE__ */ _export_sfc(_sfc_main$m, [["render", _sfc_render$l], ["__scopeId", "data-v-6f7f9871"], ["__file", "C:/Users/86158/Documents/HBuilderProjects/PrePayApp/pages/PreLogin/PreLogin.vue"]]);
+  const _imports_0$6 = "/static/logo.png";
+  const _sfc_main$l = {
     data() {
       return {
         title: "Hello"
@@ -1330,11 +1367,11 @@ if (uni.restoreGlobal) {
     },
     methods: {}
   };
-  function _sfc_render$j(_ctx, _cache, $props, $setup, $data, $options) {
+  function _sfc_render$k(_ctx, _cache, $props, $setup, $data, $options) {
     return vue.openBlock(), vue.createElementBlock("view", { class: "content" }, [
       vue.createElementVNode("image", {
         class: "logo",
-        src: _imports_0$5
+        src: _imports_0$6
       }),
       vue.createElementVNode("view", { class: "text-area" }, [
         vue.createElementVNode(
@@ -1347,22 +1384,22 @@ if (uni.restoreGlobal) {
       ])
     ]);
   }
-  const PagesIndexIndex = /* @__PURE__ */ _export_sfc(_sfc_main$k, [["render", _sfc_render$j], ["__file", "C:/Users/86158/Documents/HBuilderProjects/PrePayApp/pages/index/index.vue"]]);
-  const _imports_0$4 = "/static/more.png";
-  const _sfc_main$j = {};
-  function _sfc_render$i(_ctx, _cache) {
+  const PagesIndexIndex = /* @__PURE__ */ _export_sfc(_sfc_main$l, [["render", _sfc_render$k], ["__file", "C:/Users/86158/Documents/HBuilderProjects/PrePayApp/pages/index/index.vue"]]);
+  const _imports_0$5 = "/static/more.png";
+  const _sfc_main$k = {};
+  function _sfc_render$j(_ctx, _cache) {
     return vue.openBlock(), vue.createElementBlock("view", { class: "main" }, [
       vue.createElementVNode("img", {
-        src: _imports_0$4,
+        src: _imports_0$5,
         alt: "",
         class: "img"
       })
     ]);
   }
-  const PagesMoreMore = /* @__PURE__ */ _export_sfc(_sfc_main$j, [["render", _sfc_render$i], ["__scopeId", "data-v-ac368486"], ["__file", "C:/Users/86158/Documents/HBuilderProjects/PrePayApp/pages/more/more.vue"]]);
-  const _imports_0$3 = "/static/search.png";
-  const _imports_1 = "/static/station_icon.png";
-  const _sfc_main$i = {
+  const PagesMoreMore = /* @__PURE__ */ _export_sfc(_sfc_main$k, [["render", _sfc_render$j], ["__scopeId", "data-v-ac368486"], ["__file", "C:/Users/86158/Documents/HBuilderProjects/PrePayApp/pages/more/more.vue"]]);
+  const _imports_0$4 = "/static/search.png";
+  const _imports_0$3 = "/static/station_icon.png";
+  const _sfc_main$j = {
     data() {
       return {
         searchText: "",
@@ -1429,7 +1466,7 @@ if (uni.restoreGlobal) {
     onLoad() {
     }
   };
-  function _sfc_render$h(_ctx, _cache, $props, $setup, $data, $options) {
+  function _sfc_render$i(_ctx, _cache, $props, $setup, $data, $options) {
     return vue.openBlock(), vue.createElementBlock("view", { class: "container" }, [
       vue.createCommentVNode(" 设备列表视图 "),
       vue.createElementVNode("view", { class: "device-list-layout" }, [
@@ -1451,7 +1488,7 @@ if (uni.restoreGlobal) {
           ]),
           vue.createElementVNode("image", {
             class: "search-icon",
-            src: _imports_0$3
+            src: _imports_0$4
           })
         ]),
         vue.createCommentVNode(" 列表内容 "),
@@ -1472,7 +1509,7 @@ if (uni.restoreGlobal) {
                   vue.createElementVNode("view", { class: "device-content" }, [
                     vue.createElementVNode("image", {
                       class: "device-icon",
-                      src: _imports_1
+                      src: _imports_0$3
                     }),
                     vue.createElementVNode("view", { class: "device-info" }, [
                       vue.createElementVNode(
@@ -1584,9 +1621,9 @@ if (uni.restoreGlobal) {
       ])) : vue.createCommentVNode("v-if", true)
     ]);
   }
-  const PagesListList = /* @__PURE__ */ _export_sfc(_sfc_main$i, [["render", _sfc_render$h], ["__file", "C:/Users/86158/Documents/HBuilderProjects/PrePayApp/pages/list/list.vue"]]);
+  const PagesListList = /* @__PURE__ */ _export_sfc(_sfc_main$j, [["render", _sfc_render$i], ["__file", "C:/Users/86158/Documents/HBuilderProjects/PrePayApp/pages/list/list.vue"]]);
   const _imports_0$2 = "/static/enter_icon.png";
-  const _sfc_main$h = {
+  const _sfc_main$i = {
     __name: "settings",
     setup(__props, { expose: __expose }) {
       __expose();
@@ -1639,7 +1676,7 @@ if (uni.restoreGlobal) {
       return __returned__;
     }
   };
-  function _sfc_render$g(_ctx, _cache, $props, $setup, $data, $options) {
+  function _sfc_render$h(_ctx, _cache, $props, $setup, $data, $options) {
     return vue.openBlock(), vue.createElementBlock("view", { class: "setting-page" }, [
       (vue.openBlock(true), vue.createElementBlock(
         vue.Fragment,
@@ -1680,7 +1717,7 @@ if (uni.restoreGlobal) {
       ])
     ]);
   }
-  const PagesSettingsSettings = /* @__PURE__ */ _export_sfc(_sfc_main$h, [["render", _sfc_render$g], ["__file", "C:/Users/86158/Documents/HBuilderProjects/PrePayApp/pages/settings/settings.vue"]]);
+  const PagesSettingsSettings = /* @__PURE__ */ _export_sfc(_sfc_main$i, [["render", _sfc_render$h], ["__file", "C:/Users/86158/Documents/HBuilderProjects/PrePayApp/pages/settings/settings.vue"]]);
   const pages = [
     {
       path: "pages/login/login",
@@ -1787,6 +1824,12 @@ if (uni.restoreGlobal) {
     },
     {
       path: "pages/select-location/select-location",
+      style: {
+        navigationBarTitleText: ""
+      }
+    },
+    {
+      path: "pages/company-stationList/company-stationList",
       style: {
         navigationBarTitleText: ""
       }
@@ -4691,7 +4734,7 @@ ${i3}
     }
   })();
   var nr = tr;
-  const _sfc_main$g = {
+  const _sfc_main$h = {
     name: "uni-data-select",
     mixins: [nr.mixinDatacom || {}],
     props: {
@@ -4940,7 +4983,7 @@ ${i3}
       }
     }
   };
-  function _sfc_render$f(_ctx, _cache, $props, $setup, $data, $options) {
+  function _sfc_render$g(_ctx, _cache, $props, $setup, $data, $options) {
     const _component_uni_icons = resolveEasycom(vue.resolveDynamicComponent("uni-icons"), UniIcons);
     return vue.openBlock(), vue.createElementBlock("view", { class: "uni-stat__select" }, [
       $props.label ? (vue.openBlock(), vue.createElementBlock(
@@ -5080,7 +5123,7 @@ ${i3}
       )
     ]);
   }
-  const __easycom_0$2 = /* @__PURE__ */ _export_sfc(_sfc_main$g, [["render", _sfc_render$f], ["__scopeId", "data-v-123e8af9"], ["__file", "C:/Users/86158/Documents/HBuilderProjects/PrePayApp/node_modules/@dcloudio/uni-ui/lib/uni-data-select/uni-data-select.vue"]]);
+  const __easycom_0$2 = /* @__PURE__ */ _export_sfc(_sfc_main$h, [["render", _sfc_render$g], ["__scopeId", "data-v-123e8af9"], ["__file", "C:/Users/86158/Documents/HBuilderProjects/PrePayApp/node_modules/@dcloudio/uni-ui/lib/uni-data-select/uni-data-select.vue"]]);
   function obj2strClass(obj) {
     let classess = "";
     for (let key in obj) {
@@ -5099,7 +5142,7 @@ ${i3}
     }
     return style;
   }
-  const _sfc_main$f = {
+  const _sfc_main$g = {
     name: "uni-easyinput",
     emits: [
       "click",
@@ -5456,7 +5499,7 @@ ${i3}
       }
     }
   };
-  function _sfc_render$e(_ctx, _cache, $props, $setup, $data, $options) {
+  function _sfc_render$f(_ctx, _cache, $props, $setup, $data, $options) {
     const _component_uni_icons = resolveEasycom(vue.resolveDynamicComponent("uni-icons"), UniIcons);
     return vue.openBlock(), vue.createElementBlock(
       "view",
@@ -5581,7 +5624,7 @@ ${i3}
       /* CLASS, STYLE */
     );
   }
-  const __easycom_0$1 = /* @__PURE__ */ _export_sfc(_sfc_main$f, [["render", _sfc_render$e], ["__scopeId", "data-v-f7a14e66"], ["__file", "C:/Users/86158/Documents/HBuilderProjects/PrePayApp/node_modules/@dcloudio/uni-ui/lib/uni-easyinput/uni-easyinput.vue"]]);
+  const __easycom_0$1 = /* @__PURE__ */ _export_sfc(_sfc_main$g, [["render", _sfc_render$f], ["__scopeId", "data-v-f7a14e66"], ["__file", "C:/Users/86158/Documents/HBuilderProjects/PrePayApp/node_modules/@dcloudio/uni-ui/lib/uni-easyinput/uni-easyinput.vue"]]);
   const isObject = (val) => val !== null && typeof val === "object";
   const defaultDelimiters = ["{", "}"];
   class BaseFormatter {
@@ -5888,7 +5931,7 @@ ${i3}
   const {
     t
   } = initVueI18n(messages);
-  const _sfc_main$e = {
+  const _sfc_main$f = {
     name: "UniSearchBar",
     emits: ["input", "update:modelValue", "clear", "cancel", "confirm", "blur", "focus"],
     props: {
@@ -6030,7 +6073,7 @@ ${i3}
       }
     }
   };
-  function _sfc_render$d(_ctx, _cache, $props, $setup, $data, $options) {
+  function _sfc_render$e(_ctx, _cache, $props, $setup, $data, $options) {
     const _component_uni_icons = resolveEasycom(vue.resolveDynamicComponent("uni-icons"), UniIcons);
     return vue.openBlock(), vue.createElementBlock("view", { class: "uni-searchbar" }, [
       vue.createElementVNode(
@@ -6106,7 +6149,7 @@ ${i3}
       )) : vue.createCommentVNode("v-if", true)
     ]);
   }
-  const UniSearchBar = /* @__PURE__ */ _export_sfc(_sfc_main$e, [["render", _sfc_render$d], ["__scopeId", "data-v-a149a6be"], ["__file", "C:/Users/86158/Documents/HBuilderProjects/PrePayApp/node_modules/@dcloudio/uni-ui/lib/uni-search-bar/uni-search-bar.vue"]]);
+  const UniSearchBar = /* @__PURE__ */ _export_sfc(_sfc_main$f, [["render", _sfc_render$e], ["__scopeId", "data-v-a149a6be"], ["__file", "C:/Users/86158/Documents/HBuilderProjects/PrePayApp/node_modules/@dcloudio/uni-ui/lib/uni-search-bar/uni-search-bar.vue"]]);
   class MPAnimation {
     constructor(options, _this) {
       this.options = options;
@@ -6219,7 +6262,7 @@ ${i3}
     clearTimeout(_this.timer);
     return new MPAnimation(option, _this);
   }
-  const _sfc_main$d = {
+  const _sfc_main$e = {
     name: "uniTransition",
     emits: ["click", "change"],
     props: {
@@ -6470,7 +6513,7 @@ ${i3}
       }
     }
   };
-  function _sfc_render$c(_ctx, _cache, $props, $setup, $data, $options) {
+  function _sfc_render$d(_ctx, _cache, $props, $setup, $data, $options) {
     return vue.withDirectives((vue.openBlock(), vue.createElementBlock("view", {
       ref: "ani",
       animation: $data.animationData,
@@ -6483,8 +6526,8 @@ ${i3}
       [vue.vShow, $data.isShow]
     ]);
   }
-  const __easycom_0 = /* @__PURE__ */ _export_sfc(_sfc_main$d, [["render", _sfc_render$c], ["__file", "C:/Users/86158/Documents/HBuilderProjects/PrePayApp/node_modules/@dcloudio/uni-ui/lib/uni-transition/uni-transition.vue"]]);
-  const _sfc_main$c = {
+  const __easycom_0 = /* @__PURE__ */ _export_sfc(_sfc_main$e, [["render", _sfc_render$d], ["__file", "C:/Users/86158/Documents/HBuilderProjects/PrePayApp/node_modules/@dcloudio/uni-ui/lib/uni-transition/uni-transition.vue"]]);
+  const _sfc_main$d = {
     name: "uniPopup",
     components: {},
     emits: ["change", "maskClick"],
@@ -6837,7 +6880,7 @@ ${i3}
       }
     }
   };
-  function _sfc_render$b(_ctx, _cache, $props, $setup, $data, $options) {
+  function _sfc_render$c(_ctx, _cache, $props, $setup, $data, $options) {
     const _component_uni_transition = resolveEasycom(vue.resolveDynamicComponent("uni-transition"), __easycom_0);
     return $data.showPopup ? (vue.openBlock(), vue.createElementBlock(
       "view",
@@ -6897,8 +6940,8 @@ ${i3}
       /* CLASS */
     )) : vue.createCommentVNode("v-if", true);
   }
-  const UniPopup = /* @__PURE__ */ _export_sfc(_sfc_main$c, [["render", _sfc_render$b], ["__scopeId", "data-v-7db519c7"], ["__file", "C:/Users/86158/Documents/HBuilderProjects/PrePayApp/node_modules/@dcloudio/uni-ui/lib/uni-popup/uni-popup.vue"]]);
-  const _sfc_main$b = {
+  const UniPopup = /* @__PURE__ */ _export_sfc(_sfc_main$d, [["render", _sfc_render$c], ["__scopeId", "data-v-7db519c7"], ["__file", "C:/Users/86158/Documents/HBuilderProjects/PrePayApp/node_modules/@dcloudio/uni-ui/lib/uni-popup/uni-popup.vue"]]);
+  const _sfc_main$c = {
     __name: "user",
     setup(__props, { expose: __expose }) {
       __expose();
@@ -6941,13 +6984,19 @@ ${i3}
             });
           }
         } catch (error) {
-          formatAppLog("error", "at pages/user/user.vue:297", "删除企业失败:", error);
+          formatAppLog("error", "at pages/user/user.vue:298", "删除企业失败:", error);
           uni.showToast({
             title: "删除失败，请重试",
             icon: "none"
           });
         }
       }
+      const viewHeatStations = () => {
+        saveDevice(currentUser.value.name);
+        uni.navigateTo({
+          url: `/pages/company-stationList/company-stationList`
+        });
+      };
       vue.onMounted(async () => {
         var _a, _b;
         try {
@@ -6962,7 +7011,7 @@ ${i3}
             sale: item.sale
           }))) || [];
         } catch (error) {
-          formatAppLog("error", "at pages/user/user.vue:318", "获取企业列表失败:", error);
+          formatAppLog("error", "at pages/user/user.vue:325", "获取企业列表失败:", error);
           uni.showToast({
             title: "数据加载失败",
             icon: "none"
@@ -7012,18 +7061,18 @@ ${i3}
       };
       const handleSubmit = async () => {
         var _a, _b;
-        formatAppLog("log", "at pages/user/user.vue:380", newCompany.value);
+        formatAppLog("log", "at pages/user/user.vue:387", newCompany.value);
         if (!newCompany.value.name || !newCompany.value.phone || !newCompany.value.userName || !newCompany.value.admin || !newCompany.value.user || !newCompany.value.sale) {
           uni.showToast({ title: "企业信息不完整", icon: "none" });
           return;
         }
         try {
           let data = await addCompany(newCompany.value);
-          formatAppLog("log", "at pages/user/user.vue:389", data);
+          formatAppLog("log", "at pages/user/user.vue:396", data);
           uni.showToast({ title: "添加成功" });
           closeAddModal();
           const res = await fetchCompanyList();
-          formatAppLog("log", "at pages/user/user.vue:394", res.data);
+          formatAppLog("log", "at pages/user/user.vue:401", res.data);
           users.value = ((_b = (_a = res.data) == null ? void 0 : _a.records) == null ? void 0 : _b.map((item, index) => ({
             id: String(index),
             name: item.companyName || "未知企业",
@@ -7035,8 +7084,8 @@ ${i3}
           }))) || [];
         } catch (error) {
           uni.showToast({ title: "添加失败", icon: "none" });
-          formatAppLog("log", "at pages/user/user.vue:406", error);
-          formatAppLog("log", "at pages/user/user.vue:407", 55);
+          formatAppLog("log", "at pages/user/user.vue:413", error);
+          formatAppLog("log", "at pages/user/user.vue:414", 55);
         }
       };
       const allUsers = vue.ref([]);
@@ -7137,7 +7186,7 @@ ${i3}
               sale: editCompanyData.value.sale
             };
             closeEditModal();
-            formatAppLog("log", "at pages/user/user.vue:537", currentUser.value.phone);
+            formatAppLog("log", "at pages/user/user.vue:544", currentUser.value.phone);
             const listRes = await fetchCompanyList();
             users.value = ((_b = (_a = listRes.data) == null ? void 0 : _a.records) == null ? void 0 : _b.map((item, index) => ({
               id: String(index),
@@ -7152,12 +7201,14 @@ ${i3}
             uni.showToast({ title: res.message || "修改失败", icon: "none" });
           }
         } catch (error) {
-          formatAppLog("error", "at pages/user/user.vue:553", "修改失败:", error);
+          formatAppLog("error", "at pages/user/user.vue:560", "修改失败:", error);
           uni.showToast({ title: "修改失败，请重试", icon: "none" });
         }
       };
-      const __returned__ = { users, currentUser, searchKeyword, detailPopup, deletecompany, filteredUsers, handleSearch, handleCancel, showDetailModal, closeDetailModal, addPopup, newCompany, closeAddModal, handleSubmit, allUsers, loadUsers, filteredAdmins, filteredusers, filteredSales, filterUsers, showAddModal, editPopup, editCompanyData, editCompany, closeEditModal, handleUpdateSubmit, UniEasyinput: __easycom_0$1, ref: vue.ref, computed: vue.computed, onMounted: vue.onMounted, UniSearchBar, UniIcons, UniPopup, get fetchCompanyList() {
+      const __returned__ = { users, currentUser, searchKeyword, detailPopup, deletecompany, viewHeatStations, filteredUsers, handleSearch, handleCancel, showDetailModal, closeDetailModal, addPopup, newCompany, closeAddModal, handleSubmit, allUsers, loadUsers, filteredAdmins, filteredusers, filteredSales, filterUsers, showAddModal, editPopup, editCompanyData, editCompany, closeEditModal, handleUpdateSubmit, UniEasyinput: __easycom_0$1, ref: vue.ref, computed: vue.computed, onMounted: vue.onMounted, UniSearchBar, UniIcons, UniPopup, get fetchCompanyList() {
         return fetchCompanyList;
+      }, get fetchStationList() {
+        return fetchStationList;
       }, get fetchUserList() {
         return fetchUserList;
       }, get addCompany() {
@@ -7166,12 +7217,14 @@ ${i3}
         return deleteCompany;
       }, get updateCompany() {
         return updateCompany;
+      }, get saveDevice() {
+        return saveDevice;
       } };
       Object.defineProperty(__returned__, "__isScriptSetup", { enumerable: false, value: true });
       return __returned__;
     }
   };
-  function _sfc_render$a(_ctx, _cache, $props, $setup, $data, $options) {
+  function _sfc_render$b(_ctx, _cache, $props, $setup, $data, $options) {
     const _component_uni_data_select = resolveEasycom(vue.resolveDynamicComponent("uni-data-select"), __easycom_0$2);
     return vue.openBlock(), vue.createElementBlock("view", { class: "container" }, [
       vue.createElementVNode("view", {
@@ -7302,7 +7355,7 @@ ${i3}
                   vue.createElementVNode("view", { class: "action-buttons" }, [
                     vue.createElementVNode("button", {
                       class: "btn heat-station",
-                      onClick: _cache[0] || (_cache[0] = (...args) => _ctx.viewHeatStations && _ctx.viewHeatStations(...args))
+                      onClick: $setup.viewHeatStations
                     }, "查看换热站"),
                     vue.createElementVNode("button", {
                       class: "btn edit",
@@ -7345,7 +7398,7 @@ ${i3}
                 vue.createElementVNode("text", { class: "label" }, "* 企业名称"),
                 vue.createVNode($setup["UniEasyinput"], {
                   modelValue: $setup.newCompany.name,
-                  "onUpdate:modelValue": _cache[1] || (_cache[1] = ($event) => $setup.newCompany.name = $event),
+                  "onUpdate:modelValue": _cache[0] || (_cache[0] = ($event) => $setup.newCompany.name = $event),
                   placeholder: "请输入企业名称"
                 }, null, 8, ["modelValue"])
               ]),
@@ -7353,7 +7406,7 @@ ${i3}
                 vue.createElementVNode("text", { class: "label" }, "* 联系电话"),
                 vue.createVNode($setup["UniEasyinput"], {
                   modelValue: $setup.newCompany.phone,
-                  "onUpdate:modelValue": _cache[2] || (_cache[2] = ($event) => $setup.newCompany.phone = $event),
+                  "onUpdate:modelValue": _cache[1] || (_cache[1] = ($event) => $setup.newCompany.phone = $event),
                   placeholder: "请输入联系电话",
                   type: "number"
                 }, null, 8, ["modelValue"])
@@ -7362,7 +7415,7 @@ ${i3}
                 vue.createElementVNode("text", { class: "label" }, "* 负责人"),
                 vue.createVNode($setup["UniEasyinput"], {
                   modelValue: $setup.newCompany.userName,
-                  "onUpdate:modelValue": _cache[3] || (_cache[3] = ($event) => $setup.newCompany.userName = $event),
+                  "onUpdate:modelValue": _cache[2] || (_cache[2] = ($event) => $setup.newCompany.userName = $event),
                   placeholder: "请输入负责人姓名"
                 }, null, 8, ["modelValue"])
               ]),
@@ -7370,7 +7423,7 @@ ${i3}
                 vue.createElementVNode("text", { class: "label" }, "* 管理员"),
                 vue.createVNode(_component_uni_data_select, {
                   modelValue: $setup.newCompany.admin,
-                  "onUpdate:modelValue": _cache[4] || (_cache[4] = ($event) => $setup.newCompany.admin = $event),
+                  "onUpdate:modelValue": _cache[3] || (_cache[3] = ($event) => $setup.newCompany.admin = $event),
                   placeholder: "选择管理员",
                   localdata: $setup.filteredAdmins,
                   clear: true
@@ -7381,7 +7434,7 @@ ${i3}
                 vue.createElementVNode("text", { class: "label" }, "* 用户"),
                 vue.createVNode(_component_uni_data_select, {
                   modelValue: $setup.newCompany.user,
-                  "onUpdate:modelValue": _cache[5] || (_cache[5] = ($event) => $setup.newCompany.user = $event),
+                  "onUpdate:modelValue": _cache[4] || (_cache[4] = ($event) => $setup.newCompany.user = $event),
                   placeholder: "选择用户",
                   localdata: $setup.filteredusers,
                   clear: true
@@ -7392,7 +7445,7 @@ ${i3}
                 vue.createElementVNode("text", { class: "label" }, "* 销售"),
                 vue.createVNode(_component_uni_data_select, {
                   modelValue: $setup.newCompany.sale,
-                  "onUpdate:modelValue": _cache[6] || (_cache[6] = ($event) => $setup.newCompany.sale = $event),
+                  "onUpdate:modelValue": _cache[5] || (_cache[5] = ($event) => $setup.newCompany.sale = $event),
                   placeholder: "选择销售",
                   localdata: $setup.filteredSales,
                   clear: true
@@ -7439,7 +7492,7 @@ ${i3}
                 vue.createElementVNode("text", { class: "label" }, "* 企业名称"),
                 vue.createVNode($setup["UniEasyinput"], {
                   modelValue: $setup.editCompanyData.name,
-                  "onUpdate:modelValue": _cache[7] || (_cache[7] = ($event) => $setup.editCompanyData.name = $event),
+                  "onUpdate:modelValue": _cache[6] || (_cache[6] = ($event) => $setup.editCompanyData.name = $event),
                   placeholder: "请输入企业名称",
                   disabled: true
                 }, null, 8, ["modelValue"])
@@ -7448,7 +7501,7 @@ ${i3}
                 vue.createElementVNode("text", { class: "label" }, "* 联系电话"),
                 vue.createVNode($setup["UniEasyinput"], {
                   modelValue: $setup.editCompanyData.phone,
-                  "onUpdate:modelValue": _cache[8] || (_cache[8] = ($event) => $setup.editCompanyData.phone = $event),
+                  "onUpdate:modelValue": _cache[7] || (_cache[7] = ($event) => $setup.editCompanyData.phone = $event),
                   placeholder: "请输入联系电话",
                   type: "number"
                 }, null, 8, ["modelValue"])
@@ -7457,7 +7510,7 @@ ${i3}
                 vue.createElementVNode("text", { class: "label" }, "* 负责人"),
                 vue.createVNode($setup["UniEasyinput"], {
                   modelValue: $setup.editCompanyData.userName,
-                  "onUpdate:modelValue": _cache[9] || (_cache[9] = ($event) => $setup.editCompanyData.userName = $event),
+                  "onUpdate:modelValue": _cache[8] || (_cache[8] = ($event) => $setup.editCompanyData.userName = $event),
                   placeholder: "请输入负责人姓名"
                 }, null, 8, ["modelValue"])
               ]),
@@ -7465,7 +7518,7 @@ ${i3}
                 vue.createElementVNode("text", { class: "label" }, "* 管理员"),
                 vue.createVNode(_component_uni_data_select, {
                   modelValue: $setup.editCompanyData.admin,
-                  "onUpdate:modelValue": _cache[10] || (_cache[10] = ($event) => $setup.editCompanyData.admin = $event),
+                  "onUpdate:modelValue": _cache[9] || (_cache[9] = ($event) => $setup.editCompanyData.admin = $event),
                   placeholder: "选择管理员",
                   localdata: $setup.filteredAdmins,
                   clear: true
@@ -7476,7 +7529,7 @@ ${i3}
                 vue.createElementVNode("text", { class: "label" }, "* 用户"),
                 vue.createVNode(_component_uni_data_select, {
                   modelValue: $setup.editCompanyData.user,
-                  "onUpdate:modelValue": _cache[11] || (_cache[11] = ($event) => $setup.editCompanyData.user = $event),
+                  "onUpdate:modelValue": _cache[10] || (_cache[10] = ($event) => $setup.editCompanyData.user = $event),
                   placeholder: "选择用户",
                   localdata: $setup.filteredusers,
                   clear: true
@@ -7487,7 +7540,7 @@ ${i3}
                 vue.createElementVNode("text", { class: "label" }, "* 销售"),
                 vue.createVNode(_component_uni_data_select, {
                   modelValue: $setup.editCompanyData.sale,
-                  "onUpdate:modelValue": _cache[12] || (_cache[12] = ($event) => $setup.editCompanyData.sale = $event),
+                  "onUpdate:modelValue": _cache[11] || (_cache[11] = ($event) => $setup.editCompanyData.sale = $event),
                   placeholder: "选择销售",
                   localdata: $setup.filteredSales,
                   clear: true
@@ -7513,9 +7566,9 @@ ${i3}
       )
     ]);
   }
-  const PagesUserUser = /* @__PURE__ */ _export_sfc(_sfc_main$b, [["render", _sfc_render$a], ["__scopeId", "data-v-0f7520f0"], ["__file", "C:/Users/86158/Documents/HBuilderProjects/PrePayApp/pages/user/user.vue"]]);
+  const PagesUserUser = /* @__PURE__ */ _export_sfc(_sfc_main$c, [["render", _sfc_render$b], ["__scopeId", "data-v-0f7520f0"], ["__file", "C:/Users/86158/Documents/HBuilderProjects/PrePayApp/pages/user/user.vue"]]);
   const _imports_0$1 = "/static/error_icon.png";
-  const _sfc_main$a = {
+  const _sfc_main$b = {
     data() {
       return {
         errorList: []
@@ -7585,7 +7638,7 @@ ${i3}
       this.getErrorList();
     }
   };
-  function _sfc_render$9(_ctx, _cache, $props, $setup, $data, $options) {
+  function _sfc_render$a(_ctx, _cache, $props, $setup, $data, $options) {
     return vue.openBlock(), vue.createElementBlock("view", { class: "container" }, [
       vue.createCommentVNode(" 错误记录列表 "),
       vue.createElementVNode("scroll-view", {
@@ -7638,8 +7691,8 @@ ${i3}
       ])
     ]);
   }
-  const PagesErrorError = /* @__PURE__ */ _export_sfc(_sfc_main$a, [["render", _sfc_render$9], ["__file", "C:/Users/86158/Documents/HBuilderProjects/PrePayApp/pages/error/error.vue"]]);
-  const _sfc_main$9 = {
+  const PagesErrorError = /* @__PURE__ */ _export_sfc(_sfc_main$b, [["render", _sfc_render$a], ["__file", "C:/Users/86158/Documents/HBuilderProjects/PrePayApp/pages/error/error.vue"]]);
+  const _sfc_main$a = {
     __name: "account",
     setup(__props, { expose: __expose }) {
       __expose();
@@ -7700,7 +7753,7 @@ ${i3}
       return __returned__;
     }
   };
-  function _sfc_render$8(_ctx, _cache, $props, $setup, $data, $options) {
+  function _sfc_render$9(_ctx, _cache, $props, $setup, $data, $options) {
     return vue.openBlock(), vue.createElementBlock("view", { class: "container" }, [
       vue.createCommentVNode(" 标题 "),
       vue.createElementVNode("view", { class: "header" }, [
@@ -7849,9 +7902,9 @@ ${i3}
       )
     ]);
   }
-  const PagesAccountAccount = /* @__PURE__ */ _export_sfc(_sfc_main$9, [["render", _sfc_render$8], ["__scopeId", "data-v-8cce343a"], ["__file", "C:/Users/86158/Documents/HBuilderProjects/PrePayApp/pages/account/account.vue"]]);
+  const PagesAccountAccount = /* @__PURE__ */ _export_sfc(_sfc_main$a, [["render", _sfc_render$9], ["__scopeId", "data-v-8cce343a"], ["__file", "C:/Users/86158/Documents/HBuilderProjects/PrePayApp/pages/account/account.vue"]]);
   const _imports_0 = "/static/card.png";
-  const _sfc_main$8 = {
+  const _sfc_main$9 = {
     data() {
       return {
         deviceList: []
@@ -7907,7 +7960,7 @@ ${i3}
       });
     }
   };
-  function _sfc_render$7(_ctx, _cache, $props, $setup, $data, $options) {
+  function _sfc_render$8(_ctx, _cache, $props, $setup, $data, $options) {
     return vue.openBlock(), vue.createElementBlock("view", { class: "container" }, [
       vue.createCommentVNode(" 记录列表 "),
       vue.createElementVNode("scroll-view", {
@@ -7965,8 +8018,8 @@ ${i3}
       ])
     ]);
   }
-  const PagesRechargeRecordRechargeRecord = /* @__PURE__ */ _export_sfc(_sfc_main$8, [["render", _sfc_render$7], ["__file", "C:/Users/86158/Documents/HBuilderProjects/PrePayApp/pages/recharge-record/recharge-record.vue"]]);
-  const _sfc_main$7 = {
+  const PagesRechargeRecordRechargeRecord = /* @__PURE__ */ _export_sfc(_sfc_main$9, [["render", _sfc_render$8], ["__file", "C:/Users/86158/Documents/HBuilderProjects/PrePayApp/pages/recharge-record/recharge-record.vue"]]);
+  const _sfc_main$8 = {
     __name: "setting",
     setup(__props, { expose: __expose }) {
       __expose();
@@ -7998,7 +8051,7 @@ ${i3}
       return __returned__;
     }
   };
-  function _sfc_render$6(_ctx, _cache, $props, $setup, $data, $options) {
+  function _sfc_render$7(_ctx, _cache, $props, $setup, $data, $options) {
     return vue.openBlock(), vue.createElementBlock("view", { class: "setting-page" }, [
       vue.createElementVNode("view", {
         class: "setting-item",
@@ -8021,8 +8074,8 @@ ${i3}
       ])
     ]);
   }
-  const PagesSettingSetting = /* @__PURE__ */ _export_sfc(_sfc_main$7, [["render", _sfc_render$6], ["__file", "C:/Users/86158/Documents/HBuilderProjects/PrePayApp/pages/setting/setting.vue"]]);
-  const _sfc_main$6 = {
+  const PagesSettingSetting = /* @__PURE__ */ _export_sfc(_sfc_main$8, [["render", _sfc_render$7], ["__file", "C:/Users/86158/Documents/HBuilderProjects/PrePayApp/pages/setting/setting.vue"]]);
+  const _sfc_main$7 = {
     __name: "remote-charge",
     setup(__props, { expose: __expose }) {
       __expose();
@@ -8098,7 +8151,7 @@ ${i3}
       return __returned__;
     }
   };
-  function _sfc_render$5(_ctx, _cache, $props, $setup, $data, $options) {
+  function _sfc_render$6(_ctx, _cache, $props, $setup, $data, $options) {
     return vue.openBlock(), vue.createElementBlock("view", { class: "container" }, [
       vue.createElementVNode(
         "form",
@@ -8283,8 +8336,8 @@ ${i3}
       )
     ]);
   }
-  const PagesRemoteChargeRemoteCharge = /* @__PURE__ */ _export_sfc(_sfc_main$6, [["render", _sfc_render$5], ["__file", "C:/Users/86158/Documents/HBuilderProjects/PrePayApp/pages/remote-charge/remote-charge.vue"]]);
-  const _sfc_main$5 = {
+  const PagesRemoteChargeRemoteCharge = /* @__PURE__ */ _export_sfc(_sfc_main$7, [["render", _sfc_render$6], ["__file", "C:/Users/86158/Documents/HBuilderProjects/PrePayApp/pages/remote-charge/remote-charge.vue"]]);
+  const _sfc_main$6 = {
     __name: "change-password",
     setup(__props, { expose: __expose }) {
       __expose();
@@ -8337,7 +8390,7 @@ ${i3}
       return __returned__;
     }
   };
-  function _sfc_render$4(_ctx, _cache, $props, $setup, $data, $options) {
+  function _sfc_render$5(_ctx, _cache, $props, $setup, $data, $options) {
     return vue.openBlock(), vue.createElementBlock("view", { class: "change-password-page" }, [
       vue.createElementVNode("view", { class: "input-group" }, [
         vue.createElementVNode("text", null, "旧密码"),
@@ -8395,8 +8448,8 @@ ${i3}
       ])
     ]);
   }
-  const PagesChangePasswordChangePassword = /* @__PURE__ */ _export_sfc(_sfc_main$5, [["render", _sfc_render$4], ["__file", "C:/Users/86158/Documents/HBuilderProjects/PrePayApp/pages/change-password/change-password.vue"]]);
-  const _sfc_main$4 = {
+  const PagesChangePasswordChangePassword = /* @__PURE__ */ _export_sfc(_sfc_main$6, [["render", _sfc_render$5], ["__file", "C:/Users/86158/Documents/HBuilderProjects/PrePayApp/pages/change-password/change-password.vue"]]);
+  const _sfc_main$5 = {
     name: "uniFormsItem",
     options: {
       virtualHost: true
@@ -8728,7 +8781,7 @@ ${i3}
       }
     }
   };
-  function _sfc_render$3(_ctx, _cache, $props, $setup, $data, $options) {
+  function _sfc_render$4(_ctx, _cache, $props, $setup, $data, $options) {
     return vue.openBlock(), vue.createElementBlock(
       "view",
       {
@@ -8784,7 +8837,7 @@ ${i3}
       /* CLASS */
     );
   }
-  const __easycom_1 = /* @__PURE__ */ _export_sfc(_sfc_main$4, [["render", _sfc_render$3], ["__scopeId", "data-v-3515f8e1"], ["__file", "C:/Users/86158/Documents/HBuilderProjects/PrePayApp/node_modules/@dcloudio/uni-ui/lib/uni-forms-item/uni-forms-item.vue"]]);
+  const __easycom_1 = /* @__PURE__ */ _export_sfc(_sfc_main$5, [["render", _sfc_render$4], ["__scopeId", "data-v-3515f8e1"], ["__file", "C:/Users/86158/Documents/HBuilderProjects/PrePayApp/node_modules/@dcloudio/uni-ui/lib/uni-forms-item/uni-forms-item.vue"]]);
   var pattern = {
     email: /^\S+?@\S+?\.\S+?$/,
     idcard: /^[1-9]\d{5}(18|19|([23]\d))\d{2}((0[1-9])|(10|11|12))(([0-2][1-9])|10|20|30|31)\d{3}[0-9Xx]$/,
@@ -9348,7 +9401,7 @@ ${i3}
       return false;
     }
   };
-  const _sfc_main$3 = {
+  const _sfc_main$4 = {
     name: "uniForms",
     emits: ["validate", "submit"],
     options: {
@@ -9650,21 +9703,21 @@ ${i3}
       _isEqual: isEqual
     }
   };
-  function _sfc_render$2(_ctx, _cache, $props, $setup, $data, $options) {
+  function _sfc_render$3(_ctx, _cache, $props, $setup, $data, $options) {
     return vue.openBlock(), vue.createElementBlock("view", { class: "uni-forms" }, [
       vue.createElementVNode("form", null, [
         vue.renderSlot(_ctx.$slots, "default", {}, void 0, true)
       ])
     ]);
   }
-  const __easycom_2 = /* @__PURE__ */ _export_sfc(_sfc_main$3, [["render", _sfc_render$2], ["__scopeId", "data-v-13523fe0"], ["__file", "C:/Users/86158/Documents/HBuilderProjects/PrePayApp/node_modules/@dcloudio/uni-ui/lib/uni-forms/uni-forms.vue"]]);
-  const _sfc_main$2 = {
+  const __easycom_2 = /* @__PURE__ */ _export_sfc(_sfc_main$4, [["render", _sfc_render$3], ["__scopeId", "data-v-13523fe0"], ["__file", "C:/Users/86158/Documents/HBuilderProjects/PrePayApp/node_modules/@dcloudio/uni-ui/lib/uni-forms/uni-forms.vue"]]);
+  const _sfc_main$3 = {
     __name: "add-station",
     setup(__props, { expose: __expose }) {
       __expose();
       const formData = vue.ref({
         stationName: "",
-        company: "02test",
+        company: "",
         userName: "",
         phone: "",
         longitude: "",
@@ -9711,7 +9764,7 @@ ${i3}
               title: "获取位置失败",
               icon: "none"
             });
-            formatAppLog("error", "at pages/add-station/add-station.vue:140", "获取位置失败:", err);
+            formatAppLog("error", "at pages/add-station/add-station.vue:141", "获取位置失败:", err);
           }
         });
       };
@@ -9721,7 +9774,7 @@ ${i3}
           uni.showLoading({
             title: "提交中..."
           });
-          formatAppLog("log", "at pages/add-station/add-station.vue:154", "提交数据:", formData.value);
+          formatAppLog("log", "at pages/add-station/add-station.vue:155", "提交数据:", formData.value);
           setTimeout(() => {
             uni.hideLoading();
             uni.showToast({
@@ -9731,17 +9784,24 @@ ${i3}
             uni.navigateBack();
           }, 1500);
         }).catch((err) => {
-          formatAppLog("log", "at pages/add-station/add-station.vue:165", "表单验证失败:", err);
+          formatAppLog("log", "at pages/add-station/add-station.vue:166", "表单验证失败:", err);
         });
       };
-      const __returned__ = { formData, companies, rules, getLocation, submitForm, ref: vue.ref, get onLoad() {
+      vue.onMounted(() => {
+        getDevice().then((res) => {
+          formData.value.company = res;
+        });
+      });
+      const __returned__ = { formData, companies, rules, getLocation, submitForm, onMounted: vue.onMounted, ref: vue.ref, get onLoad() {
         return onLoad;
+      }, get getDevice() {
+        return getDevice;
       } };
       Object.defineProperty(__returned__, "__isScriptSetup", { enumerable: false, value: true });
       return __returned__;
     }
   };
-  function _sfc_render$1(_ctx, _cache, $props, $setup, $data, $options) {
+  function _sfc_render$2(_ctx, _cache, $props, $setup, $data, $options) {
     const _component_uni_easyinput = resolveEasycom(vue.resolveDynamicComponent("uni-easyinput"), __easycom_0$1);
     const _component_uni_forms_item = resolveEasycom(vue.resolveDynamicComponent("uni-forms-item"), __easycom_1);
     const _component_uni_forms = resolveEasycom(vue.resolveDynamicComponent("uni-forms"), __easycom_2);
@@ -9893,8 +9953,8 @@ ${i3}
       ])
     ]);
   }
-  const PagesAddStationAddStation = /* @__PURE__ */ _export_sfc(_sfc_main$2, [["render", _sfc_render$1], ["__file", "C:/Users/86158/Documents/HBuilderProjects/PrePayApp/pages/add-station/add-station.vue"]]);
-  const _sfc_main$1 = {
+  const PagesAddStationAddStation = /* @__PURE__ */ _export_sfc(_sfc_main$3, [["render", _sfc_render$2], ["__file", "C:/Users/86158/Documents/HBuilderProjects/PrePayApp/pages/add-station/add-station.vue"]]);
+  const _sfc_main$2 = {
     __name: "select-location",
     setup(__props, { expose: __expose }) {
       __expose();
@@ -9912,9 +9972,9 @@ ${i3}
           id: Date.now(),
           latitude: e2.detail.latitude,
           longitude: e2.detail.longitude,
-          iconPath: "/static/marker.png",
-          width: 30,
-          height: 30
+          iconPath: "../../static/maker.png",
+          width: 100,
+          height: 100
         }];
         reverseGeocode(e2.detail.longitude, e2.detail.latitude);
       };
@@ -9938,7 +9998,7 @@ ${i3}
       return __returned__;
     }
   };
-  function _sfc_render(_ctx, _cache, $props, $setup, $data, $options) {
+  function _sfc_render$1(_ctx, _cache, $props, $setup, $data, $options) {
     return vue.openBlock(), vue.createElementBlock("view", { class: "map-container" }, [
       vue.createElementVNode("map", {
         id: "myMap",
@@ -9961,7 +10021,205 @@ ${i3}
       )) : vue.createCommentVNode("v-if", true)
     ]);
   }
-  const PagesSelectLocationSelectLocation = /* @__PURE__ */ _export_sfc(_sfc_main$1, [["render", _sfc_render], ["__file", "C:/Users/86158/Documents/HBuilderProjects/PrePayApp/pages/select-location/select-location.vue"]]);
+  const PagesSelectLocationSelectLocation = /* @__PURE__ */ _export_sfc(_sfc_main$2, [["render", _sfc_render$1], ["__file", "C:/Users/86158/Documents/HBuilderProjects/PrePayApp/pages/select-location/select-location.vue"]]);
+  /*!
+    * vue-router v4.3.0
+    * (c) 2024 Eduardo San Martin Morote
+    * @license MIT
+    */
+  var NavigationType;
+  (function(NavigationType2) {
+    NavigationType2["pop"] = "pop";
+    NavigationType2["push"] = "push";
+  })(NavigationType || (NavigationType = {}));
+  var NavigationDirection;
+  (function(NavigationDirection2) {
+    NavigationDirection2["back"] = "back";
+    NavigationDirection2["forward"] = "forward";
+    NavigationDirection2["unknown"] = "";
+  })(NavigationDirection || (NavigationDirection = {}));
+  var NavigationFailureType;
+  (function(NavigationFailureType2) {
+    NavigationFailureType2[NavigationFailureType2["aborted"] = 4] = "aborted";
+    NavigationFailureType2[NavigationFailureType2["cancelled"] = 8] = "cancelled";
+    NavigationFailureType2[NavigationFailureType2["duplicated"] = 16] = "duplicated";
+  })(NavigationFailureType || (NavigationFailureType = {}));
+  const routeLocationKey = Symbol("route location");
+  function useRoute() {
+    return vue.inject(routeLocationKey);
+  }
+  const _sfc_main$1 = {
+    __name: "company-stationList",
+    setup(__props, { expose: __expose }) {
+      __expose();
+      const list = vue.reactive([]);
+      const currentDevice = vue.ref(null);
+      const showPopup = vue.ref(false);
+      const showDevicePopup = (item) => {
+        currentDevice.value = item;
+        showPopup.value = true;
+        formatAppLog("log", "at pages/company-stationList/company-stationList.vue:66", currentDevice);
+      };
+      const viewDeviceDetail = () => {
+        uni.navigateTo({
+          url: "/pages/add-station/add-station"
+        });
+      };
+      const closePopup = () => {
+        currentDevice.value = null;
+        showPopup.value = false;
+      };
+      const query = vue.ref(null);
+      {
+        getDevice().then((res) => {
+          fetchStationList(res).then((res2) => {
+            list.push(...res2.data);
+            formatAppLog("log", "at pages/company-stationList/company-stationList.vue:82", res2.data);
+          });
+        });
+      }
+      const __returned__ = { list, currentDevice, showPopup, showDevicePopup, viewDeviceDetail, closePopup, query, getCurrentInstance: vue.getCurrentInstance, onMounted: vue.onMounted, reactive: vue.reactive, ref: vue.ref, get fetchStationList() {
+        return fetchStationList;
+      }, get useRoute() {
+        return useRoute;
+      }, get getDevice() {
+        return getDevice;
+      } };
+      Object.defineProperty(__returned__, "__isScriptSetup", { enumerable: false, value: true });
+      return __returned__;
+    }
+  };
+  function _sfc_render(_ctx, _cache, $props, $setup, $data, $options) {
+    return vue.openBlock(), vue.createElementBlock("view", null, [
+      vue.createElementVNode("view", null, [
+        vue.createElementVNode("button", {
+          class: "add",
+          onClick: $setup.viewDeviceDetail
+        }, "+添加换热站")
+      ]),
+      vue.createElementVNode("scroll-view", {
+        "scroll-y": "",
+        class: "device-list"
+      }, [
+        (vue.openBlock(true), vue.createElementBlock(
+          vue.Fragment,
+          null,
+          vue.renderList($setup.list, (item, index) => {
+            return vue.openBlock(), vue.createElementBlock("view", {
+              class: "device-item",
+              key: index,
+              onClick: ($event) => $setup.showDevicePopup(item)
+            }, [
+              vue.createElementVNode("view", { class: "device-content" }, [
+                vue.createElementVNode("image", {
+                  class: "device-icon",
+                  src: _imports_0$3
+                }),
+                vue.createElementVNode("view", { class: "device-info" }, [
+                  vue.createElementVNode(
+                    "text",
+                    { class: "device-name" },
+                    vue.toDisplayString(item.stationName),
+                    1
+                    /* TEXT */
+                  ),
+                  vue.createElementVNode(
+                    "text",
+                    { class: "device-address" },
+                    vue.toDisplayString(item.address),
+                    1
+                    /* TEXT */
+                  )
+                ])
+              ])
+            ], 8, ["onClick"]);
+          }),
+          128
+          /* KEYED_FRAGMENT */
+        ))
+      ]),
+      $setup.showPopup ? (vue.openBlock(), vue.createElementBlock("view", {
+        key: 0,
+        class: "popup-mask",
+        onClick: $setup.closePopup
+      })) : vue.createCommentVNode("v-if", true),
+      $setup.showPopup ? (vue.openBlock(), vue.createElementBlock("view", {
+        key: 1,
+        class: "popup-content"
+      }, [
+        vue.createElementVNode("view", { class: "popup-header" }, [
+          vue.createElementVNode("text", { class: "popup-title" }, "换热站详情"),
+          vue.createElementVNode("text", {
+            class: "popup-close",
+            onClick: $setup.closePopup
+          }, "×")
+        ]),
+        vue.createElementVNode("view", { class: "popup-body" }, [
+          vue.createElementVNode("view", { class: "popup-item" }, [
+            vue.createElementVNode("text", { class: "popup-label" }, "名称:"),
+            vue.createElementVNode(
+              "text",
+              { class: "popup-value" },
+              vue.toDisplayString($setup.currentDevice.stationName),
+              1
+              /* TEXT */
+            )
+          ]),
+          vue.createElementVNode("view", { class: "popup-item" }, [
+            vue.createElementVNode("text", { class: "popup-label" }, "地址:"),
+            vue.createElementVNode(
+              "text",
+              { class: "popup-value" },
+              vue.toDisplayString($setup.currentDevice.address),
+              1
+              /* TEXT */
+            )
+          ]),
+          vue.createElementVNode("view", { class: "popup-item" }, [
+            vue.createElementVNode("text", { class: "popup-label" }, "所属公司:"),
+            vue.createElementVNode(
+              "text",
+              { class: "popup-value" },
+              vue.toDisplayString($setup.currentDevice.company),
+              1
+              /* TEXT */
+            )
+          ]),
+          vue.createElementVNode("view", { class: "popup-item" }, [
+            vue.createElementVNode("text", { class: "popup-label" }, "负责人:"),
+            vue.createElementVNode(
+              "text",
+              { class: "popup-value" },
+              vue.toDisplayString($setup.currentDevice.userName),
+              1
+              /* TEXT */
+            )
+          ]),
+          vue.createElementVNode("view", { class: "popup-item" }, [
+            vue.createElementVNode("text", { class: "popup-label" }, "联系方式:"),
+            vue.createElementVNode(
+              "text",
+              { class: "popup-value" },
+              vue.toDisplayString($setup.currentDevice.phone),
+              1
+              /* TEXT */
+            )
+          ]),
+          vue.createElementVNode("view", { class: "popup-buttons" }, [
+            vue.createElementVNode("button", {
+              class: "popup-button",
+              onClick: $setup.viewDeviceDetail
+            }, "导航到换热站"),
+            vue.createElementVNode("button", {
+              class: "popup-button primary",
+              onClick: _cache[0] || (_cache[0] = (...args) => _ctx.controlDevice && _ctx.controlDevice(...args))
+            }, "查看实时数据")
+          ])
+        ])
+      ])) : vue.createCommentVNode("v-if", true)
+    ]);
+  }
+  const PagesCompanyStationListCompanyStationList = /* @__PURE__ */ _export_sfc(_sfc_main$1, [["render", _sfc_render], ["__scopeId", "data-v-de55059f"], ["__file", "C:/Users/86158/Documents/HBuilderProjects/PrePayApp/pages/company-stationList/company-stationList.vue"]]);
   __definePage("pages/login/login", PagesLoginLogin);
   __definePage("pages/map/map", PagesMapMap);
   __definePage("pages/PreLogin/PreLogin", PagesPreLoginPreLogin);
@@ -9978,6 +10236,7 @@ ${i3}
   __definePage("pages/change-password/change-password", PagesChangePasswordChangePassword);
   __definePage("pages/add-station/add-station", PagesAddStationAddStation);
   __definePage("pages/select-location/select-location", PagesSelectLocationSelectLocation);
+  __definePage("pages/company-stationList/company-stationList", PagesCompanyStationListCompanyStationList);
   const _sfc_main = {
     onLaunch: function() {
       formatAppLog("log", "at App.vue:4", "App Launch");

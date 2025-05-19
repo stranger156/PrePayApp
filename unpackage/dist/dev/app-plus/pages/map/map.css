@@ -558,7 +558,7 @@
 .container[data-v-e06b858f] {
   display: flex;
   flex-direction: column;
-  height: 85vh;
+  height: 100vh;
 }
 .header[data-v-e06b858f] {
   flex: 0 0 3.125rem;
@@ -616,7 +616,7 @@
   color: #999;
 }
 .map-container[data-v-e06b858f] {
-  flex: 1;
+  flex-grow: 1;
   border-radius: 0.3125rem;
   box-shadow: 0 0.125rem 0.375rem rgba(0, 0, 0, 0.05);
   margin: 0 0.625rem 0.625rem;
@@ -624,7 +624,7 @@
   position: relative;
 }
 .info-window[data-v-e06b858f] {
-  position: absolute;
+  position: fixed;
   bottom: 0.625rem;
   left: 0.625rem;
   right: 0.625rem;
@@ -633,6 +633,9 @@
   padding: 0.78125rem;
   box-shadow: 0 0.25rem 0.75rem rgba(0, 0, 0, 0.1);
   z-index: 999;
+  transform: translateZ(100px);
+  /* 触发硬件加速 */
+  animation: fadeIn 0.3s ease;
 }
 .info-window .info-header[data-v-e06b858f] {
   display: flex;

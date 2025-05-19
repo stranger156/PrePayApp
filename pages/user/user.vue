@@ -238,11 +238,12 @@ import { ref, computed, onMounted } from 'vue';
 import UniSearchBar from '@dcloudio/uni-ui/lib/uni-search-bar/uni-search-bar.vue';
 import UniIcons from '@dcloudio/uni-ui/lib/uni-icons/uni-icons.vue';
 import UniPopup from '@dcloudio/uni-ui/lib/uni-popup/uni-popup.vue';
-import { fetchCompanyList } from '../../utils/api';
+import { fetchCompanyList, fetchStationList } from '../../utils/api';
 import { fetchUserList } from '../../utils/api';
 import { addCompany } from '../../utils/api';
 import { deleteCompany } from '../../utils/api';
 import { updateCompany } from '../../utils/api';
+import { saveDevice } from '../../store/user';
 
 // 用户数据
 const users = ref([]);
@@ -300,6 +301,12 @@ async function deletecompany() {
       icon: 'none'
     });
   }
+}
+const viewHeatStations=()=>{
+	saveDevice(currentUser.value.name)
+	uni.navigateTo({
+	  url: `/pages/company-stationList/company-stationList`
+	})
 }
 // 页面加载时获取数据
 onMounted(async () => {
