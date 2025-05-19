@@ -10,6 +10,9 @@ export const login = (params) => {
     });
 };
 
+
+
+
 // 获取公司列表接口
 export const fetchCompanyList =async()=> {
 	const token = await getTokenFromLocalStorage();
@@ -25,6 +28,9 @@ export const fetchCompanyList =async()=> {
 		}
 	});
 };
+
+
+
 
 // 添加公司接口
 export const addCompany =async(params)=> {
@@ -46,6 +52,44 @@ export const addCompany =async(params)=> {
 	});
 };
 
+// 添加用户接口
+export const addUser =async(params)=> {
+	const token = await getTokenFromLocalStorage();
+	return request({
+		url: "/web/user/add",
+		method: 'POST',
+		headers: {
+			'token': token
+		},
+		data: params
+	});
+};
+
+// 删除用户接口
+export const deleteUser =async(params)=> {
+	const token = await getTokenFromLocalStorage();
+	return request({
+		url: `/web/user/${params}`,
+		method: 'DELETE',
+		headers: {
+			'token': token
+		},
+	});
+};
+
+// 更新用户接口
+export const updateUser =async(params)=> {
+	const token = await getTokenFromLocalStorage();
+	return request({
+		url: '/web/user/update',
+		method: 'PUT',
+		headers: {
+			'token': token
+		},
+		data: params
+	});
+};
+
 // 获取换热站列表接口
 export const fetchStationList = async(params) => {
 	const token = await getTokenFromLocalStorage();
@@ -60,6 +104,7 @@ export const fetchStationList = async(params) => {
 		}
 	});
 };
+
 
 // 添加设备接口
 export const addDevice = (params) => {
@@ -229,6 +274,39 @@ export const addStation = async(params) => {
 		data:params
 	});
 };
+
+
+
+
+// // 获取站点设备列表
+// export const getStationDevices = (stationName) => {
+//   return request({
+//     url: `/web/stations/${encodeURIComponent(stationName)}`,
+//     method: 'GET'
+//   });
+// };
+// // 在api.js中添加
+export const getStationDevices = async (stationName) => {
+  const token = await getTokenFromLocalStorage();
+  return request({
+    url: `/web/stations/${stationName}`,
+    method: 'GET',
+    headers: {
+      "token": token
+    }
+  })
+}
+
+export const getDetailDevices = async (deviceNumber) => {
+  const token = await getTokenFromLocalStorage();
+  return request({
+    url: `/web/device/${deviceNumber}`,
+    method: 'GET',
+    headers: {
+      "token": token
+    }
+  })
+}
 
 export const getStationList=async()=>{
 	  const token = await getTokenFromLocalStorage();  

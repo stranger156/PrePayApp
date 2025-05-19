@@ -17,9 +17,6 @@
     "url": ""
   },
   "permissions": {
-    "Maps": {
-      "coordType": "gcj02"
-    },
     "UniNView": {
       "description": "UniNView原生渲染"
     }
@@ -65,13 +62,6 @@
       },
       "apple": {},
       "plugins": {
-        "maps": {
-          "amap": {
-            "name": "amap_HbaJZ28Dg8",
-            "appkey_ios": "8d9d8862fa1b3332e6b1480be1376447",
-            "appkey_android": "8d9d8862fa1b3332e6b1480be1376447"
-          }
-        },
         "audio": {
           "mp3": {
             "description": "Android平台录音支持MP3格式文件"
@@ -97,7 +87,7 @@
     "uni-app": {
       "control": "uni-v3",
       "vueVersion": "3",
-      "compilerVersion": "4.56",
+      "compilerVersion": "4.57",
       "nvueCompiler": "uni-app",
       "renderer": "auto",
       "nvue": {
