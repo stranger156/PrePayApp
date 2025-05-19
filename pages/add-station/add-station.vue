@@ -50,7 +50,7 @@
               class="coordinate-item"
 			    type="number"
             />
-            <button class="location-btn" @click="getLocation">选择位置</button>
+            <button class="location-btn" @click="goToMap">选择位置</button>
           </view>
         </uni-forms-item>
         
@@ -81,6 +81,7 @@
 import { onMounted, ref } from 'vue';
 import { onLoad } from '@dcloudio/uni-app';
 import { getDevice } from '../../store/user';
+import { addStation } from '../../utils/api';
 
 // 表单数据
 const formData = ref({
@@ -123,28 +124,51 @@ const rules = ref({
 
 // 获取当前位置
 const getLocation = () => {
-  uni.getLocation({
-    type: 'wgs84',
-    success: (res) => {
-      formData.value.longitude = res.longitude.toFixed(6);
-      formData.value.latitude = res.latitude.toFixed(6);
-      uni.showToast({
-        title: '获取位置成功',
-        icon: 'success'
-      });
-    },
-    fail: (err) => {
-      uni.showToast({
-        title: '获取位置失败',
-        icon: 'none'
-      });
-      console.error('获取位置失败:', err);
-    }
-  });
+  // uni.getLocation({
+  //   type: 'wgs84',
+  //   success: (res) => {
+  //     formData.value.longitude = res.longitude.toFixed(6);
+  //     formData.value.latitude = res.latitude.toFixed(6);
+  //     uni.showToast({
+  //       title: '获取位置成功',
+  //       icon: 'success'
+  //     });
+  //   },
+  //   fail: (err) => {
+  //     uni.showToast({
+  //       title: '获取位置失败',
+  //       icon: 'none'
+  //     });
+  //     console.error('获取位置失败:', err);
+  //   }
+  // });
 };
 
+//选择位置
+const selectedLocation = ref(null)
+const goToMap = () => {
+  uni.navigateTo({
+    url: '/pages/select-location/select-location',
+    events: {
+      // 接收从地图页面返回的数据
+      acceptLocation: (data) => {
+        selectedLocation.value = data
+		formData.value.longitude= selectedLocation.value.longitude
+		formData.value.latitude=selectedLocation.value.latitude
+      }
+    },
+    success: (res) => {
+      // 保存事件通道
+      mapPageEventChannel = res.eventChannel
+    }
+  })
+}
+let mapPageEventChannel = null
 // 提交表单
 const submitForm = () => {
+	addStation(formData).then(res=>{
+		console.log(1111)
+	})
   const form = ref(null);
   form.value.validate().then(() => {
     uni.showLoading({
