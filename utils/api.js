@@ -46,6 +46,44 @@ export const addCompany =async(params)=> {
 	});
 };
 
+// 添加用户接口
+export const addUser =async(params)=> {
+	const token = await getTokenFromLocalStorage();
+	return request({
+		url: "/web/user/add",
+		method: 'POST',
+		headers: {
+			'token': token
+		},
+		data: params
+	});
+};
+
+// 删除用户接口
+export const deleteUser =async(params)=> {
+	const token = await getTokenFromLocalStorage();
+	return request({
+		url: `/web/user/${params}`,
+		method: 'DELETE',
+		headers: {
+			'token': token
+		},
+	});
+};
+
+// 更新用户接口
+export const updateUser =async(params)=> {
+	const token = await getTokenFromLocalStorage();
+	return request({
+		url: '/web/user/update',
+		method: 'PUT',
+		headers: {
+			'token': token
+		},
+		data: params
+	});
+};
+
 // 获取换热站列表接口
 export const fetchStationList = (params) => {
 	return request({

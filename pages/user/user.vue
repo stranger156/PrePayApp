@@ -15,6 +15,7 @@
       <uni-search-bar 
         placeholder="请输入企业名称关键字" 
         radius="100"
+		v-model="searchKeyword"
         @confirm="handleSearch"
 		@cancel="handleCancel"
       ></uni-search-bar>
@@ -305,6 +306,7 @@ async function deletecompany() {
 onMounted(async () => {
   try {
     const res = await fetchCompanyList();
+	console.log(res)
     users.value = res.data?.records?.map((item, index) => ({
       id: String(index),
       name: item.companyName || '未知企业',
@@ -348,8 +350,10 @@ const showDetailModal = (user) => {
 
 // 关闭详情弹窗
 const closeDetailModal = () => {
-  currentUser.value = null;
-  detailPopup.value.close();
+	detailPopup.value.close(() => {
+	    // 在弹窗完全关闭后清空数据
+	    currentUser.value = null;
+	  });
 };
 // 新增响应式数据
 const addPopup = ref(null);
@@ -364,15 +368,17 @@ const newCompany = ref({
 
 // 关闭添加弹窗
 const closeAddModal = () => {
-  newCompany.value = {
-    name: '',
-    phone: '',
-    userName: '',
-    admin: '',
-    user: '',
-    sale: ''
-  };
-  addPopup.value.close();
+	addPopup.value.close(() => {
+	    newCompany.value = {
+			name: '',
+			phone: '',
+			userName: '',
+			admin: '',
+			user: '',
+			sale: ''
+		  };
+	  });
+  
 };
 
 // 提交表单
@@ -484,16 +490,17 @@ const editCompany = async () => {
 
 // 关闭编辑弹窗
 const closeEditModal = () => {
-  editCompanyData.value = {
-    id: '',
-    name: '',
-    phone: '',
-    userName: '',
-    admin: '',
-    user: '',
-    sale: ''
-  };
-  editPopup.value.close();
+	editPopup.value.close(() => {
+	    editCompanyData.value = {
+	      id: '',
+	      name: '',
+	      phone: '',
+	      userName: '',
+	      admin: '',
+	      user: '',
+	      sale: ''
+	    };
+	  });
 };
 
 // 提交修改
@@ -574,19 +581,18 @@ const handleUpdateSubmit = async () => {
 	  z-index: 999;
 	}
 	
-	/* 新增弹窗样式 */
 	.add-modal {
-	  width: 560rpx;
+	  width: 600rpx;
 	  background: #fff;
 	  border-radius: 16rpx;
-	  padding: 10rpx;
-	  
+	  padding: 30rpx;
+	
 	  .modal-header {
 	    display: flex;
 	    justify-content: space-between;
 	    align-items: center;
-	    margin-bottom: 40rpx;
-	    
+	    margin-bottom: 30rpx;
+	
 	    .title {
 	      font-size: 36rpx;
 	      font-weight: bold;
@@ -595,33 +601,34 @@ const handleUpdateSubmit = async () => {
 	  }
 	
 	  .form-item {
-	    margin-bottom: 10rpx;
-	    
+	    margin-bottom: 0rpx;
+		height: 80%;
 	    .label {
-	      display: block;
 	      font-size: 16rpx;
 	      color: #666;
-	      margin-bottom: 8rpx;
+	      margin-bottom: 0rpx;
+	      display: block;
 	    }
 	  }
 	
 	  .modal-footer {
+	    margin-top: 20rpx;
 	    display: flex;
 	    justify-content: flex-end;
 	    gap: 20rpx;
-	    margin-top: 20rpx;
 	
 	    .btn {
-	      padding: 16rpx 40rpx;
+	      padding: 8rpx 16rpx;
 	      border-radius: 8rpx;
-	      font-size: 16rpx;
-	      
+		font-size: 20rpx;
 	      &.cancel {
+			  padding: 10rpx 30rpx;
 	        background: #f0f0f0;
 	        color: #666;
 	      }
-	      
+	
 	      &.confirm {
+			padding: 10rpx 30rpx;
 	        background: #007AFF;
 	        color: #fff;
 	      }

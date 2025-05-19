@@ -1037,19 +1037,17 @@
   box-shadow: 0 0.125rem 0.375rem rgba(0, 0, 0, 0.2);
   z-index: 999;
 }
-
-/* 新增弹窗样式 */
 .add-modal[data-v-0f7520f0] {
-  width: 17.5rem;
+  width: 18.75rem;
   background: #fff;
   border-radius: 0.5rem;
-  padding: 0.3125rem;
+  padding: 0.9375rem;
 }
 .add-modal .modal-header[data-v-0f7520f0] {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  margin-bottom: 1.25rem;
+  margin-bottom: 0.9375rem;
 }
 .add-modal .modal-header .title[data-v-0f7520f0] {
   font-size: 1.125rem;
@@ -1057,30 +1055,33 @@
   color: #333;
 }
 .add-modal .form-item[data-v-0f7520f0] {
-  margin-bottom: 0.3125rem;
+  margin-bottom: 0;
+  height: 80%;
 }
 .add-modal .form-item .label[data-v-0f7520f0] {
-  display: block;
   font-size: 0.5rem;
   color: #666;
-  margin-bottom: 0.25rem;
+  margin-bottom: 0;
+  display: block;
 }
 .add-modal .modal-footer[data-v-0f7520f0] {
+  margin-top: 0.625rem;
   display: flex;
   justify-content: flex-end;
   gap: 0.625rem;
-  margin-top: 0.625rem;
 }
 .add-modal .modal-footer .btn[data-v-0f7520f0] {
-  padding: 0.5rem 1.25rem;
+  padding: 0.25rem 0.5rem;
   border-radius: 0.25rem;
-  font-size: 0.5rem;
+  font-size: 0.625rem;
 }
 .add-modal .modal-footer .btn.cancel[data-v-0f7520f0] {
+  padding: 0.3125rem 0.9375rem;
   background: #f0f0f0;
   color: #666;
 }
 .add-modal .modal-footer .btn.confirm[data-v-0f7520f0] {
+  padding: 0.3125rem 0.9375rem;
   background: #007AFF;
   color: #fff;
 }

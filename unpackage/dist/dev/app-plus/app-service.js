@@ -175,6 +175,38 @@ if (uni.restoreGlobal) {
       }
     });
   };
+  const addUser = async (params) => {
+    const token = await getTokenFromLocalStorage();
+    return request({
+      url: "/web/user/add",
+      method: "POST",
+      headers: {
+        "token": token
+      },
+      data: params
+    });
+  };
+  const deleteUser = async (params) => {
+    const token = await getTokenFromLocalStorage();
+    return request({
+      url: `/web/user/${params}`,
+      method: "DELETE",
+      headers: {
+        "token": token
+      }
+    });
+  };
+  const updateUser = async (params) => {
+    const token = await getTokenFromLocalStorage();
+    return request({
+      url: "/web/user/update",
+      method: "PUT",
+      headers: {
+        "token": token
+      },
+      data: params
+    });
+  };
   const deleteCompany = async (params) => {
     const token = await getTokenFromLocalStorage();
     return request({
@@ -391,7 +423,7 @@ if (uni.restoreGlobal) {
       }, "24小时客户服务电话：400 858 1855")
     ]);
   }
-  const PagesLoginLogin = /* @__PURE__ */ _export_sfc(_sfc_main$o, [["render", _sfc_render$n], ["__scopeId", "data-v-e4e4508d"], ["__file", "C:/Users/86158/Documents/HBuilderProjects/PrePayApp/pages/login/login.vue"]]);
+  const PagesLoginLogin = /* @__PURE__ */ _export_sfc(_sfc_main$o, [["render", _sfc_render$n], ["__scopeId", "data-v-e4e4508d"], ["__file", "D:/PrePayApp/pages/login/login.vue"]]);
   const fontData = [
     {
       "font_class": "arrow-down",
@@ -1111,7 +1143,7 @@ if (uni.restoreGlobal) {
       /* CLASS, STYLE */
     );
   }
-  const UniIcons = /* @__PURE__ */ _export_sfc(_sfc_main$n, [["render", _sfc_render$m], ["__scopeId", "data-v-946bce22"], ["__file", "C:/Users/86158/Documents/HBuilderProjects/PrePayApp/node_modules/@dcloudio/uni-ui/lib/uni-icons/uni-icons.vue"]]);
+  const UniIcons = /* @__PURE__ */ _export_sfc(_sfc_main$n, [["render", _sfc_render$m], ["__scopeId", "data-v-946bce22"], ["__file", "D:/PrePayApp/node_modules/@dcloudio/uni-ui/lib/uni-icons/uni-icons.vue"]]);
   const _sfc_main$m = {
     __name: "map",
     setup(__props, { expose: __expose }) {
@@ -1291,7 +1323,7 @@ if (uni.restoreGlobal) {
       ])
     ]);
   }
-  const PagesMapMap = /* @__PURE__ */ _export_sfc(_sfc_main$m, [["render", _sfc_render$l], ["__scopeId", "data-v-e06b858f"], ["__file", "C:/Users/86158/Documents/HBuilderProjects/PrePayApp/pages/map/map.vue"]]);
+  const PagesMapMap = /* @__PURE__ */ _export_sfc(_sfc_main$m, [["render", _sfc_render$l], ["__scopeId", "data-v-e06b858f"], ["__file", "D:/PrePayApp/pages/map/map.vue"]]);
   const _imports_0$6 = "/static/background.png";
   const _sfc_main$l = {
     __name: "PreLogin",
@@ -1318,7 +1350,7 @@ if (uni.restoreGlobal) {
       })
     ]);
   }
-  const PagesPreLoginPreLogin = /* @__PURE__ */ _export_sfc(_sfc_main$l, [["render", _sfc_render$k], ["__scopeId", "data-v-6f7f9871"], ["__file", "C:/Users/86158/Documents/HBuilderProjects/PrePayApp/pages/PreLogin/PreLogin.vue"]]);
+  const PagesPreLoginPreLogin = /* @__PURE__ */ _export_sfc(_sfc_main$l, [["render", _sfc_render$k], ["__scopeId", "data-v-6f7f9871"], ["__file", "D:/PrePayApp/pages/PreLogin/PreLogin.vue"]]);
   const _imports_0$5 = "/static/logo.png";
   const _sfc_main$k = {
     data() {
@@ -1347,7 +1379,7 @@ if (uni.restoreGlobal) {
       ])
     ]);
   }
-  const PagesIndexIndex = /* @__PURE__ */ _export_sfc(_sfc_main$k, [["render", _sfc_render$j], ["__file", "C:/Users/86158/Documents/HBuilderProjects/PrePayApp/pages/index/index.vue"]]);
+  const PagesIndexIndex = /* @__PURE__ */ _export_sfc(_sfc_main$k, [["render", _sfc_render$j], ["__file", "D:/PrePayApp/pages/index/index.vue"]]);
   const _imports_0$4 = "/static/more.png";
   const _sfc_main$j = {};
   function _sfc_render$i(_ctx, _cache) {
@@ -1359,7 +1391,7 @@ if (uni.restoreGlobal) {
       })
     ]);
   }
-  const PagesMoreMore = /* @__PURE__ */ _export_sfc(_sfc_main$j, [["render", _sfc_render$i], ["__scopeId", "data-v-ac368486"], ["__file", "C:/Users/86158/Documents/HBuilderProjects/PrePayApp/pages/more/more.vue"]]);
+  const PagesMoreMore = /* @__PURE__ */ _export_sfc(_sfc_main$j, [["render", _sfc_render$i], ["__scopeId", "data-v-ac368486"], ["__file", "D:/PrePayApp/pages/more/more.vue"]]);
   const _imports_0$3 = "/static/search.png";
   const _imports_1 = "/static/station_icon.png";
   const _sfc_main$i = {
@@ -1584,7 +1616,7 @@ if (uni.restoreGlobal) {
       ])) : vue.createCommentVNode("v-if", true)
     ]);
   }
-  const PagesListList = /* @__PURE__ */ _export_sfc(_sfc_main$i, [["render", _sfc_render$h], ["__file", "C:/Users/86158/Documents/HBuilderProjects/PrePayApp/pages/list/list.vue"]]);
+  const PagesListList = /* @__PURE__ */ _export_sfc(_sfc_main$i, [["render", _sfc_render$h], ["__file", "D:/PrePayApp/pages/list/list.vue"]]);
   const _imports_0$2 = "/static/enter_icon.png";
   const _sfc_main$h = {
     __name: "settings",
@@ -1680,7 +1712,7 @@ if (uni.restoreGlobal) {
       ])
     ]);
   }
-  const PagesSettingsSettings = /* @__PURE__ */ _export_sfc(_sfc_main$h, [["render", _sfc_render$g], ["__file", "C:/Users/86158/Documents/HBuilderProjects/PrePayApp/pages/settings/settings.vue"]]);
+  const PagesSettingsSettings = /* @__PURE__ */ _export_sfc(_sfc_main$h, [["render", _sfc_render$g], ["__file", "D:/PrePayApp/pages/settings/settings.vue"]]);
   const pages = [
     {
       path: "pages/login/login",
@@ -5080,7 +5112,7 @@ ${i3}
       )
     ]);
   }
-  const __easycom_0$2 = /* @__PURE__ */ _export_sfc(_sfc_main$g, [["render", _sfc_render$f], ["__scopeId", "data-v-123e8af9"], ["__file", "C:/Users/86158/Documents/HBuilderProjects/PrePayApp/node_modules/@dcloudio/uni-ui/lib/uni-data-select/uni-data-select.vue"]]);
+  const __easycom_1$1 = /* @__PURE__ */ _export_sfc(_sfc_main$g, [["render", _sfc_render$f], ["__scopeId", "data-v-123e8af9"], ["__file", "D:/PrePayApp/node_modules/@dcloudio/uni-ui/lib/uni-data-select/uni-data-select.vue"]]);
   function obj2strClass(obj) {
     let classess = "";
     for (let key in obj) {
@@ -5581,7 +5613,7 @@ ${i3}
       /* CLASS, STYLE */
     );
   }
-  const __easycom_0$1 = /* @__PURE__ */ _export_sfc(_sfc_main$f, [["render", _sfc_render$e], ["__scopeId", "data-v-f7a14e66"], ["__file", "C:/Users/86158/Documents/HBuilderProjects/PrePayApp/node_modules/@dcloudio/uni-ui/lib/uni-easyinput/uni-easyinput.vue"]]);
+  const __easycom_0$1 = /* @__PURE__ */ _export_sfc(_sfc_main$f, [["render", _sfc_render$e], ["__scopeId", "data-v-f7a14e66"], ["__file", "D:/PrePayApp/node_modules/@dcloudio/uni-ui/lib/uni-easyinput/uni-easyinput.vue"]]);
   const isObject = (val) => val !== null && typeof val === "object";
   const defaultDelimiters = ["{", "}"];
   class BaseFormatter {
@@ -6106,7 +6138,7 @@ ${i3}
       )) : vue.createCommentVNode("v-if", true)
     ]);
   }
-  const UniSearchBar = /* @__PURE__ */ _export_sfc(_sfc_main$e, [["render", _sfc_render$d], ["__scopeId", "data-v-a149a6be"], ["__file", "C:/Users/86158/Documents/HBuilderProjects/PrePayApp/node_modules/@dcloudio/uni-ui/lib/uni-search-bar/uni-search-bar.vue"]]);
+  const UniSearchBar = /* @__PURE__ */ _export_sfc(_sfc_main$e, [["render", _sfc_render$d], ["__scopeId", "data-v-a149a6be"], ["__file", "D:/PrePayApp/node_modules/@dcloudio/uni-ui/lib/uni-search-bar/uni-search-bar.vue"]]);
   class MPAnimation {
     constructor(options, _this) {
       this.options = options;
@@ -6483,7 +6515,7 @@ ${i3}
       [vue.vShow, $data.isShow]
     ]);
   }
-  const __easycom_0 = /* @__PURE__ */ _export_sfc(_sfc_main$d, [["render", _sfc_render$c], ["__file", "C:/Users/86158/Documents/HBuilderProjects/PrePayApp/node_modules/@dcloudio/uni-ui/lib/uni-transition/uni-transition.vue"]]);
+  const __easycom_0 = /* @__PURE__ */ _export_sfc(_sfc_main$d, [["render", _sfc_render$c], ["__file", "D:/PrePayApp/node_modules/@dcloudio/uni-ui/lib/uni-transition/uni-transition.vue"]]);
   const _sfc_main$c = {
     name: "uniPopup",
     components: {},
@@ -6897,7 +6929,7 @@ ${i3}
       /* CLASS */
     )) : vue.createCommentVNode("v-if", true);
   }
-  const UniPopup = /* @__PURE__ */ _export_sfc(_sfc_main$c, [["render", _sfc_render$b], ["__scopeId", "data-v-7db519c7"], ["__file", "C:/Users/86158/Documents/HBuilderProjects/PrePayApp/node_modules/@dcloudio/uni-ui/lib/uni-popup/uni-popup.vue"]]);
+  const UniPopup = /* @__PURE__ */ _export_sfc(_sfc_main$c, [["render", _sfc_render$b], ["__scopeId", "data-v-7db519c7"], ["__file", "D:/PrePayApp/node_modules/@dcloudio/uni-ui/lib/uni-popup/uni-popup.vue"]]);
   const _sfc_main$b = {
     __name: "user",
     setup(__props, { expose: __expose }) {
@@ -6941,7 +6973,7 @@ ${i3}
             });
           }
         } catch (error) {
-          formatAppLog("error", "at pages/user/user.vue:297", "删除企业失败:", error);
+          formatAppLog("error", "at pages/user/user.vue:298", "删除企业失败:", error);
           uni.showToast({
             title: "删除失败，请重试",
             icon: "none"
@@ -6952,6 +6984,7 @@ ${i3}
         var _a, _b;
         try {
           const res = await fetchCompanyList();
+          formatAppLog("log", "at pages/user/user.vue:309", res);
           users.value = ((_b = (_a = res.data) == null ? void 0 : _a.records) == null ? void 0 : _b.map((item, index) => ({
             id: String(index),
             name: item.companyName || "未知企业",
@@ -6962,7 +6995,7 @@ ${i3}
             sale: item.sale
           }))) || [];
         } catch (error) {
-          formatAppLog("error", "at pages/user/user.vue:318", "获取企业列表失败:", error);
+          formatAppLog("error", "at pages/user/user.vue:320", "获取企业列表失败:", error);
           uni.showToast({
             title: "数据加载失败",
             icon: "none"
@@ -6987,8 +7020,9 @@ ${i3}
         detailPopup.value.open();
       };
       const closeDetailModal = () => {
-        currentUser.value = null;
-        detailPopup.value.close();
+        detailPopup.value.close(() => {
+          currentUser.value = null;
+        });
       };
       const addPopup = vue.ref(null);
       const newCompany = vue.ref({
@@ -7000,30 +7034,31 @@ ${i3}
         sale: ""
       });
       const closeAddModal = () => {
-        newCompany.value = {
-          name: "",
-          phone: "",
-          userName: "",
-          admin: "",
-          user: "",
-          sale: ""
-        };
-        addPopup.value.close();
+        addPopup.value.close(() => {
+          newCompany.value = {
+            name: "",
+            phone: "",
+            userName: "",
+            admin: "",
+            user: "",
+            sale: ""
+          };
+        });
       };
       const handleSubmit = async () => {
         var _a, _b;
-        formatAppLog("log", "at pages/user/user.vue:380", newCompany.value);
+        formatAppLog("log", "at pages/user/user.vue:386", newCompany.value);
         if (!newCompany.value.name || !newCompany.value.phone || !newCompany.value.userName || !newCompany.value.admin || !newCompany.value.user || !newCompany.value.sale) {
           uni.showToast({ title: "企业信息不完整", icon: "none" });
           return;
         }
         try {
           let data = await addCompany(newCompany.value);
-          formatAppLog("log", "at pages/user/user.vue:389", data);
+          formatAppLog("log", "at pages/user/user.vue:395", data);
           uni.showToast({ title: "添加成功" });
           closeAddModal();
           const res = await fetchCompanyList();
-          formatAppLog("log", "at pages/user/user.vue:394", res.data);
+          formatAppLog("log", "at pages/user/user.vue:400", res.data);
           users.value = ((_b = (_a = res.data) == null ? void 0 : _a.records) == null ? void 0 : _b.map((item, index) => ({
             id: String(index),
             name: item.companyName || "未知企业",
@@ -7035,8 +7070,8 @@ ${i3}
           }))) || [];
         } catch (error) {
           uni.showToast({ title: "添加失败", icon: "none" });
-          formatAppLog("log", "at pages/user/user.vue:406", error);
-          formatAppLog("log", "at pages/user/user.vue:407", 55);
+          formatAppLog("log", "at pages/user/user.vue:412", error);
+          formatAppLog("log", "at pages/user/user.vue:413", 55);
         }
       };
       const allUsers = vue.ref([]);
@@ -7099,16 +7134,17 @@ ${i3}
         editPopup.value.open();
       };
       const closeEditModal = () => {
-        editCompanyData.value = {
-          id: "",
-          name: "",
-          phone: "",
-          userName: "",
-          admin: "",
-          user: "",
-          sale: ""
-        };
-        editPopup.value.close();
+        editPopup.value.close(() => {
+          editCompanyData.value = {
+            id: "",
+            name: "",
+            phone: "",
+            userName: "",
+            admin: "",
+            user: "",
+            sale: ""
+          };
+        });
       };
       const handleUpdateSubmit = async () => {
         var _a, _b;
@@ -7137,7 +7173,7 @@ ${i3}
               sale: editCompanyData.value.sale
             };
             closeEditModal();
-            formatAppLog("log", "at pages/user/user.vue:537", currentUser.value.phone);
+            formatAppLog("log", "at pages/user/user.vue:544", currentUser.value.phone);
             const listRes = await fetchCompanyList();
             users.value = ((_b = (_a = listRes.data) == null ? void 0 : _a.records) == null ? void 0 : _b.map((item, index) => ({
               id: String(index),
@@ -7152,7 +7188,7 @@ ${i3}
             uni.showToast({ title: res.message || "修改失败", icon: "none" });
           }
         } catch (error) {
-          formatAppLog("error", "at pages/user/user.vue:553", "修改失败:", error);
+          formatAppLog("error", "at pages/user/user.vue:560", "修改失败:", error);
           uni.showToast({ title: "修改失败，请重试", icon: "none" });
         }
       };
@@ -7172,7 +7208,7 @@ ${i3}
     }
   };
   function _sfc_render$a(_ctx, _cache, $props, $setup, $data, $options) {
-    const _component_uni_data_select = resolveEasycom(vue.resolveDynamicComponent("uni-data-select"), __easycom_0$2);
+    const _component_uni_data_select = resolveEasycom(vue.resolveDynamicComponent("uni-data-select"), __easycom_1$1);
     return vue.openBlock(), vue.createElementBlock("view", { class: "container" }, [
       vue.createElementVNode("view", {
         class: "float-btn",
@@ -7193,9 +7229,11 @@ ${i3}
         vue.createVNode($setup["UniSearchBar"], {
           placeholder: "请输入企业名称关键字",
           radius: "100",
+          modelValue: $setup.searchKeyword,
+          "onUpdate:modelValue": _cache[0] || (_cache[0] = ($event) => $setup.searchKeyword = $event),
           onConfirm: $setup.handleSearch,
           onCancel: $setup.handleCancel
-        })
+        }, null, 8, ["modelValue"])
       ]),
       vue.createCommentVNode(" 用户列表 "),
       vue.createElementVNode("view", {
@@ -7302,7 +7340,7 @@ ${i3}
                   vue.createElementVNode("view", { class: "action-buttons" }, [
                     vue.createElementVNode("button", {
                       class: "btn heat-station",
-                      onClick: _cache[0] || (_cache[0] = (...args) => _ctx.viewHeatStations && _ctx.viewHeatStations(...args))
+                      onClick: _cache[1] || (_cache[1] = (...args) => _ctx.viewHeatStations && _ctx.viewHeatStations(...args))
                     }, "查看换热站"),
                     vue.createElementVNode("button", {
                       class: "btn edit",
@@ -7345,7 +7383,7 @@ ${i3}
                 vue.createElementVNode("text", { class: "label" }, "* 企业名称"),
                 vue.createVNode($setup["UniEasyinput"], {
                   modelValue: $setup.newCompany.name,
-                  "onUpdate:modelValue": _cache[1] || (_cache[1] = ($event) => $setup.newCompany.name = $event),
+                  "onUpdate:modelValue": _cache[2] || (_cache[2] = ($event) => $setup.newCompany.name = $event),
                   placeholder: "请输入企业名称"
                 }, null, 8, ["modelValue"])
               ]),
@@ -7353,7 +7391,7 @@ ${i3}
                 vue.createElementVNode("text", { class: "label" }, "* 联系电话"),
                 vue.createVNode($setup["UniEasyinput"], {
                   modelValue: $setup.newCompany.phone,
-                  "onUpdate:modelValue": _cache[2] || (_cache[2] = ($event) => $setup.newCompany.phone = $event),
+                  "onUpdate:modelValue": _cache[3] || (_cache[3] = ($event) => $setup.newCompany.phone = $event),
                   placeholder: "请输入联系电话",
                   type: "number"
                 }, null, 8, ["modelValue"])
@@ -7362,7 +7400,7 @@ ${i3}
                 vue.createElementVNode("text", { class: "label" }, "* 负责人"),
                 vue.createVNode($setup["UniEasyinput"], {
                   modelValue: $setup.newCompany.userName,
-                  "onUpdate:modelValue": _cache[3] || (_cache[3] = ($event) => $setup.newCompany.userName = $event),
+                  "onUpdate:modelValue": _cache[4] || (_cache[4] = ($event) => $setup.newCompany.userName = $event),
                   placeholder: "请输入负责人姓名"
                 }, null, 8, ["modelValue"])
               ]),
@@ -7370,7 +7408,7 @@ ${i3}
                 vue.createElementVNode("text", { class: "label" }, "* 管理员"),
                 vue.createVNode(_component_uni_data_select, {
                   modelValue: $setup.newCompany.admin,
-                  "onUpdate:modelValue": _cache[4] || (_cache[4] = ($event) => $setup.newCompany.admin = $event),
+                  "onUpdate:modelValue": _cache[5] || (_cache[5] = ($event) => $setup.newCompany.admin = $event),
                   placeholder: "选择管理员",
                   localdata: $setup.filteredAdmins,
                   clear: true
@@ -7381,7 +7419,7 @@ ${i3}
                 vue.createElementVNode("text", { class: "label" }, "* 用户"),
                 vue.createVNode(_component_uni_data_select, {
                   modelValue: $setup.newCompany.user,
-                  "onUpdate:modelValue": _cache[5] || (_cache[5] = ($event) => $setup.newCompany.user = $event),
+                  "onUpdate:modelValue": _cache[6] || (_cache[6] = ($event) => $setup.newCompany.user = $event),
                   placeholder: "选择用户",
                   localdata: $setup.filteredusers,
                   clear: true
@@ -7392,7 +7430,7 @@ ${i3}
                 vue.createElementVNode("text", { class: "label" }, "* 销售"),
                 vue.createVNode(_component_uni_data_select, {
                   modelValue: $setup.newCompany.sale,
-                  "onUpdate:modelValue": _cache[6] || (_cache[6] = ($event) => $setup.newCompany.sale = $event),
+                  "onUpdate:modelValue": _cache[7] || (_cache[7] = ($event) => $setup.newCompany.sale = $event),
                   placeholder: "选择销售",
                   localdata: $setup.filteredSales,
                   clear: true
@@ -7439,7 +7477,7 @@ ${i3}
                 vue.createElementVNode("text", { class: "label" }, "* 企业名称"),
                 vue.createVNode($setup["UniEasyinput"], {
                   modelValue: $setup.editCompanyData.name,
-                  "onUpdate:modelValue": _cache[7] || (_cache[7] = ($event) => $setup.editCompanyData.name = $event),
+                  "onUpdate:modelValue": _cache[8] || (_cache[8] = ($event) => $setup.editCompanyData.name = $event),
                   placeholder: "请输入企业名称",
                   disabled: true
                 }, null, 8, ["modelValue"])
@@ -7448,7 +7486,7 @@ ${i3}
                 vue.createElementVNode("text", { class: "label" }, "* 联系电话"),
                 vue.createVNode($setup["UniEasyinput"], {
                   modelValue: $setup.editCompanyData.phone,
-                  "onUpdate:modelValue": _cache[8] || (_cache[8] = ($event) => $setup.editCompanyData.phone = $event),
+                  "onUpdate:modelValue": _cache[9] || (_cache[9] = ($event) => $setup.editCompanyData.phone = $event),
                   placeholder: "请输入联系电话",
                   type: "number"
                 }, null, 8, ["modelValue"])
@@ -7457,7 +7495,7 @@ ${i3}
                 vue.createElementVNode("text", { class: "label" }, "* 负责人"),
                 vue.createVNode($setup["UniEasyinput"], {
                   modelValue: $setup.editCompanyData.userName,
-                  "onUpdate:modelValue": _cache[9] || (_cache[9] = ($event) => $setup.editCompanyData.userName = $event),
+                  "onUpdate:modelValue": _cache[10] || (_cache[10] = ($event) => $setup.editCompanyData.userName = $event),
                   placeholder: "请输入负责人姓名"
                 }, null, 8, ["modelValue"])
               ]),
@@ -7465,7 +7503,7 @@ ${i3}
                 vue.createElementVNode("text", { class: "label" }, "* 管理员"),
                 vue.createVNode(_component_uni_data_select, {
                   modelValue: $setup.editCompanyData.admin,
-                  "onUpdate:modelValue": _cache[10] || (_cache[10] = ($event) => $setup.editCompanyData.admin = $event),
+                  "onUpdate:modelValue": _cache[11] || (_cache[11] = ($event) => $setup.editCompanyData.admin = $event),
                   placeholder: "选择管理员",
                   localdata: $setup.filteredAdmins,
                   clear: true
@@ -7476,7 +7514,7 @@ ${i3}
                 vue.createElementVNode("text", { class: "label" }, "* 用户"),
                 vue.createVNode(_component_uni_data_select, {
                   modelValue: $setup.editCompanyData.user,
-                  "onUpdate:modelValue": _cache[11] || (_cache[11] = ($event) => $setup.editCompanyData.user = $event),
+                  "onUpdate:modelValue": _cache[12] || (_cache[12] = ($event) => $setup.editCompanyData.user = $event),
                   placeholder: "选择用户",
                   localdata: $setup.filteredusers,
                   clear: true
@@ -7487,7 +7525,7 @@ ${i3}
                 vue.createElementVNode("text", { class: "label" }, "* 销售"),
                 vue.createVNode(_component_uni_data_select, {
                   modelValue: $setup.editCompanyData.sale,
-                  "onUpdate:modelValue": _cache[12] || (_cache[12] = ($event) => $setup.editCompanyData.sale = $event),
+                  "onUpdate:modelValue": _cache[13] || (_cache[13] = ($event) => $setup.editCompanyData.sale = $event),
                   placeholder: "选择销售",
                   localdata: $setup.filteredSales,
                   clear: true
@@ -7513,7 +7551,7 @@ ${i3}
       )
     ]);
   }
-  const PagesUserUser = /* @__PURE__ */ _export_sfc(_sfc_main$b, [["render", _sfc_render$a], ["__scopeId", "data-v-0f7520f0"], ["__file", "C:/Users/86158/Documents/HBuilderProjects/PrePayApp/pages/user/user.vue"]]);
+  const PagesUserUser = /* @__PURE__ */ _export_sfc(_sfc_main$b, [["render", _sfc_render$a], ["__scopeId", "data-v-0f7520f0"], ["__file", "D:/PrePayApp/pages/user/user.vue"]]);
   const _imports_0$1 = "/static/error_icon.png";
   const _sfc_main$a = {
     data() {
@@ -7638,7 +7676,7 @@ ${i3}
       ])
     ]);
   }
-  const PagesErrorError = /* @__PURE__ */ _export_sfc(_sfc_main$a, [["render", _sfc_render$9], ["__file", "C:/Users/86158/Documents/HBuilderProjects/PrePayApp/pages/error/error.vue"]]);
+  const PagesErrorError = /* @__PURE__ */ _export_sfc(_sfc_main$a, [["render", _sfc_render$9], ["__file", "D:/PrePayApp/pages/error/error.vue"]]);
   const _sfc_main$9 = {
     __name: "account",
     setup(__props, { expose: __expose }) {
@@ -7651,18 +7689,21 @@ ${i3}
         var _a, _b;
         try {
           const res = await fetchUserList();
+          formatAppLog("log", "at pages/account/account.vue:303", res);
           accounts.value = ((_b = (_a = res.data) == null ? void 0 : _a.records) == null ? void 0 : _b.map((item) => ({
             userNumber: item.userNumber,
             userName: item.userName,
+            passwords: item.passwords,
             mobile: item.mobile,
             email: item.email,
             authority_id: item.authority_id,
             address: item.address,
+            createTime: item.createTime,
             admin: item.admin,
             errorLogin: item.errorLogin
           }))) || [];
         } catch (error) {
-          formatAppLog("error", "at pages/account/account.vue:109", "获取用户列表失败:", error);
+          formatAppLog("error", "at pages/account/account.vue:317", "获取用户列表失败:", error);
           uni.showToast({
             title: "数据加载失败",
             icon: "none"
@@ -7687,21 +7728,250 @@ ${i3}
       };
       const showDetailModal = (user) => {
         currentUser.value = user;
+        formatAppLog("log", "at pages/account/account.vue:349", user);
         detailPopup.value.open("center");
       };
       const closeDetailModal = () => {
-        currentUser.value = null;
-        detailPopup.value.close();
+        detailPopup.value.close(() => {
+          currentUser.value = null;
+        });
       };
-      const __returned__ = { accounts, currentUser, searchKeyword, detailPopup, filteredAccounts, handleSearch, handleClear, showDetailModal, closeDetailModal, ref: vue.ref, computed: vue.computed, onMounted: vue.onMounted, UniSearchBar, UniIcons, UniPopup, get fetchUserList() {
+      const addPopup = vue.ref(null);
+      const newUser = vue.ref({
+        userName: "",
+        passwords: "",
+        authority_id: "user",
+        admin: "",
+        mobile: "",
+        email: "",
+        address: "",
+        userNumber: "",
+        createTime: (/* @__PURE__ */ new Date()).toISOString().split("T")[0]
+        // 自动生成创建时间
+      });
+      const userTypes = vue.ref([
+        { value: "user", text: "普通用户" },
+        { value: "sale", text: "销售" },
+        { value: "admin", text: "管理员" }
+      ]);
+      const admins = vue.ref([]);
+      const showAddModal = () => {
+        addPopup.value.open();
+      };
+      const closeAddModal = () => {
+        addPopup.value.close(() => {
+          newUser.value = {
+            userName: "",
+            passwords: "",
+            authority_id: "",
+            admin: "",
+            mobile: "",
+            email: "",
+            address: "",
+            userNumber: "",
+            createTime: (/* @__PURE__ */ new Date()).toISOString().split("T")[0]
+          };
+        });
+      };
+      const handleAddSubmit = async () => {
+        var _a, _b;
+        const requiredFields = [
+          "userName",
+          "passwords",
+          "authority_id",
+          "admin",
+          "mobile"
+        ];
+        const missingFields = requiredFields.filter((field) => !newUser.value[field]);
+        if (missingFields.length > 0) {
+          uni.showToast({ title: "请填写所有必填项", icon: "none" });
+          return;
+        }
+        if (!/^1[3-9]\d{9}$/.test(newUser.value.mobile)) {
+          uni.showToast({ title: "手机号格式不正确", icon: "none" });
+          return;
+        }
+        const confirm = await uni.showModal({
+          title: "确认添加用户",
+          content: "确定要添加该用户吗？"
+        });
+        if (!confirm.confirm) {
+          return;
+        }
+        try {
+          formatAppLog("log", "at pages/account/account.vue:438", newUser.value);
+          const res = await addUser(newUser.value);
+          formatAppLog("log", "at pages/account/account.vue:440", res);
+          if (res.code === 200) {
+            uni.showToast({ title: "添加成功", icon: "success" });
+            closeAddModal();
+            const listRes = await fetchUserList();
+            accounts.value = ((_b = (_a = listRes.data) == null ? void 0 : _a.records) == null ? void 0 : _b.map((item) => ({
+              userNumber: item.userNumber,
+              userName: item.userName,
+              passwords: item.passwords,
+              mobile: item.mobile,
+              email: item.email,
+              authority_id: item.authority_id,
+              address: item.address,
+              createTime: item.createTime,
+              admin: item.admin,
+              errorLogin: item.errorLogin
+            }))) || [];
+          } else {
+            uni.showToast({ title: res.message || "添加失败", icon: "none" });
+          }
+        } catch (error) {
+          formatAppLog("error", "at pages/account/account.vue:463", "添加用户失败:", error);
+          uni.showToast({ title: "添加失败，请重试", icon: "none" });
+        }
+      };
+      const isAdminOrSale = vue.computed(() => {
+        return ["sale", "admin"].includes(newUser.value.authority_id);
+      });
+      vue.watch(
+        () => newUser.value.authority_id,
+        (newVal) => {
+          if (["sale", "admin"].includes(newVal)) {
+            newUser.value.admin = 1;
+            formatAppLog("log", "at pages/account/account.vue:479", newUser.value.admin);
+          } else {
+            newUser.value.admin = "";
+          }
+        }
+      );
+      vue.onMounted(async () => {
+        var _a, _b;
+        try {
+          const res = await fetchUserList();
+          accounts.value = ((_b = (_a = res.data) == null ? void 0 : _a.records) == null ? void 0 : _b.map((item) => ({
+            userNumber: item.userNumber,
+            userName: item.userName,
+            passwords: item.passwords,
+            mobile: item.mobile,
+            email: item.email,
+            authority_id: item.authority_id,
+            address: item.address,
+            createTime: item.createTime,
+            admin: item.admin,
+            errorLogin: item.errorLogin
+          }))) || [];
+          admins.value = accounts.value.filter((user) => user.authority_id === "admin" || user.authority_id === "superadmin").map((user) => ({
+            value: user.userNumber,
+            // 使用userName作为value
+            text: user.userName
+            // 使用userName作为显示文本
+          }));
+        } catch (error) {
+          formatAppLog("error", "at pages/account/account.vue:511", "获取用户列表失败:", error);
+          uni.showToast({
+            title: "数据加载失败",
+            icon: "none"
+          });
+        }
+      });
+      const editPopup = vue.ref(null);
+      const editUserData = vue.ref({
+        userName: "",
+        passwords: "",
+        mobile: "",
+        email: "",
+        address: "",
+        userNumber: "",
+        authority_id: "",
+        admin: ""
+      });
+      const edituser = () => {
+        editUserData.value = JSON.parse(JSON.stringify(currentUser.value));
+        editPopup.value.open();
+      };
+      const closeEditModal = () => {
+        editPopup.value.close();
+      };
+      const handleEditSubmit = async () => {
+        const requiredFields = ["userName", "passwords", "mobile"];
+        const missingFields = requiredFields.filter((field) => !editUserData.value[field]);
+        if (missingFields.length > 0) {
+          uni.showToast({ title: "请填写所有必填项", icon: "none" });
+          return;
+        }
+        uni.showModal({
+          title: "确认修改",
+          content: "确定要提交修改吗？",
+          success: async (res) => {
+            if (res.confirm) {
+              try {
+                const res2 = await updateUser(editUserData.value);
+                if (res2.code === 200) {
+                  uni.showToast({ title: "修改成功", icon: "success" });
+                  const index = accounts.value.findIndex(
+                    (item) => item.userNumber === editUserData.value.userNumber
+                  );
+                  if (index !== -1) {
+                    currentUser.value = { ...editUserData.value };
+                    accounts.value[index] = { ...editUserData.value };
+                  }
+                  closeEditModal();
+                } else {
+                  uni.showToast({ title: res2.message || "修改失败", icon: "none" });
+                }
+              } catch (error) {
+                formatAppLog("error", "at pages/account/account.vue:577", "修改用户失败:", error);
+                uni.showToast({ title: "修改失败，请重试", icon: "none" });
+              }
+            }
+          }
+        });
+      };
+      const deleteuser = () => {
+        uni.showModal({
+          title: "确认删除",
+          content: `确定要删除用户 ${currentUser.value.userName} 吗？`,
+          success: async (res) => {
+            var _a;
+            if (res.confirm) {
+              try {
+                const res2 = await deleteUser(currentUser.value.userNumber);
+                if (res2.code === 200) {
+                  uni.showToast({ title: "删除成功" });
+                  const listRes = await fetchUserList();
+                  accounts.value = ((_a = listRes.data) == null ? void 0 : _a.records) || [];
+                  closeDetailModal();
+                }
+              } catch (error) {
+                uni.showToast({ title: "删除失败", icon: "none" });
+              }
+            }
+          }
+        });
+      };
+      const __returned__ = { accounts, currentUser, searchKeyword, detailPopup, filteredAccounts, handleSearch, handleClear, showDetailModal, closeDetailModal, addPopup, newUser, userTypes, admins, showAddModal, closeAddModal, handleAddSubmit, isAdminOrSale, editPopup, editUserData, edituser, closeEditModal, handleEditSubmit, deleteuser, ref: vue.ref, computed: vue.computed, onMounted: vue.onMounted, watch: vue.watch, UniSearchBar, UniIcons, UniPopup, get fetchUserList() {
         return fetchUserList;
+      }, get deleteUser() {
+        return deleteUser;
+      }, get updateUser() {
+        return updateUser;
+      }, get addUser() {
+        return addUser;
       } };
       Object.defineProperty(__returned__, "__isScriptSetup", { enumerable: false, value: true });
       return __returned__;
     }
   };
   function _sfc_render$8(_ctx, _cache, $props, $setup, $data, $options) {
+    const _component_uni_easyinput = resolveEasycom(vue.resolveDynamicComponent("uni-easyinput"), __easycom_0$1);
+    const _component_uni_data_select = resolveEasycom(vue.resolveDynamicComponent("uni-data-select"), __easycom_1$1);
     return vue.openBlock(), vue.createElementBlock("view", { class: "container" }, [
+      vue.createElementVNode("view", {
+        class: "float-btn",
+        onClick: $setup.showAddModal
+      }, [
+        vue.createVNode($setup["UniIcons"], {
+          type: "plusempty",
+          size: "30",
+          color: "#fff"
+        })
+      ]),
       vue.createCommentVNode(" 标题 "),
       vue.createElementVNode("view", { class: "header" }, [
         vue.createElementVNode("text", { class: "title" }, "账户列表")
@@ -7758,7 +8028,7 @@ ${i3}
         },
         {
           default: vue.withCtx(() => {
-            var _a, _b, _c, _d, _e2, _f, _g;
+            var _a, _b, _c, _d, _e2, _f, _g, _h, _i, _j, _k;
             return [
               vue.createElementVNode("view", { class: "modal-content" }, [
                 vue.createElementVNode("view", { class: "modal-header" }, [
@@ -7798,27 +8068,27 @@ ${i3}
                     )
                   ]),
                   vue.createElementVNode("view", { class: "info-item" }, [
+                    vue.createElementVNode("text", { class: "label" }, "密码："),
+                    vue.createElementVNode(
+                      "text",
+                      { class: "value" },
+                      vue.toDisplayString(((_d = $setup.currentUser) == null ? void 0 : _d.passwords) || "暂无信息"),
+                      1
+                      /* TEXT */
+                    )
+                  ]),
+                  vue.createElementVNode("view", { class: "info-item" }, [
                     vue.createElementVNode("text", { class: "label" }, "联系电话："),
                     vue.createElementVNode(
                       "text",
                       { class: "value" },
-                      vue.toDisplayString(((_d = $setup.currentUser) == null ? void 0 : _d.mobile) || "暂无信息"),
+                      vue.toDisplayString(((_e2 = $setup.currentUser) == null ? void 0 : _e2.mobile) || "暂无信息"),
                       1
                       /* TEXT */
                     )
                   ]),
                   vue.createElementVNode("view", { class: "info-item" }, [
-                    vue.createElementVNode("text", { class: "label" }, "电子邮箱："),
-                    vue.createElementVNode(
-                      "text",
-                      { class: "value" },
-                      vue.toDisplayString(((_e2 = $setup.currentUser) == null ? void 0 : _e2.email) || "暂无信息"),
-                      1
-                      /* TEXT */
-                    )
-                  ]),
-                  vue.createElementVNode("view", { class: "info-item" }, [
-                    vue.createElementVNode("text", { class: "label" }, "权限等级："),
+                    vue.createElementVNode("text", { class: "label" }, "权限："),
                     vue.createElementVNode(
                       "text",
                       { class: "value" },
@@ -7828,14 +8098,55 @@ ${i3}
                     )
                   ]),
                   vue.createElementVNode("view", { class: "info-item" }, [
+                    vue.createElementVNode("text", { class: "label" }, "地址："),
+                    vue.createElementVNode(
+                      "text",
+                      { class: "value" },
+                      vue.toDisplayString(((_g = $setup.currentUser) == null ? void 0 : _g.address) || "暂无信息"),
+                      1
+                      /* TEXT */
+                    )
+                  ]),
+                  vue.createElementVNode("view", { class: "info-item" }, [
+                    vue.createElementVNode("text", { class: "label" }, "电子邮箱："),
+                    vue.createElementVNode(
+                      "text",
+                      { class: "value" },
+                      vue.toDisplayString(((_h = $setup.currentUser) == null ? void 0 : _h.email) || "暂无信息"),
+                      1
+                      /* TEXT */
+                    )
+                  ]),
+                  vue.createElementVNode("view", { class: "info-item" }, [
+                    vue.createElementVNode("text", { class: "label" }, "创建时间："),
+                    vue.createElementVNode(
+                      "text",
+                      { class: "value" },
+                      vue.toDisplayString(((_i = $setup.currentUser) == null ? void 0 : _i.createTime) || "暂无信息"),
+                      1
+                      /* TEXT */
+                    )
+                  ]),
+                  vue.createElementVNode("view", { class: "info-item" }, [
                     vue.createElementVNode("text", { class: "label" }, "所属账号："),
                     vue.createElementVNode(
                       "text",
                       { class: "value" },
-                      vue.toDisplayString(((_g = $setup.currentUser) == null ? void 0 : _g.admin) || "暂无信息"),
+                      vue.toDisplayString(((_j = $setup.currentUser) == null ? void 0 : _j.admin) || "暂无信息"),
                       1
                       /* TEXT */
                     )
+                  ]),
+                  vue.createElementVNode("view", { class: "action-buttons" }, [
+                    vue.createElementVNode("button", {
+                      class: "btn edit",
+                      onClick: $setup.edituser
+                    }, "修改信息"),
+                    ((_k = $setup.currentUser) == null ? void 0 : _k.userName) !== "root" ? (vue.openBlock(), vue.createElementBlock("button", {
+                      key: 0,
+                      class: "btn delete",
+                      onClick: $setup.deleteuser
+                    }, "删除用户")) : vue.createCommentVNode("v-if", true)
                   ])
                 ])
               ])
@@ -7846,10 +8157,227 @@ ${i3}
         },
         512
         /* NEED_PATCH */
+      ),
+      vue.createVNode(
+        $setup["UniPopup"],
+        {
+          ref: "addPopup",
+          type: "center"
+        },
+        {
+          default: vue.withCtx(() => [
+            vue.createElementVNode("view", { class: "add-modal" }, [
+              vue.createElementVNode("view", { class: "modal-header" }, [
+                vue.createElementVNode("text", { class: "title" }, "添加用户"),
+                vue.createVNode($setup["UniIcons"], {
+                  type: "closeempty",
+                  size: "20",
+                  color: "#666",
+                  onClick: $setup.closeAddModal
+                })
+              ]),
+              vue.createElementVNode("view", { class: "form-content" }, [
+                vue.createCommentVNode(" 用户名 "),
+                vue.createElementVNode("view", { class: "form-item" }, [
+                  vue.createElementVNode("text", { class: "label" }, "* 用户名"),
+                  vue.createVNode(_component_uni_easyinput, {
+                    modelValue: $setup.newUser.userName,
+                    "onUpdate:modelValue": _cache[1] || (_cache[1] = ($event) => $setup.newUser.userName = $event),
+                    placeholder: "请输入用户名"
+                  }, null, 8, ["modelValue"])
+                ]),
+                vue.createCommentVNode(" 密码 "),
+                vue.createElementVNode("view", { class: "form-item" }, [
+                  vue.createElementVNode("text", { class: "label" }, "* 密码"),
+                  vue.createVNode(_component_uni_easyinput, {
+                    modelValue: $setup.newUser.passwords,
+                    "onUpdate:modelValue": _cache[2] || (_cache[2] = ($event) => $setup.newUser.passwords = $event),
+                    placeholder: "请输入密码"
+                  }, null, 8, ["modelValue"])
+                ]),
+                vue.createCommentVNode(" 用户类型 "),
+                vue.createElementVNode("view", { class: "form-item" }, [
+                  vue.createElementVNode("text", { class: "label" }, "* 用户类型"),
+                  vue.createVNode(_component_uni_data_select, {
+                    modelValue: $setup.newUser.authority_id,
+                    "onUpdate:modelValue": _cache[3] || (_cache[3] = ($event) => $setup.newUser.authority_id = $event),
+                    placeholder: "请选择用户类型",
+                    localdata: $setup.userTypes
+                  }, null, 8, ["modelValue", "localdata"])
+                ]),
+                vue.createCommentVNode(" 所属管理员 "),
+                vue.createElementVNode("view", { class: "form-item" }, [
+                  vue.createElementVNode("text", { class: "label" }, "* 所属管理员"),
+                  vue.createVNode(_component_uni_data_select, {
+                    modelValue: $setup.newUser.admin,
+                    "onUpdate:modelValue": _cache[4] || (_cache[4] = ($event) => $setup.newUser.admin = $event),
+                    placeholder: "请选择所属管理员",
+                    localdata: $setup.admins,
+                    disabled: $setup.isAdminOrSale,
+                    clear: !$setup.isAdminOrSale
+                  }, null, 8, ["modelValue", "localdata", "disabled", "clear"])
+                ]),
+                vue.createCommentVNode(" 其他字段（示例：联系方式） "),
+                vue.createElementVNode("view", { class: "form-item" }, [
+                  vue.createElementVNode("text", { class: "label" }, "* 联系方式"),
+                  vue.createVNode(_component_uni_easyinput, {
+                    modelValue: $setup.newUser.mobile,
+                    "onUpdate:modelValue": _cache[5] || (_cache[5] = ($event) => $setup.newUser.mobile = $event),
+                    placeholder: "请输入手机号",
+                    type: "number"
+                  }, null, 8, ["modelValue"])
+                ]),
+                vue.createElementVNode("view", { class: "form-item" }, [
+                  vue.createElementVNode("text", { class: "label" }, "* 用户邮箱"),
+                  vue.createVNode(_component_uni_easyinput, {
+                    modelValue: $setup.newUser.email,
+                    "onUpdate:modelValue": _cache[6] || (_cache[6] = ($event) => $setup.newUser.email = $event),
+                    placeholder: "请输入用户邮箱"
+                  }, null, 8, ["modelValue"])
+                ]),
+                vue.createElementVNode("view", { class: "form-item" }, [
+                  vue.createElementVNode("text", { class: "label" }, "* 联系地址"),
+                  vue.createVNode(_component_uni_easyinput, {
+                    modelValue: $setup.newUser.address,
+                    "onUpdate:modelValue": _cache[7] || (_cache[7] = ($event) => $setup.newUser.address = $event),
+                    placeholder: "请输入联系地址"
+                  }, null, 8, ["modelValue"])
+                ]),
+                vue.createElementVNode("view", { class: "form-item" }, [
+                  vue.createElementVNode("text", { class: "label" }, "* 用户编号"),
+                  vue.createVNode(_component_uni_easyinput, {
+                    modelValue: $setup.newUser.userNumber,
+                    "onUpdate:modelValue": _cache[8] || (_cache[8] = ($event) => $setup.newUser.userNumber = $event),
+                    placeholder: "请输入用户编号",
+                    type: "number"
+                  }, null, 8, ["modelValue"])
+                ]),
+                vue.createCommentVNode(" 提交按钮 "),
+                vue.createElementVNode("view", { class: "modal-footer" }, [
+                  vue.createElementVNode("button", {
+                    class: "btn cancel",
+                    onClick: $setup.closeAddModal
+                  }, "取消"),
+                  vue.createElementVNode("button", {
+                    class: "btn confirm",
+                    onClick: $setup.handleAddSubmit
+                  }, "确定添加")
+                ])
+              ])
+            ])
+          ]),
+          _: 1
+          /* STABLE */
+        },
+        512
+        /* NEED_PATCH */
+      ),
+      vue.createCommentVNode(" 编辑弹窗 "),
+      vue.createVNode(
+        $setup["UniPopup"],
+        {
+          ref: "editPopup",
+          type: "center"
+        },
+        {
+          default: vue.withCtx(() => [
+            vue.createElementVNode("view", { class: "edit-modal" }, [
+              vue.createElementVNode("view", { class: "modal-header" }, [
+                vue.createElementVNode("text", { class: "title" }, "编辑用户"),
+                vue.createVNode($setup["UniIcons"], {
+                  type: "closeempty",
+                  size: "20",
+                  color: "#666",
+                  onClick: $setup.closeEditModal
+                })
+              ]),
+              vue.createElementVNode("view", { class: "form-content" }, [
+                vue.createElementVNode("view", { class: "form-item" }, [
+                  vue.createElementVNode("text", { class: "label" }, "* 用户编号"),
+                  vue.createVNode(_component_uni_easyinput, {
+                    modelValue: $setup.editUserData.userNumber,
+                    "onUpdate:modelValue": _cache[9] || (_cache[9] = ($event) => $setup.editUserData.userNumber = $event),
+                    disabled: true
+                  }, null, 8, ["modelValue"])
+                ]),
+                vue.createElementVNode("view", { class: "form-item" }, [
+                  vue.createElementVNode("text", { class: "label" }, "* 权限"),
+                  vue.createVNode(_component_uni_easyinput, {
+                    modelValue: $setup.editUserData.authority_id,
+                    "onUpdate:modelValue": _cache[10] || (_cache[10] = ($event) => $setup.editUserData.authority_id = $event),
+                    disabled: true
+                  }, null, 8, ["modelValue"])
+                ]),
+                vue.createElementVNode("view", { class: "form-item" }, [
+                  vue.createElementVNode("text", { class: "label" }, "* 所属管理员"),
+                  vue.createVNode(_component_uni_easyinput, {
+                    modelValue: $setup.editUserData.admin,
+                    "onUpdate:modelValue": _cache[11] || (_cache[11] = ($event) => $setup.editUserData.admin = $event),
+                    disabled: true
+                  }, null, 8, ["modelValue"])
+                ]),
+                vue.createElementVNode("view", { class: "form-item" }, [
+                  vue.createElementVNode("text", { class: "label" }, "* 用户名"),
+                  vue.createVNode(_component_uni_easyinput, {
+                    modelValue: $setup.editUserData.userName,
+                    "onUpdate:modelValue": _cache[12] || (_cache[12] = ($event) => $setup.editUserData.userName = $event),
+                    placeholder: "请输入用户名"
+                  }, null, 8, ["modelValue"])
+                ]),
+                vue.createElementVNode("view", { class: "form-item" }, [
+                  vue.createElementVNode("text", { class: "label" }, "* 密码"),
+                  vue.createVNode(_component_uni_easyinput, {
+                    modelValue: $setup.editUserData.passwords,
+                    "onUpdate:modelValue": _cache[13] || (_cache[13] = ($event) => $setup.editUserData.passwords = $event),
+                    placeholder: "请输入密码"
+                  }, null, 8, ["modelValue"])
+                ]),
+                vue.createElementVNode("view", { class: "form-item" }, [
+                  vue.createElementVNode("text", { class: "label" }, "* 手机号"),
+                  vue.createVNode(_component_uni_easyinput, {
+                    modelValue: $setup.editUserData.mobile,
+                    "onUpdate:modelValue": _cache[14] || (_cache[14] = ($event) => $setup.editUserData.mobile = $event),
+                    placeholder: "请输入密码"
+                  }, null, 8, ["modelValue"])
+                ]),
+                vue.createElementVNode("view", { class: "form-item" }, [
+                  vue.createElementVNode("text", { class: "label" }, "* 邮箱"),
+                  vue.createVNode(_component_uni_easyinput, {
+                    modelValue: $setup.editUserData.email,
+                    "onUpdate:modelValue": _cache[15] || (_cache[15] = ($event) => $setup.editUserData.email = $event),
+                    placeholder: "请输入邮箱"
+                  }, null, 8, ["modelValue"])
+                ]),
+                vue.createElementVNode("view", { class: "form-item" }, [
+                  vue.createElementVNode("text", { class: "label" }, "* 地址"),
+                  vue.createVNode(_component_uni_easyinput, {
+                    modelValue: $setup.editUserData.address,
+                    "onUpdate:modelValue": _cache[16] || (_cache[16] = ($event) => $setup.editUserData.address = $event),
+                    placeholder: "请输入地址"
+                  }, null, 8, ["modelValue"])
+                ]),
+                vue.createElementVNode("view", { class: "modal-footer" }, [
+                  vue.createElementVNode("button", {
+                    class: "btn cancel",
+                    onClick: $setup.closeEditModal
+                  }, "取消"),
+                  vue.createElementVNode("button", {
+                    class: "btn confirm",
+                    onClick: $setup.handleEditSubmit
+                  }, "提交修改")
+                ])
+              ])
+            ])
+          ]),
+          _: 1
+          /* STABLE */
+        },
+        512
+        /* NEED_PATCH */
       )
     ]);
   }
-  const PagesAccountAccount = /* @__PURE__ */ _export_sfc(_sfc_main$9, [["render", _sfc_render$8], ["__scopeId", "data-v-8cce343a"], ["__file", "C:/Users/86158/Documents/HBuilderProjects/PrePayApp/pages/account/account.vue"]]);
+  const PagesAccountAccount = /* @__PURE__ */ _export_sfc(_sfc_main$9, [["render", _sfc_render$8], ["__scopeId", "data-v-8cce343a"], ["__file", "D:/PrePayApp/pages/account/account.vue"]]);
   const _imports_0 = "/static/card.png";
   const _sfc_main$8 = {
     data() {
@@ -7965,7 +8493,7 @@ ${i3}
       ])
     ]);
   }
-  const PagesRechargeRecordRechargeRecord = /* @__PURE__ */ _export_sfc(_sfc_main$8, [["render", _sfc_render$7], ["__file", "C:/Users/86158/Documents/HBuilderProjects/PrePayApp/pages/recharge-record/recharge-record.vue"]]);
+  const PagesRechargeRecordRechargeRecord = /* @__PURE__ */ _export_sfc(_sfc_main$8, [["render", _sfc_render$7], ["__file", "D:/PrePayApp/pages/recharge-record/recharge-record.vue"]]);
   const _sfc_main$7 = {
     __name: "setting",
     setup(__props, { expose: __expose }) {
@@ -8021,7 +8549,7 @@ ${i3}
       ])
     ]);
   }
-  const PagesSettingSetting = /* @__PURE__ */ _export_sfc(_sfc_main$7, [["render", _sfc_render$6], ["__file", "C:/Users/86158/Documents/HBuilderProjects/PrePayApp/pages/setting/setting.vue"]]);
+  const PagesSettingSetting = /* @__PURE__ */ _export_sfc(_sfc_main$7, [["render", _sfc_render$6], ["__file", "D:/PrePayApp/pages/setting/setting.vue"]]);
   const _sfc_main$6 = {
     __name: "remote-charge",
     setup(__props, { expose: __expose }) {
@@ -8283,7 +8811,7 @@ ${i3}
       )
     ]);
   }
-  const PagesRemoteChargeRemoteCharge = /* @__PURE__ */ _export_sfc(_sfc_main$6, [["render", _sfc_render$5], ["__file", "C:/Users/86158/Documents/HBuilderProjects/PrePayApp/pages/remote-charge/remote-charge.vue"]]);
+  const PagesRemoteChargeRemoteCharge = /* @__PURE__ */ _export_sfc(_sfc_main$6, [["render", _sfc_render$5], ["__file", "D:/PrePayApp/pages/remote-charge/remote-charge.vue"]]);
   const _sfc_main$5 = {
     __name: "change-password",
     setup(__props, { expose: __expose }) {
@@ -8395,7 +8923,7 @@ ${i3}
       ])
     ]);
   }
-  const PagesChangePasswordChangePassword = /* @__PURE__ */ _export_sfc(_sfc_main$5, [["render", _sfc_render$4], ["__file", "C:/Users/86158/Documents/HBuilderProjects/PrePayApp/pages/change-password/change-password.vue"]]);
+  const PagesChangePasswordChangePassword = /* @__PURE__ */ _export_sfc(_sfc_main$5, [["render", _sfc_render$4], ["__file", "D:/PrePayApp/pages/change-password/change-password.vue"]]);
   const _sfc_main$4 = {
     name: "uniFormsItem",
     options: {
@@ -8784,7 +9312,7 @@ ${i3}
       /* CLASS */
     );
   }
-  const __easycom_1 = /* @__PURE__ */ _export_sfc(_sfc_main$4, [["render", _sfc_render$3], ["__scopeId", "data-v-3515f8e1"], ["__file", "C:/Users/86158/Documents/HBuilderProjects/PrePayApp/node_modules/@dcloudio/uni-ui/lib/uni-forms-item/uni-forms-item.vue"]]);
+  const __easycom_1 = /* @__PURE__ */ _export_sfc(_sfc_main$4, [["render", _sfc_render$3], ["__scopeId", "data-v-3515f8e1"], ["__file", "D:/PrePayApp/node_modules/@dcloudio/uni-ui/lib/uni-forms-item/uni-forms-item.vue"]]);
   var pattern = {
     email: /^\S+?@\S+?\.\S+?$/,
     idcard: /^[1-9]\d{5}(18|19|([23]\d))\d{2}((0[1-9])|(10|11|12))(([0-2][1-9])|10|20|30|31)\d{3}[0-9Xx]$/,
@@ -9657,7 +10185,7 @@ ${i3}
       ])
     ]);
   }
-  const __easycom_2 = /* @__PURE__ */ _export_sfc(_sfc_main$3, [["render", _sfc_render$2], ["__scopeId", "data-v-13523fe0"], ["__file", "C:/Users/86158/Documents/HBuilderProjects/PrePayApp/node_modules/@dcloudio/uni-ui/lib/uni-forms/uni-forms.vue"]]);
+  const __easycom_2 = /* @__PURE__ */ _export_sfc(_sfc_main$3, [["render", _sfc_render$2], ["__scopeId", "data-v-13523fe0"], ["__file", "D:/PrePayApp/node_modules/@dcloudio/uni-ui/lib/uni-forms/uni-forms.vue"]]);
   const _sfc_main$2 = {
     __name: "add-station",
     setup(__props, { expose: __expose }) {
@@ -9893,7 +10421,7 @@ ${i3}
       ])
     ]);
   }
-  const PagesAddStationAddStation = /* @__PURE__ */ _export_sfc(_sfc_main$2, [["render", _sfc_render$1], ["__file", "C:/Users/86158/Documents/HBuilderProjects/PrePayApp/pages/add-station/add-station.vue"]]);
+  const PagesAddStationAddStation = /* @__PURE__ */ _export_sfc(_sfc_main$2, [["render", _sfc_render$1], ["__file", "D:/PrePayApp/pages/add-station/add-station.vue"]]);
   const _sfc_main$1 = {
     __name: "select-location",
     setup(__props, { expose: __expose }) {
@@ -9961,7 +10489,7 @@ ${i3}
       )) : vue.createCommentVNode("v-if", true)
     ]);
   }
-  const PagesSelectLocationSelectLocation = /* @__PURE__ */ _export_sfc(_sfc_main$1, [["render", _sfc_render], ["__file", "C:/Users/86158/Documents/HBuilderProjects/PrePayApp/pages/select-location/select-location.vue"]]);
+  const PagesSelectLocationSelectLocation = /* @__PURE__ */ _export_sfc(_sfc_main$1, [["render", _sfc_render], ["__file", "D:/PrePayApp/pages/select-location/select-location.vue"]]);
   __definePage("pages/login/login", PagesLoginLogin);
   __definePage("pages/map/map", PagesMapMap);
   __definePage("pages/PreLogin/PreLogin", PagesPreLoginPreLogin);
@@ -9989,7 +10517,7 @@ ${i3}
       formatAppLog("log", "at App.vue:10", "App Hide");
     }
   };
-  const App = /* @__PURE__ */ _export_sfc(_sfc_main, [["__file", "C:/Users/86158/Documents/HBuilderProjects/PrePayApp/App.vue"]]);
+  const App = /* @__PURE__ */ _export_sfc(_sfc_main, [["__file", "D:/PrePayApp/App.vue"]]);
   function createApp() {
     const app = vue.createVueApp(App);
     return {
