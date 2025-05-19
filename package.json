@@ -1,10 +1,15 @@
 {
   "dependencies": {
+<<<<<<< HEAD
     "@dcloudio/uni-ui": "^1.5.7",
     "@element-plus/icons-vue": "^2.3.1",
     "echarts": "^5.6.0",
     "lodash": "^4.17.21",
     "mpvue-echarts": "^1.0.0",
     "uuid": "^11.1.0"
+=======
+    "@amap/amap-jsapi-loader": "^1.0.1",
+    "@dcloudio/uni-ui": "^1.5.7"
+>>>>>>> d322fe5ca631249fd8aefcda11bd7fc60ea67653
   }
 }

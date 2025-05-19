@@ -3,11 +3,11 @@
     <!-- 标题和输入框区域 -->
     <view class="input-container">
       <view class="input-item">
-       <img style="margin-left: 20rpx;height: 5vh;" src="/static/username_icon.png"  />
+       <image style="margin-left: 20rpx;width: 70rpx;height: 70rpx;" :src=userIcon  />
         <input  v-model="user.username" placeholder="请输入用户名" />
       </view>
       <view class="input-item">
-        <img style="margin-left:20rpx;height: 5vh;" src="/static/passwords_icon.png"  />
+        <image style="margin-left:20rpx;width: 70rpx;height: 70rpx;" src="/static/passwords_icon.png"  />
         <input  v-model="user.password" type="password" placeholder="请输入密码" />
       </view>
     </view>
@@ -35,7 +35,7 @@ import { ref, onMounted, getCurrentInstance, reactive } from 'vue';
 import { login } from '../../utils/api';
 import { saveTokenToLocalStorage, saveUser } from '../../store/user';
 // import { useStorage } from '@/utils/storage.js'; // 假设你已经封装了存储工具函数
-
+const userIcon="/static/username_icon.png" 
 // // 定义页面数据
 const user=reactive({
 	username:'',
@@ -94,17 +94,16 @@ const loginButton=()=>{
       icon: 'none'
     })
   }
-  console.log(1111)
-  console.log(user)
   login(user).then((res)=>{
-	  console.log(res.data.token)
 	  if(res.code===200){
 		saveTokenToLocalStorage(res.data.token)
 		saveUser(user.username)
-		  console.log(res.data.token)
 		  uni.switchTab({
 		      url: '/pages/map/map' // 假设这是一个 tabBar 页面
 		  })
+		  // uni.navigateTo({
+		  //     url: '/pages/select-location/select-location'
+		  //   });
 	  }
   })
 }

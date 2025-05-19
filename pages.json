@@ -64,7 +64,7 @@
 			"path" : "pages/user/user",
 			"style" : 
 			{
-				"navigationBarTitleText" : "用户管理"
+				"navigationBarTitleText" : "企业管理"
 			}
 		},
 		{
@@ -107,6 +107,27 @@
 			"style" : 
 			{
 				"navigationBarTitleText" : "修改密码"
+			}
+		},
+		{
+			"path" : "pages/add-station/add-station",
+			"style" : 
+			{
+				"navigationBarTitleText" : "添加换热站信息"
+			}
+		},
+		{
+			"path" : "pages/select-location/select-location",
+			"style" : 
+			{
+				"navigationBarTitleText" : ""
+			}
+		},
+		{
+			"path" : "pages/company-stationList/company-stationList",
+			"style" : 
+			{
+				"navigationBarTitleText" : ""
 			}
 		}
 	],

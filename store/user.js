@@ -25,6 +25,7 @@ const getTokenFromLocalStorage = () => {
         });
     });
 };
+
 const saveUser= (user) => {
     uni.setStorage({
         key: 'user',
@@ -52,4 +53,32 @@ const getUser = () => {
         });
     });
 };
-export{saveTokenToLocalStorage,getTokenFromLocalStorage,saveUser,getUser}
+const saveDevice= (device) => {
+    uni.setStorage({
+        key: 'device',
+        data: device,
+        success: () => {
+            console.log('device存储成功');
+        },
+        fail: (err) => {
+            console.error('device存储失败:', err);
+        }
+    });
+};
+
+const getDevice = () => {
+    return new Promise((resolve, reject) => {
+        uni.getStorage({
+            key: 'device',
+            success: (res) => {
+                resolve(res.data);
+            },
+            fail: (err) => {
+                console.error('device获取失败:', err);
+                reject(err);
+            }
+        });
+    });
+};
+
+export{saveTokenToLocalStorage,getTokenFromLocalStorage,saveUser,getUser,saveDevice,getDevice}

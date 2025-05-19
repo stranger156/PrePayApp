@@ -31,6 +31,81 @@ export const fetchCompanyList =async()=> {
 
 
 
+
+// 添加公司接口
+export const addCompany =async(params)=> {
+	const token = await getTokenFromLocalStorage();
+	return request({
+		url: "/web/company/add",
+		method: 'POST',
+		headers: {
+			'token': token
+		},
+		data: {
+			'companyName': params.name,
+			'phone': params.phone,
+			'userName': params.userName,
+			'admin': params.admin,
+			'user': params.user,
+			'sale': params.sale
+		}
+	});
+};
+
+// 添加用户接口
+export const addUser =async(params)=> {
+	const token = await getTokenFromLocalStorage();
+	return request({
+		url: "/web/user/add",
+		method: 'POST',
+		headers: {
+			'token': token
+		},
+		data: params
+	});
+};
+
+// 删除用户接口
+export const deleteUser =async(params)=> {
+	const token = await getTokenFromLocalStorage();
+	return request({
+		url: `/web/user/${params}`,
+		method: 'DELETE',
+		headers: {
+			'token': token
+		},
+	});
+};
+
+// 更新用户接口
+export const updateUser =async(params)=> {
+	const token = await getTokenFromLocalStorage();
+	return request({
+		url: '/web/user/update',
+		method: 'PUT',
+		headers: {
+			'token': token
+		},
+		data: params
+	});
+};
+
+// 获取换热站列表接口
+export const fetchStationList = async(params) => {
+	const token = await getTokenFromLocalStorage();
+	return request({
+		url: "/web/stations/list",
+		method: 'GET',
+		headers: {
+			'token': token
+		},
+		data:{
+			companyName:params
+		}
+	});
+};
+
+
 // 添加设备接口
 export const addDevice = (params) => {
 	return request({
@@ -46,6 +121,38 @@ export const adviseStation = (params) => {
 		url: "/web/stations/update",
 		method: 'PUT',
 		params
+	});
+};
+
+// 删除公司接口
+export const deleteCompany = async(params) => {
+	const token = await getTokenFromLocalStorage();
+	return request({
+		url: `/web/company/${params}`,
+		method: 'DELETE',
+		headers: {
+			'token': token
+		},
+	});
+};
+
+// 更新公司接口
+export const updateCompany = async(params) => {
+	const token = await getTokenFromLocalStorage();
+	return request({
+		url: '/web/company/update',
+		method: 'PUT',
+		headers: {
+			'token': token
+		},
+		data: {
+			'companyName': params.name,
+			'phone': params.phone,
+			'userName': params.userName,
+			'admin': params.admin,
+			'user': params.user,
+			'sale': params.sale
+		}
 	});
 };
 
@@ -155,15 +262,6 @@ export const searchSaleUsers = (params) => {
 	});
 };
 
-// 添加公司接口
-export const addCompany = (params) => {
-	return request({
-		url: "/web/company/add",
-		method: 'POST',
-		params
-	});
-};
-
 // 添加换热站接口
 export const addStation = (params) => {
 	return request({
@@ -173,20 +271,8 @@ export const addStation = (params) => {
 	});
 };
 
-export const getStationList=async()=>{
-      const token = await getTokenFromLocalStorage();  
-     
-    return request({
-        url: "/web/stations/page",
-        method: 'GET', 
-        headers: {
-                "token": token
-            },
-        data:{
-            page:1,
-            size:10000}
-    })
-}
+
+
 
 // // 获取站点设备列表
 // export const getStationDevices = (stationName) => {
@@ -216,4 +302,19 @@ export const getDetailDevices = async (deviceNumber) => {
       "token": token
     }
   })
+}
+
+export const getStationList=async()=>{
+	  const token = await getTokenFromLocalStorage();  
+	return request({
+		url: "/web/stations/page",
+		method: 'GET', 
+		headers: {
+                "token": token
+            },
+		data:{
+			page:1,
+			size:10000
+			}
+	})
 }

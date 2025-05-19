@@ -26,59 +26,59 @@
 
     <!-- 地图容器 -->
     <view class="map-container">
-      <map 
-        id="stationMap"
-        style="width: 100%; height: 100%;"
-        :latitude="mapCenter.latitude"
-        :longitude="mapCenter.longitude"
-        :markers="markers"
-        show-location
-        @markertap="handleMarkerTap"
-		@tap="handleMapTap"
-      ></map>
-
-      <!-- 信息弹窗 -->
-      <view v-if="selectedStation" class="info-window">
-        <view class="info-header">
-          <text class="title">{{ selectedStation.stationName }}</text>
-          <uni-icons 
-            type="close" 
-            size="20" 
-            color="#999" 
-            @click="selectedStation = null"
-          ></uni-icons>
-        </view>
-        <view class="info-content">
-          <view class="info-item">
-            <text class="label">所属公司：</text>
-            <text class="value">{{ selectedStation.company }}</text>
-          </view>
-		  <view class="info-item">
-		    <text class="label">负责人：</text>
-		    <text class="value">{{ selectedStation.username }}</text>
-		  </view>
-		  <view class="info-item">
-		    <text class="label">联系电话：</text>
-		    <text class="value">{{ selectedStation.phone }}</text>
-		  </view>
-		  <view class="info-item">
-		    <text class="label">详细地址：</text>
-		    <text class="value">{{ selectedStation.address }}</text>
-		  </view>
-		  <view class="info-item">
-		    <text class="label">站点简介：</text>
-		    <text class="value">{{ selectedStation.detail }}</text>
-		  </view>
-          <view class="info-item">
-            <text class="label">设备状态：</text>
-            <text class="value status-active">正常运行</text>
-          </view>
-          <view class="info-item">
-            <text class="label">最后上报：</text>
-            <text class="value">2023-08-20 14:30</text>
-          </view>
-        </view>
-      </view>
+     <map 
+       id="stationMap"
+       style="width: 100%; height: 60%;"
+       :latitude="mapCenter.latitude"
+       :longitude="mapCenter.longitude"
+       :markers="markers"
+       show-location
+       @markertap="handleMarkerTap"
+       @tap="handleMapTap"
+     >
+     </map>
+   <view v-if="selectedStation" class="info-window">
+   		 <view class="info-header">
+   		    <text class="title">{{ selectedStation?.stationName || '加载中...' }}</text>
+   		   <!-- <uni-icons 
+   		       type="close" 
+   		       size="20" 
+   		       color="#999" 
+   		       @click="selectedStation = null"
+   		     ></uni-icons> -->
+   		   </view>
+   		   
+   		   <view class="info-content">
+   		     <view class="info-item">
+   		       <text class="label">所属公司：</text>
+   		       <text class="value">{{ selectedStation.company }}</text>
+   		     </view>
+   		 		  <view class="info-item">
+   		 		    <text class="label">负责人：</text>
+   		 		    <text class="value">{{ selectedStation.username }}</text>
+   		 		  </view>
+   		 		  <view class="info-item">
+   		 		    <text class="label">联系电话：</text>
+   		 		    <text class="value">{{ selectedStation.phone }}</text>
+   		 		  </view>
+   		 		  <view class="info-item">
+   		 		    <text class="label">详细地址：</text>
+   		 		    <text class="value">{{ selectedStation.address }}</text>
+   		 		  </view>
+   		 		  <view class="info-item">
+   		 		    <text class="label">站点简介：</text>
+   		 		    <text class="value">{{ selectedStation.detail }}</text>
+   		 		  </view>
+   		     <view class="info-item">
+   		       <text class="label">设备状态：</text>
+   		       <text class="value status-active">正常运行</text>
+   		     </view>
+   		     <view class="info-item">
+   		       <text class="label">最后上报：</text>
+   		       <text class="value">2023-08-20 14:30</text>
+   		     </view>
+   		   </view>
+   </view>
     </view>
   </view>
 </template>
@@ -105,7 +105,11 @@ const stations = reactive([]);
 // 处理标记点击
 const handleMarkerTap = (e) => {
   const markerId = e.detail.markerId;
-  selectedStation.value = stations.find(item => item.id === markerId);
+ const station = stations.find(item => item.id === markerId);
+   selectedStation.value=JSON.parse(JSON.stringify(station))
+    setTimeout(() => {
+      selectedStation.value = {...selectedStation.value};
+    }, 50);
 };
 
 // 在script中添加
@@ -119,23 +123,23 @@ const handleEnter=()=>{
 }
 
 onMounted:{
+	
 getStationList().then(res=>{
-	let num=0;
 	totalStations.value=res.data.records.length
-	res.data.records.forEach(item=>{
-		num++;
+	res.data.records.forEach((item,index)=>{
 		markers.push({
-			id: num,
+			id: index+1,
 			latitude: item.latitude,
 			longitude: item.longitude,
 			iconPath: '../../static/mapLogo.png',
-			width: 30,
-			height: 30
+			width: 10,
+			height: 10,
+			 anchor: { x: 0.5, y: 1 }
   })
   stations.push( { 
     phone:item.phone,
 	company:item.company,
-    id: num,
+    id: index+1,
 	address: item.address,
 	detail: item.detail,
 	stationName: item.stationName,
@@ -150,7 +154,7 @@ getStationList().then(res=>{
 .container {
   display: flex;
   flex-direction: column;
-  height: 85vh;
+  height: 100vh;
 }
 
 .header {
@@ -214,7 +218,7 @@ getStationList().then(res=>{
 }
 
 .map-container {
-  flex: 1;
+  flex-grow: 1;
   border-radius: 10rpx;
   box-shadow: 0 4rpx 12rpx rgba(0, 0, 0, 0.05);
   margin: 0 20rpx 20rpx;
@@ -223,7 +227,7 @@ getStationList().then(res=>{
 }
 
 .info-window {
-  position: absolute;
+  position: fixed;
   bottom: 20rpx;
   left: 20rpx;
   right: 20rpx;
@@ -232,7 +236,8 @@ getStationList().then(res=>{
   padding: 25rpx;
   box-shadow: 0 8rpx 24rpx rgba(0, 0, 0, 0.1);
   z-index: 999;
-
+	transform: translateZ(100px); /* 触发硬件加速 */
+	 animation: fadeIn 0.3s ease;
   .info-header {
     display: flex;
     justify-content: space-between;
