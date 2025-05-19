@@ -1,61 +1,61 @@
 <template>
-  <view class="map-container">
-    <map
+  <view>
+    <map 
       id="myMap"
       style="width: 100%; height: 80vh;"
       :latitude="latitude"
       :longitude="longitude"
       :markers="markers"
       @tap="handleMapTap"
-      show-location
     ></map>
-    
-    <view class="coordinate-info" v-if="clickPosition">
-      经度: {{ clickPosition.longitude.toFixed(6) }}
-      纬度: {{ clickPosition.latitude.toFixed(6) }}
-    </view>
+	<br />
+	    <view class="coordinate-info" v-if="selectedPoint">
+	      经度: {{ selectedPoint.longitude.toFixed(6) }}
+	      纬度: {{ selectedPoint.latitude.toFixed(6) }}
+	    </view>
+    <button @click="confirmLocation">确认选择</button>
   </view>
 </template>
 
 <script setup>
 import { ref } from 'vue'
-import { onReady } from '@dcloudio/uni-app'
+import { onLoad } from '@dcloudio/uni-app'
 
-const latitude = ref(39.90923)
-const longitude = ref(116.397428)
+const latitude = ref(39.909)
+const longitude = ref(116.404)
 const markers = ref([])
-const clickPosition = ref(null)
-let mapContext = null
-
-onReady(() => {
-  mapContext = uni.createMapContext('myMap', this)
-})
+const selectedPoint = ref(null)
 
 const handleMapTap = (e) => {
-  // 获取点击位置的经纬度
-  clickPosition.value = e.detail
-  
-  // 添加标记
+  selectedPoint.value = e.detail
   markers.value = [{
-    id: Date.now(),
+    id: 1,
     latitude: e.detail.latitude,
     longitude: e.detail.longitude,
-    iconPath: '../../static/maker.png',
-    width: 100,
-    height: 100
+	 iconPath: '../../static/maker.png',
+    title: '选择的位置'
   }]
-  
-  // 调用逆地理编码（需要后端API支持）
-  reverseGeocode(e.detail.longitude, e.detail.latitude)
 }
 
-const reverseGeocode = (lng, lat) => {
-  uni.request({
-    url: 'https://your-api-domain.com/reverse-geocode',
-    data: { lng, lat },
-    success: (res) => {
-      console.log('逆地理编码结果:', res.data)
-    }
-  })
+const confirmLocation = () => {
+  if (selectedPoint.value) {
+    // 获取事件通道
+     const pages = getCurrentPages()
+       // 获取当前页面实例
+       const currentPage = pages[pages.length - 1]
+       // 获取事件通道
+       const eventChannel = currentPage.getOpenerEventChannel()
+    // 触发事件并传递数据
+    eventChannel.emit('acceptLocation', {
+      latitude: selectedPoint.value.latitude,
+      longitude: selectedPoint.value.longitude
+    })
+    uni.navigateBack()
+  } else {
+    uni.showToast({
+      title: '请先点击地图选择位置',
+      icon: 'none'
+    })
+  }
 }
 </script>

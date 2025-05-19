@@ -32,7 +32,6 @@ if (uni.restoreGlobal) {
 (function(vue) {
   "use strict";
   const ON_LOAD = "onLoad";
-  const ON_READY = "onReady";
   function formatAppLog(type, filename, ...args) {
     if (uni.__log__) {
       uni.__log__(type, filename, ...args);
@@ -47,7 +46,6 @@ if (uni.restoreGlobal) {
     !vue.isInSSRComponentSetup && vue.injectHook(lifecycle, hook, target);
   };
   const onLoad = /* @__PURE__ */ createHook(ON_LOAD);
-  const onReady = /* @__PURE__ */ createHook(ON_READY);
   const saveTokenToLocalStorage = (token) => {
     uni.setStorage({
       key: "token",
@@ -294,6 +292,17 @@ if (uni.restoreGlobal) {
         "oldPassword": params.oldpassword,
         "newPassword": params.newpassword
       }
+    });
+  };
+  const addStation = async (params) => {
+    const token = await getTokenFromLocalStorage();
+    return request({
+      url: "/web/stations/add",
+      method: "POST",
+      headers: {
+        "token": token
+      },
+      data: params
     });
   };
   const getStationList = async () => {
@@ -9749,32 +9758,35 @@ ${i3}
         }
       });
       const getLocation = () => {
-        uni.getLocation({
-          type: "wgs84",
-          success: (res) => {
-            formData.value.longitude = res.longitude.toFixed(6);
-            formData.value.latitude = res.latitude.toFixed(6);
-            uni.showToast({
-              title: "获取位置成功",
-              icon: "success"
-            });
+      };
+      const selectedLocation = vue.ref(null);
+      const goToMap = () => {
+        uni.navigateTo({
+          url: "/pages/select-location/select-location",
+          events: {
+            // 接收从地图页面返回的数据
+            acceptLocation: (data) => {
+              selectedLocation.value = data;
+              formData.value.longitude = selectedLocation.value.longitude;
+              formData.value.latitude = selectedLocation.value.latitude;
+            }
           },
-          fail: (err) => {
-            uni.showToast({
-              title: "获取位置失败",
-              icon: "none"
-            });
-            formatAppLog("error", "at pages/add-station/add-station.vue:141", "获取位置失败:", err);
+          success: (res) => {
+            mapPageEventChannel = res.eventChannel;
           }
         });
       };
+      let mapPageEventChannel = null;
       const submitForm = () => {
+        addStation(formData).then((res) => {
+          formatAppLog("log", "at pages/add-station/add-station.vue:170", 1111);
+        });
         const form = vue.ref(null);
         form.value.validate().then(() => {
           uni.showLoading({
             title: "提交中..."
           });
-          formatAppLog("log", "at pages/add-station/add-station.vue:155", "提交数据:", formData.value);
+          formatAppLog("log", "at pages/add-station/add-station.vue:179", "提交数据:", formData.value);
           setTimeout(() => {
             uni.hideLoading();
             uni.showToast({
@@ -9784,7 +9796,7 @@ ${i3}
             uni.navigateBack();
           }, 1500);
         }).catch((err) => {
-          formatAppLog("log", "at pages/add-station/add-station.vue:166", "表单验证失败:", err);
+          formatAppLog("log", "at pages/add-station/add-station.vue:190", "表单验证失败:", err);
         });
       };
       vue.onMounted(() => {
@@ -9792,10 +9804,16 @@ ${i3}
           formData.value.company = res;
         });
       });
-      const __returned__ = { formData, companies, rules, getLocation, submitForm, onMounted: vue.onMounted, ref: vue.ref, get onLoad() {
+      const __returned__ = { formData, companies, rules, getLocation, selectedLocation, goToMap, get mapPageEventChannel() {
+        return mapPageEventChannel;
+      }, set mapPageEventChannel(v2) {
+        mapPageEventChannel = v2;
+      }, submitForm, onMounted: vue.onMounted, ref: vue.ref, get onLoad() {
         return onLoad;
       }, get getDevice() {
         return getDevice;
+      }, get addStation() {
+        return addStation;
       } };
       Object.defineProperty(__returned__, "__isScriptSetup", { enumerable: false, value: true });
       return __returned__;
@@ -9902,7 +9920,7 @@ ${i3}
                   }, null, 8, ["modelValue"]),
                   vue.createElementVNode("button", {
                     class: "location-btn",
-                    onClick: $setup.getLocation
+                    onClick: $setup.goToMap
                   }, "选择位置")
                 ])
               ]),
@@ -9958,67 +9976,66 @@ ${i3}
     __name: "select-location",
     setup(__props, { expose: __expose }) {
       __expose();
-      const latitude = vue.ref(39.90923);
-      const longitude = vue.ref(116.397428);
+      const latitude = vue.ref(39.909);
+      const longitude = vue.ref(116.404);
       const markers = vue.ref([]);
-      const clickPosition = vue.ref(null);
-      let mapContext = null;
-      onReady(() => {
-        mapContext = uni.createMapContext("myMap", this);
-      });
+      const selectedPoint = vue.ref(null);
       const handleMapTap = (e2) => {
-        clickPosition.value = e2.detail;
+        selectedPoint.value = e2.detail;
         markers.value = [{
-          id: Date.now(),
+          id: 1,
           latitude: e2.detail.latitude,
           longitude: e2.detail.longitude,
           iconPath: "../../static/maker.png",
-          width: 100,
-          height: 100
+          title: "选择的位置"
         }];
-        reverseGeocode(e2.detail.longitude, e2.detail.latitude);
       };
-      const reverseGeocode = (lng, lat) => {
-        uni.request({
-          url: "https://your-api-domain.com/reverse-geocode",
-          data: { lng, lat },
-          success: (res) => {
-            formatAppLog("log", "at pages/select-location/select-location.vue:57", "逆地理编码结果:", res.data);
-          }
-        });
+      const confirmLocation = () => {
+        if (selectedPoint.value) {
+          const pages2 = getCurrentPages();
+          const currentPage = pages2[pages2.length - 1];
+          const eventChannel = currentPage.getOpenerEventChannel();
+          eventChannel.emit("acceptLocation", {
+            latitude: selectedPoint.value.latitude,
+            longitude: selectedPoint.value.longitude
+          });
+          uni.navigateBack();
+        } else {
+          uni.showToast({
+            title: "请先点击地图选择位置",
+            icon: "none"
+          });
+        }
       };
-      const __returned__ = { latitude, longitude, markers, clickPosition, get mapContext() {
-        return mapContext;
-      }, set mapContext(v2) {
-        mapContext = v2;
-      }, handleMapTap, reverseGeocode, ref: vue.ref, get onReady() {
-        return onReady;
+      const __returned__ = { latitude, longitude, markers, selectedPoint, handleMapTap, confirmLocation, ref: vue.ref, get onLoad() {
+        return onLoad;
       } };
       Object.defineProperty(__returned__, "__isScriptSetup", { enumerable: false, value: true });
       return __returned__;
     }
   };
   function _sfc_render$1(_ctx, _cache, $props, $setup, $data, $options) {
-    return vue.openBlock(), vue.createElementBlock("view", { class: "map-container" }, [
+    return vue.openBlock(), vue.createElementBlock("view", null, [
       vue.createElementVNode("map", {
         id: "myMap",
         style: { "width": "100%", "height": "80vh" },
         latitude: $setup.latitude,
         longitude: $setup.longitude,
         markers: $setup.markers,
-        onTap: $setup.handleMapTap,
-        "show-location": ""
+        onTap: $setup.handleMapTap
       }, null, 40, ["latitude", "longitude", "markers"]),
-      $setup.clickPosition ? (vue.openBlock(), vue.createElementBlock(
+      vue.createElementVNode("br"),
+      $setup.selectedPoint ? (vue.openBlock(), vue.createElementBlock(
         "view",
         {
           key: 0,
           class: "coordinate-info"
         },
-        " 经度: " + vue.toDisplayString($setup.clickPosition.longitude.toFixed(6)) + " 纬度: " + vue.toDisplayString($setup.clickPosition.latitude.toFixed(6)),
+        " 经度: " + vue.toDisplayString($setup.selectedPoint.longitude.toFixed(6)) + " 纬度: " + vue.toDisplayString($setup.selectedPoint.latitude.toFixed(6)),
         1
         /* TEXT */
-      )) : vue.createCommentVNode("v-if", true)
+      )) : vue.createCommentVNode("v-if", true),
+      vue.createElementVNode("button", { onClick: $setup.confirmLocation }, "确认选择")
     ]);
   }
   const PagesSelectLocationSelectLocation = /* @__PURE__ */ _export_sfc(_sfc_main$2, [["render", _sfc_render$1], ["__file", "C:/Users/86158/Documents/HBuilderProjects/PrePayApp/pages/select-location/select-location.vue"]]);

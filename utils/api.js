@@ -218,11 +218,15 @@ export const searchSaleUsers = (params) => {
 };
 
 // 添加换热站接口
-export const addStation = (params) => {
+export const addStation = async(params) => {
+	const token = await getTokenFromLocalStorage();  
 	return request({
 		url: "/web/stations/add",
 		method: 'POST',
-		params
+		headers: {
+		        "token": token
+		    },
+		data:params
 	});
 };
 
