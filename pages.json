@@ -127,7 +127,7 @@
 			"path" : "pages/company-stationList/company-stationList",
 			"style" : 
 			{
-				"navigationBarTitleText" : ""
+				"navigationBarTitleText" : "换热站管理"
 			}
 		}
 	],
