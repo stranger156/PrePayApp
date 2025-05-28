@@ -31,6 +31,7 @@ if (uni.restoreGlobal) {
 }
 (function(vue) {
   "use strict";
+  const ON_SHOW = "onShow";
   const ON_LOAD = "onLoad";
   function formatAppLog(type, filename, ...args) {
     if (uni.__log__) {
@@ -45,16 +46,17 @@ if (uni.restoreGlobal) {
   const createHook = (lifecycle2) => (hook, target = vue.getCurrentInstance()) => {
     !vue.isInSSRComponentSetup && vue.injectHook(lifecycle2, hook, target);
   };
+  const onShow = /* @__PURE__ */ createHook(ON_SHOW);
   const onLoad = /* @__PURE__ */ createHook(ON_LOAD);
   const saveTokenToLocalStorage = (token) => {
     uni.setStorage({
       key: "token",
       data: token,
       success: () => {
-        formatAppLog("log", "at store/user.js:6", "Token 存储成功");
+        formatAppLog("log", "at store/user.js:7", "Token 存储成功");
       },
       fail: (err) => {
-        formatAppLog("error", "at store/user.js:9", "Token 存储失败:", err);
+        formatAppLog("error", "at store/user.js:10", "Token 存储失败:", err);
       }
     });
   };
@@ -66,7 +68,7 @@ if (uni.restoreGlobal) {
           resolve(res.data);
         },
         fail: (err) => {
-          formatAppLog("error", "at store/user.js:22", "Token 获取失败:", err);
+          formatAppLog("error", "at store/user.js:23", "Token 获取失败:", err);
           reject(err);
         }
       });
@@ -77,10 +79,10 @@ if (uni.restoreGlobal) {
       key: "user",
       data: user,
       success: () => {
-        formatAppLog("log", "at store/user.js:34", "user存储成功");
+        formatAppLog("log", "at store/user.js:35", "user存储成功");
       },
       fail: (err) => {
-        formatAppLog("error", "at store/user.js:37", "user存储失败:", err);
+        formatAppLog("error", "at store/user.js:39", "user存储失败:", err);
       }
     });
   };
@@ -92,7 +94,7 @@ if (uni.restoreGlobal) {
           resolve(res.data);
         },
         fail: (err) => {
-          formatAppLog("error", "at store/user.js:50", "user获取失败:", err);
+          formatAppLog("error", "at store/user.js:52", "user获取失败:", err);
           reject(err);
         }
       });
@@ -103,10 +105,10 @@ if (uni.restoreGlobal) {
       key: "device",
       data: device,
       success: () => {
-        formatAppLog("log", "at store/user.js:61", "device存储成功");
+        formatAppLog("log", "at store/user.js:63", "device存储成功");
       },
       fail: (err) => {
-        formatAppLog("error", "at store/user.js:64", "device存储失败:", err);
+        formatAppLog("error", "at store/user.js:66", "device存储失败:", err);
       }
     });
   };
@@ -118,7 +120,33 @@ if (uni.restoreGlobal) {
           resolve(res.data);
         },
         fail: (err) => {
-          formatAppLog("error", "at store/user.js:77", "device获取失败:", err);
+          formatAppLog("error", "at store/user.js:79", "device获取失败:", err);
+          reject(err);
+        }
+      });
+    });
+  };
+  const saveAuthority = (authority) => {
+    uni.setStorage({
+      key: "authority",
+      data: authority,
+      success: () => {
+        formatAppLog("log", "at store/user.js:91", "authority存储成功");
+      },
+      fail: (err) => {
+        formatAppLog("error", "at store/user.js:94", "authority存储失败:", err);
+      }
+    });
+  };
+  const getAuthority = () => {
+    return new Promise((resolve, reject) => {
+      uni.getStorage({
+        key: "authority",
+        success: (res) => {
+          resolve(res.data);
+        },
+        fail: (err) => {
+          formatAppLog("error", "at store/user.js:107", "authority获取失败:", err);
           reject(err);
         }
       });
@@ -152,6 +180,7 @@ if (uni.restoreGlobal) {
           }
         },
         fail: (err) => {
+          formatAppLog("log", "at utils/request.js:27", 5555);
           uni.showToast({
             title: "网络请求失败",
             icon: "none"
@@ -380,6 +409,16 @@ if (uni.restoreGlobal) {
       }
     });
   };
+  const getDeviceInstallInfo = async (deviceNumber) => {
+    const token = await getTokenFromLocalStorage();
+    return request({
+      url: `/web/device/install/${deviceNumber}`,
+      method: "GET",
+      headers: {
+        "token": token
+      }
+    });
+  };
   const getDetailDevices = async (deviceNumber) => {
     const token = await getTokenFromLocalStorage();
     return request({
@@ -413,7 +452,7 @@ if (uni.restoreGlobal) {
     return target;
   };
   const userIcon = "/static/username_icon.png";
-  const _sfc_main$v = {
+  const _sfc_main$w = {
     __name: "login",
     setup(__props, { expose: __expose }) {
       __expose();
@@ -433,11 +472,18 @@ if (uni.restoreGlobal) {
         }
         login(user).then((res) => {
           if (res.code === 200) {
+            formatAppLog("log", "at pages/login/login.vue:99", res);
             saveTokenToLocalStorage(res.data.token);
             saveUser(user.username);
+            saveAuthority(res.data.userInfo.authority);
             uni.switchTab({
               url: "/pages/map/map"
               // 假设这是一个 tabBar 页面
+            });
+          } else {
+            uni.showToast({
+              title: res.msg,
+              icon: "none"
             });
           }
         });
@@ -454,6 +500,8 @@ if (uni.restoreGlobal) {
       };
       const __returned__ = { userIcon, user, rememberPasswords, loginAuto, proxy, loginButton, callPhone, goToDetail, ref: vue.ref, onMounted: vue.onMounted, getCurrentInstance: vue.getCurrentInstance, reactive: vue.reactive, get login() {
         return login;
+      }, get saveAuthority() {
+        return saveAuthority;
       }, get saveTokenToLocalStorage() {
         return saveTokenToLocalStorage;
       }, get saveUser() {
@@ -463,7 +511,7 @@ if (uni.restoreGlobal) {
       return __returned__;
     }
   };
-  function _sfc_render$u(_ctx, _cache, $props, $setup, $data, $options) {
+  function _sfc_render$v(_ctx, _cache, $props, $setup, $data, $options) {
     return vue.openBlock(), vue.createElementBlock("view", { class: "container" }, [
       vue.createCommentVNode(" 标题和输入框区域 "),
       vue.createElementVNode("view", { class: "input-container" }, [
@@ -524,7 +572,7 @@ if (uni.restoreGlobal) {
       }, "24小时客户服务电话：400 858 1855")
     ]);
   }
-  const PagesLoginLogin = /* @__PURE__ */ _export_sfc(_sfc_main$v, [["render", _sfc_render$u], ["__scopeId", "data-v-e4e4508d"], ["__file", "C:/Users/86158/Documents/HBuilderProjects/PrePayApp/pages/login/login.vue"]]);
+  const PagesLoginLogin = /* @__PURE__ */ _export_sfc(_sfc_main$w, [["render", _sfc_render$v], ["__scopeId", "data-v-e4e4508d"], ["__file", "C:/Users/86158/Documents/HBuilderProjects/PrePayApp/pages/login/login.vue"]]);
   const fontData = [
     {
       "font_class": "arrow-down",
@@ -1175,7 +1223,7 @@ if (uni.restoreGlobal) {
     const reg = /^[0-9]*$/g;
     return typeof val === "number" || reg.test(val) ? val + "px" : val;
   };
-  const _sfc_main$u = {
+  const _sfc_main$v = {
     name: "UniIcons",
     emits: ["click"],
     props: {
@@ -1229,7 +1277,7 @@ if (uni.restoreGlobal) {
       }
     }
   };
-  function _sfc_render$t(_ctx, _cache, $props, $setup, $data, $options) {
+  function _sfc_render$u(_ctx, _cache, $props, $setup, $data, $options) {
     return vue.openBlock(), vue.createElementBlock(
       "text",
       {
@@ -1244,17 +1292,18 @@ if (uni.restoreGlobal) {
       /* CLASS, STYLE */
     );
   }
-  const __easycom_0$1 = /* @__PURE__ */ _export_sfc(_sfc_main$u, [["render", _sfc_render$t], ["__scopeId", "data-v-946bce22"], ["__file", "C:/Users/86158/Documents/HBuilderProjects/PrePayApp/node_modules/@dcloudio/uni-ui/lib/uni-icons/uni-icons.vue"]]);
-  const _sfc_main$t = {
+  const __easycom_0$1 = /* @__PURE__ */ _export_sfc(_sfc_main$v, [["render", _sfc_render$u], ["__scopeId", "data-v-946bce22"], ["__file", "C:/Users/86158/Documents/HBuilderProjects/PrePayApp/node_modules/@dcloudio/uni-ui/lib/uni-icons/uni-icons.vue"]]);
+  const _sfc_main$u = {
     __name: "map",
     setup(__props, { expose: __expose }) {
       __expose();
       const selectedStation = vue.ref(null);
       const totalStations = vue.ref(0);
       const input = vue.ref(null);
+      const authority = vue.ref("");
       const mapCenter = vue.ref({
-        latitude: 39.9042,
-        longitude: 116.4074
+        latitude: 0,
+        longitude: 0
       });
       const markers = vue.reactive([]);
       const stations = vue.reactive([]);
@@ -1294,7 +1343,7 @@ if (uni.restoreGlobal) {
             });
           },
           fail: (err) => {
-            formatAppLog("error", "at pages/map/map.vue:144", "定位失败:", err);
+            formatAppLog("error", "at pages/map/map.vue:145", "定位失败:", err);
             uni.showToast({
               title: "获取位置失败，请检查定位权限",
               icon: "none"
@@ -1302,9 +1351,9 @@ if (uni.restoreGlobal) {
           }
         });
       };
-      {
-        getLocation();
+      function start2() {
         getStationList().then((res) => {
+          formatAppLog("log", "at pages/map/map.vue:156", res);
           totalStations.value = res.data.records.length;
           res.data.records.forEach((item, index) => {
             markers.push({
@@ -1328,14 +1377,24 @@ if (uni.restoreGlobal) {
           });
         });
       }
-      const __returned__ = { selectedStation, totalStations, input, mapCenter, markers, stations, handleMarkerTap, handleMapTap, handleEnter, getLocation, onMounted: vue.onMounted, reactive: vue.reactive, ref: vue.ref, onUnmounted: vue.onUnmounted, uniIcons: __easycom_0$1, get getStationList() {
+      vue.onMounted(() => {
+        getLocation();
+        start2();
+      });
+      const __returned__ = { selectedStation, totalStations, input, authority, mapCenter, markers, stations, handleMarkerTap, handleMapTap, handleEnter, getLocation, start: start2, onMounted: vue.onMounted, reactive: vue.reactive, ref: vue.ref, onUnmounted: vue.onUnmounted, onBeforeUpdate: vue.onBeforeUpdate, uniIcons: __easycom_0$1, get fetchCompanyList() {
+        return fetchCompanyList;
+      }, get getStationList() {
         return getStationList;
+      }, get getAuthority() {
+        return getAuthority;
+      }, get onShow() {
+        return onShow;
       } };
       Object.defineProperty(__returned__, "__isScriptSetup", { enumerable: false, value: true });
       return __returned__;
     }
   };
-  function _sfc_render$s(_ctx, _cache, $props, $setup, $data, $options) {
+  function _sfc_render$t(_ctx, _cache, $props, $setup, $data, $options) {
     var _a2;
     return vue.openBlock(), vue.createElementBlock("view", { class: "container" }, [
       vue.createCommentVNode(" 顶部统计信息 "),
@@ -1453,9 +1512,9 @@ if (uni.restoreGlobal) {
       ])
     ]);
   }
-  const PagesMapMap = /* @__PURE__ */ _export_sfc(_sfc_main$t, [["render", _sfc_render$s], ["__scopeId", "data-v-e06b858f"], ["__file", "C:/Users/86158/Documents/HBuilderProjects/PrePayApp/pages/map/map.vue"]]);
+  const PagesMapMap = /* @__PURE__ */ _export_sfc(_sfc_main$u, [["render", _sfc_render$t], ["__scopeId", "data-v-e06b858f"], ["__file", "C:/Users/86158/Documents/HBuilderProjects/PrePayApp/pages/map/map.vue"]]);
   const _imports_0$6 = "/static/background.png";
-  const _sfc_main$s = {
+  const _sfc_main$t = {
     __name: "PreLogin",
     setup(__props, { expose: __expose }) {
       __expose();
@@ -1471,7 +1530,7 @@ if (uni.restoreGlobal) {
       return __returned__;
     }
   };
-  function _sfc_render$r(_ctx, _cache, $props, $setup, $data, $options) {
+  function _sfc_render$s(_ctx, _cache, $props, $setup, $data, $options) {
     return vue.openBlock(), vue.createElementBlock("view", { class: "main" }, [
       vue.createElementVNode("img", {
         src: _imports_0$6,
@@ -1480,9 +1539,9 @@ if (uni.restoreGlobal) {
       })
     ]);
   }
-  const PagesPreLoginPreLogin = /* @__PURE__ */ _export_sfc(_sfc_main$s, [["render", _sfc_render$r], ["__scopeId", "data-v-6f7f9871"], ["__file", "C:/Users/86158/Documents/HBuilderProjects/PrePayApp/pages/PreLogin/PreLogin.vue"]]);
+  const PagesPreLoginPreLogin = /* @__PURE__ */ _export_sfc(_sfc_main$t, [["render", _sfc_render$s], ["__scopeId", "data-v-6f7f9871"], ["__file", "C:/Users/86158/Documents/HBuilderProjects/PrePayApp/pages/PreLogin/PreLogin.vue"]]);
   const _imports_0$5 = "/static/logo.png";
-  const _sfc_main$r = {
+  const _sfc_main$s = {
     data() {
       return {
         title: "Hello"
@@ -1492,7 +1551,7 @@ if (uni.restoreGlobal) {
     },
     methods: {}
   };
-  function _sfc_render$q(_ctx, _cache, $props, $setup, $data, $options) {
+  function _sfc_render$r(_ctx, _cache, $props, $setup, $data, $options) {
     return vue.openBlock(), vue.createElementBlock("view", { class: "content" }, [
       vue.createElementVNode("image", {
         class: "logo",
@@ -1509,10 +1568,10 @@ if (uni.restoreGlobal) {
       ])
     ]);
   }
-  const PagesIndexIndex = /* @__PURE__ */ _export_sfc(_sfc_main$r, [["render", _sfc_render$q], ["__scopeId", "data-v-1cf27b2a"], ["__file", "C:/Users/86158/Documents/HBuilderProjects/PrePayApp/pages/index/index.vue"]]);
+  const PagesIndexIndex = /* @__PURE__ */ _export_sfc(_sfc_main$s, [["render", _sfc_render$r], ["__scopeId", "data-v-1cf27b2a"], ["__file", "C:/Users/86158/Documents/HBuilderProjects/PrePayApp/pages/index/index.vue"]]);
   const _imports_0$4 = "/static/more.png";
-  const _sfc_main$q = {};
-  function _sfc_render$p(_ctx, _cache) {
+  const _sfc_main$r = {};
+  function _sfc_render$q(_ctx, _cache) {
     return vue.openBlock(), vue.createElementBlock("view", { class: "main" }, [
       vue.createElementVNode("img", {
         src: _imports_0$4,
@@ -1521,7 +1580,7 @@ if (uni.restoreGlobal) {
       })
     ]);
   }
-  const PagesMoreMore = /* @__PURE__ */ _export_sfc(_sfc_main$q, [["render", _sfc_render$p], ["__scopeId", "data-v-ac368486"], ["__file", "C:/Users/86158/Documents/HBuilderProjects/PrePayApp/pages/more/more.vue"]]);
+  const PagesMoreMore = /* @__PURE__ */ _export_sfc(_sfc_main$r, [["render", _sfc_render$q], ["__scopeId", "data-v-ac368486"], ["__file", "C:/Users/86158/Documents/HBuilderProjects/PrePayApp/pages/more/more.vue"]]);
   const isObject$4 = (val) => val !== null && typeof val === "object";
   const defaultDelimiters = ["{", "}"];
   class BaseFormatter {
@@ -1828,7 +1887,7 @@ if (uni.restoreGlobal) {
   const {
     t: t$4
   } = initVueI18n(messages$1);
-  const _sfc_main$p = {
+  const _sfc_main$q = {
     name: "UniSearchBar",
     emits: ["input", "update:modelValue", "clear", "cancel", "confirm", "blur", "focus"],
     props: {
@@ -1970,7 +2029,7 @@ if (uni.restoreGlobal) {
       }
     }
   };
-  function _sfc_render$o(_ctx, _cache, $props, $setup, $data, $options) {
+  function _sfc_render$p(_ctx, _cache, $props, $setup, $data, $options) {
     const _component_uni_icons = resolveEasycom(vue.resolveDynamicComponent("uni-icons"), __easycom_0$1);
     return vue.openBlock(), vue.createElementBlock("view", { class: "uni-searchbar" }, [
       vue.createElementVNode(
@@ -2046,192 +2105,7 @@ if (uni.restoreGlobal) {
       )) : vue.createCommentVNode("v-if", true)
     ]);
   }
-  const UniSearchBar = /* @__PURE__ */ _export_sfc(_sfc_main$p, [["render", _sfc_render$o], ["__scopeId", "data-v-a149a6be"], ["__file", "C:/Users/86158/Documents/HBuilderProjects/PrePayApp/node_modules/@dcloudio/uni-ui/lib/uni-search-bar/uni-search-bar.vue"]]);
-  const en$2 = {
-    "uni-load-more.contentdown": "Pull up to show more",
-    "uni-load-more.contentrefresh": "loading...",
-    "uni-load-more.contentnomore": "No more data"
-  };
-  const zhHans$1 = {
-    "uni-load-more.contentdown": "上拉显示更多",
-    "uni-load-more.contentrefresh": "正在加载...",
-    "uni-load-more.contentnomore": "没有更多数据了"
-  };
-  const zhHant$1 = {
-    "uni-load-more.contentdown": "上拉顯示更多",
-    "uni-load-more.contentrefresh": "正在加載...",
-    "uni-load-more.contentnomore": "沒有更多數據了"
-  };
-  const messages = {
-    en: en$2,
-    "zh-Hans": zhHans$1,
-    "zh-Hant": zhHant$1
-  };
-  let platform$1;
-  setTimeout(() => {
-    platform$1 = uni.getSystemInfoSync().platform;
-  }, 16);
-  const {
-    t: t$3
-  } = initVueI18n(messages);
-  const _sfc_main$o = {
-    name: "UniLoadMore",
-    emits: ["clickLoadMore"],
-    props: {
-      status: {
-        // 上拉的状态：more-loading前；loading-loading中；noMore-没有更多了
-        type: String,
-        default: "more"
-      },
-      showIcon: {
-        type: Boolean,
-        default: true
-      },
-      iconType: {
-        type: String,
-        default: "auto"
-      },
-      iconSize: {
-        type: Number,
-        default: 24
-      },
-      color: {
-        type: String,
-        default: "#777777"
-      },
-      contentText: {
-        type: Object,
-        default() {
-          return {
-            contentdown: "",
-            contentrefresh: "",
-            contentnomore: ""
-          };
-        }
-      },
-      showText: {
-        type: Boolean,
-        default: true
-      }
-    },
-    data() {
-      return {
-        webviewHide: false,
-        platform: platform$1,
-        imgBase64: "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAEAAAABACAYAAACqaXHeAAAAGXRFWHRTb2Z0d2FyZQBBZG9iZSBJbWFnZVJlYWR5ccllPAAAAyJpVFh0WE1MOmNvbS5hZG9iZS54bXAAAAAAADw/eHBhY2tldCBiZWdpbj0i77u/IiBpZD0iVzVNME1wQ2VoaUh6cmVTek5UY3prYzlkIj8+IDx4OnhtcG1ldGEgeG1sbnM6eD0iYWRvYmU6bnM6bWV0YS8iIHg6eG1wdGs9IkFkb2JlIFhNUCBDb3JlIDUuMy1jMDExIDY2LjE0NTY2MSwgMjAxMi8wMi8wNi0xNDo1NjoyNyAgICAgICAgIj4gPHJkZjpSREYgeG1sbnM6cmRmPSJodHRwOi8vd3d3LnczLm9yZy8xOTk5LzAyLzIyLXJkZi1zeW50YXgtbnMjIj4gPHJkZjpEZXNjcmlwdGlvbiByZGY6YWJvdXQ9IiIgeG1sbnM6eG1wPSJodHRwOi8vbnMuYWRvYmUuY29tL3hhcC8xLjAvIiB4bWxuczp4bXBNTT0iaHR0cDovL25zLmFkb2JlLmNvbS94YXAvMS4wL21tLyIgeG1sbnM6c3RSZWY9Imh0dHA6Ly9ucy5hZG9iZS5jb20veGFwLzEuMC9zVHlwZS9SZXNvdXJjZVJlZiMiIHhtcDpDcmVhdG9yVG9vbD0iQWRvYmUgUGhvdG9zaG9wIENTNiAoV2luZG93cykiIHhtcE1NOkluc3RhbmNlSUQ9InhtcC5paWQ6QzlBMzU3OTlEOUM0MTFFOUI0NTZDNERBQURBQzI4RkUiIHhtcE1NOkRvY3VtZW50SUQ9InhtcC5kaWQ6QzlBMzU3OUFEOUM0MTFFOUI0NTZDNERBQURBQzI4RkUiPiA8eG1wTU06RGVyaXZlZEZyb20gc3RSZWY6aW5zdGFuY2VJRD0ieG1wLmlpZDpDOUEzNTc5N0Q5QzQxMUU5QjQ1NkM0REFBREFDMjhGRSIgc3RSZWY6ZG9jdW1lbnRJRD0ieG1wLmRpZDpDOUEzNTc5OEQ5QzQxMUU5QjQ1NkM0REFBREFDMjhGRSIvPiA8L3JkZjpEZXNjcmlwdGlvbj4gPC9yZGY6UkRGPiA8L3g6eG1wbWV0YT4gPD94cGFja2V0IGVuZD0iciI/Pt+ALSwAAA6CSURBVHja1FsLkFZV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"
-      };
-    },
-    computed: {
-      iconSnowWidth() {
-        return (Math.floor(this.iconSize / 24) || 1) * 2;
-      },
-      contentdownText() {
-        return this.contentText.contentdown || t$3("uni-load-more.contentdown");
-      },
-      contentrefreshText() {
-        return this.contentText.contentrefresh || t$3("uni-load-more.contentrefresh");
-      },
-      contentnomoreText() {
-        return this.contentText.contentnomore || t$3("uni-load-more.contentnomore");
-      }
-    },
-    mounted() {
-      var pages2 = getCurrentPages();
-      var page = pages2[pages2.length - 1];
-      var currentWebview = page.$getAppWebview();
-      currentWebview.addEventListener("hide", () => {
-        this.webviewHide = true;
-      });
-      currentWebview.addEventListener("show", () => {
-        this.webviewHide = false;
-      });
-    },
-    methods: {
-      onClick() {
-        this.$emit("clickLoadMore", {
-          detail: {
-            status: this.status
-          }
-        });
-      }
-    }
-  };
-  function _sfc_render$n(_ctx, _cache, $props, $setup, $data, $options) {
-    return vue.openBlock(), vue.createElementBlock("view", {
-      class: "uni-load-more",
-      onClick: _cache[0] || (_cache[0] = (...args) => $options.onClick && $options.onClick(...args))
-    }, [
-      !$data.webviewHide && ($props.iconType === "circle" || $props.iconType === "auto" && $data.platform === "android") && $props.status === "loading" && $props.showIcon ? (vue.openBlock(), vue.createElementBlock(
-        "view",
-        {
-          key: 0,
-          style: vue.normalizeStyle({ width: $props.iconSize + "px", height: $props.iconSize + "px" }),
-          class: "uni-load-more__img uni-load-more__img--android-MP"
-        },
-        [
-          vue.createElementVNode(
-            "view",
-            {
-              class: "uni-load-more__img-icon",
-              style: vue.normalizeStyle({ borderTopColor: $props.color, borderTopWidth: $props.iconSize / 12 })
-            },
-            null,
-            4
-            /* STYLE */
-          ),
-          vue.createElementVNode(
-            "view",
-            {
-              class: "uni-load-more__img-icon",
-              style: vue.normalizeStyle({ borderTopColor: $props.color, borderTopWidth: $props.iconSize / 12 })
-            },
-            null,
-            4
-            /* STYLE */
-          ),
-          vue.createElementVNode(
-            "view",
-            {
-              class: "uni-load-more__img-icon",
-              style: vue.normalizeStyle({ borderTopColor: $props.color, borderTopWidth: $props.iconSize / 12 })
-            },
-            null,
-            4
-            /* STYLE */
-          )
-        ],
-        4
-        /* STYLE */
-      )) : !$data.webviewHide && $props.status === "loading" && $props.showIcon ? (vue.openBlock(), vue.createElementBlock(
-        "view",
-        {
-          key: 1,
-          style: vue.normalizeStyle({ width: $props.iconSize + "px", height: $props.iconSize + "px" }),
-          class: "uni-load-more__img uni-load-more__img--ios-H5"
-        },
-        [
-          vue.createElementVNode("image", {
-            src: $data.imgBase64,
-            mode: "widthFix"
-          }, null, 8, ["src"])
-        ],
-        4
-        /* STYLE */
-      )) : vue.createCommentVNode("v-if", true),
-      $props.showText ? (vue.openBlock(), vue.createElementBlock(
-        "text",
-        {
-          key: 2,
-          class: "uni-load-more__text",
-          style: vue.normalizeStyle({ color: $props.color })
-        },
-        vue.toDisplayString($props.status === "more" ? $options.contentdownText : $props.status === "loading" ? $options.contentrefreshText : $options.contentnomoreText),
-        5
-        /* TEXT, STYLE */
-      )) : vue.createCommentVNode("v-if", true)
-    ]);
-  }
-  const __easycom_2$2 = /* @__PURE__ */ _export_sfc(_sfc_main$o, [["render", _sfc_render$n], ["__scopeId", "data-v-2c1dd21f"], ["__file", "C:/Users/86158/Documents/HBuilderProjects/PrePayApp/node_modules/@dcloudio/uni-ui/lib/uni-load-more/uni-load-more.vue"]]);
+  const UniSearchBar = /* @__PURE__ */ _export_sfc(_sfc_main$q, [["render", _sfc_render$p], ["__scopeId", "data-v-a149a6be"], ["__file", "C:/Users/86158/Documents/HBuilderProjects/PrePayApp/node_modules/@dcloudio/uni-ui/lib/uni-search-bar/uni-search-bar.vue"]]);
   var extendStatics = function(d2, b2) {
     extendStatics = Object.setPrototypeOf || { __proto__: [] } instanceof Array && function(d3, b3) {
       d3.__proto__ = b3;
@@ -17346,9 +17220,9 @@ if (uni.restoreGlobal) {
     return deps;
   }
   const ComponentModel$1 = ComponentModel;
-  var platform = "";
+  var platform$1 = "";
   if (typeof navigator !== "undefined") {
-    platform = navigator.platform || "";
+    platform$1 = navigator.platform || "";
   }
   var decalColor = "rgba(0, 0, 0, 0.2)";
   const globalDefault = {
@@ -17400,7 +17274,7 @@ if (uni.restoreGlobal) {
       // color: '#000',
       // decoration: 'none',
       // PENDING
-      fontFamily: platform.match(/^Win/) ? "Microsoft YaHei" : "sans-serif",
+      fontFamily: platform$1.match(/^Win/) ? "Microsoft YaHei" : "sans-serif",
       // fontFamily: 'Arial, Verdana, sans-serif',
       fontSize: 12,
       fontStyle: "normal",
@@ -75876,6 +75750,242 @@ if (uni.restoreGlobal) {
   use(install);
   use(installUniversalTransition);
   use(installLabelLayout);
+  const _sfc_main$p = {
+    name: "EcCanvas",
+    props: {
+      width: {
+        type: Number,
+        default: 300
+      },
+      height: {
+        type: Number,
+        default: 200
+      },
+      option: {
+        type: Object,
+        required: true
+      },
+      canvasId: {
+        type: String,
+        default: "myChart"
+      }
+    },
+    mounted() {
+      this.initChart();
+    },
+    methods: {
+      initChart() {
+        const chartDom = this.$refs.canvas;
+        const chart = init$1(chartDom);
+        chart.setOption(this.option);
+      }
+    }
+  };
+  function _sfc_render$o(_ctx, _cache, $props, $setup, $data, $options) {
+    return vue.openBlock(), vue.createElementBlock(
+      "view",
+      {
+        class: "echarts",
+        style: vue.normalizeStyle({ width: $props.width + "px", height: $props.height + "px" })
+      },
+      [
+        vue.createElementVNode("canvas", {
+          ref: "canvas",
+          id: $props.canvasId,
+          "canvas-id": $props.canvasId,
+          style: { "width": "100%", "height": "100%" }
+        }, null, 8, ["id", "canvas-id"])
+      ],
+      4
+      /* STYLE */
+    );
+  }
+  const __easycom_2$2 = /* @__PURE__ */ _export_sfc(_sfc_main$p, [["render", _sfc_render$o], ["__scopeId", "data-v-12977466"], ["__file", "C:/Users/86158/Documents/HBuilderProjects/PrePayApp/components/ec-canvas/ec-canvas.vue"]]);
+  const en$2 = {
+    "uni-load-more.contentdown": "Pull up to show more",
+    "uni-load-more.contentrefresh": "loading...",
+    "uni-load-more.contentnomore": "No more data"
+  };
+  const zhHans$1 = {
+    "uni-load-more.contentdown": "上拉显示更多",
+    "uni-load-more.contentrefresh": "正在加载...",
+    "uni-load-more.contentnomore": "没有更多数据了"
+  };
+  const zhHant$1 = {
+    "uni-load-more.contentdown": "上拉顯示更多",
+    "uni-load-more.contentrefresh": "正在加載...",
+    "uni-load-more.contentnomore": "沒有更多數據了"
+  };
+  const messages = {
+    en: en$2,
+    "zh-Hans": zhHans$1,
+    "zh-Hant": zhHant$1
+  };
+  let platform;
+  setTimeout(() => {
+    platform = uni.getSystemInfoSync().platform;
+  }, 16);
+  const {
+    t: t$3
+  } = initVueI18n(messages);
+  const _sfc_main$o = {
+    name: "UniLoadMore",
+    emits: ["clickLoadMore"],
+    props: {
+      status: {
+        // 上拉的状态：more-loading前；loading-loading中；noMore-没有更多了
+        type: String,
+        default: "more"
+      },
+      showIcon: {
+        type: Boolean,
+        default: true
+      },
+      iconType: {
+        type: String,
+        default: "auto"
+      },
+      iconSize: {
+        type: Number,
+        default: 24
+      },
+      color: {
+        type: String,
+        default: "#777777"
+      },
+      contentText: {
+        type: Object,
+        default() {
+          return {
+            contentdown: "",
+            contentrefresh: "",
+            contentnomore: ""
+          };
+        }
+      },
+      showText: {
+        type: Boolean,
+        default: true
+      }
+    },
+    data() {
+      return {
+        webviewHide: false,
+        platform,
+        imgBase64: "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAEAAAABACAYAAACqaXHeAAAAGXRFWHRTb2Z0d2FyZQBBZG9iZSBJbWFnZVJlYWR5ccllPAAAAyJpVFh0WE1MOmNvbS5hZG9iZS54bXAAAAAAADw/eHBhY2tldCBiZWdpbj0i77u/IiBpZD0iVzVNME1wQ2VoaUh6cmVTek5UY3prYzlkIj8+IDx4OnhtcG1ldGEgeG1sbnM6eD0iYWRvYmU6bnM6bWV0YS8iIHg6eG1wdGs9IkFkb2JlIFhNUCBDb3JlIDUuMy1jMDExIDY2LjE0NTY2MSwgMjAxMi8wMi8wNi0xNDo1NjoyNyAgICAgICAgIj4gPHJkZjpSREYgeG1sbnM6cmRmPSJodHRwOi8vd3d3LnczLm9yZy8xOTk5LzAyLzIyLXJkZi1zeW50YXgtbnMjIj4gPHJkZjpEZXNjcmlwdGlvbiByZGY6YWJvdXQ9IiIgeG1sbnM6eG1wPSJodHRwOi8vbnMuYWRvYmUuY29tL3hhcC8xLjAvIiB4bWxuczp4bXBNTT0iaHR0cDovL25zLmFkb2JlLmNvbS94YXAvMS4wL21tLyIgeG1sbnM6c3RSZWY9Imh0dHA6Ly9ucy5hZG9iZS5jb20veGFwLzEuMC9zVHlwZS9SZXNvdXJjZVJlZiMiIHhtcDpDcmVhdG9yVG9vbD0iQWRvYmUgUGhvdG9zaG9wIENTNiAoV2luZG93cykiIHhtcE1NOkluc3RhbmNlSUQ9InhtcC5paWQ6QzlBMzU3OTlEOUM0MTFFOUI0NTZDNERBQURBQzI4RkUiIHhtcE1NOkRvY3VtZW50SUQ9InhtcC5kaWQ6QzlBMzU3OUFEOUM0MTFFOUI0NTZDNERBQURBQzI4RkUiPiA8eG1wTU06RGVyaXZlZEZyb20gc3RSZWY6aW5zdGFuY2VJRD0ieG1wLmlpZDpDOUEzNTc5N0Q5QzQxMUU5QjQ1NkM0REFBREFDMjhGRSIgc3RSZWY6ZG9jdW1lbnRJRD0ieG1wLmRpZDpDOUEzNTc5OEQ5QzQxMUU5QjQ1NkM0REFBREFDMjhGRSIvPiA8L3JkZjpEZXNjcmlwdGlvbj4gPC9yZGY6UkRGPiA8L3g6eG1wbWV0YT4gPD94cGFja2V0IGVuZD0iciI/Pt+ALSwAAA6CSURBVHja1FsLkFZV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"
+      };
+    },
+    computed: {
+      iconSnowWidth() {
+        return (Math.floor(this.iconSize / 24) || 1) * 2;
+      },
+      contentdownText() {
+        return this.contentText.contentdown || t$3("uni-load-more.contentdown");
+      },
+      contentrefreshText() {
+        return this.contentText.contentrefresh || t$3("uni-load-more.contentrefresh");
+      },
+      contentnomoreText() {
+        return this.contentText.contentnomore || t$3("uni-load-more.contentnomore");
+      }
+    },
+    mounted() {
+      var pages2 = getCurrentPages();
+      var page = pages2[pages2.length - 1];
+      var currentWebview = page.$getAppWebview();
+      currentWebview.addEventListener("hide", () => {
+        this.webviewHide = true;
+      });
+      currentWebview.addEventListener("show", () => {
+        this.webviewHide = false;
+      });
+    },
+    methods: {
+      onClick() {
+        this.$emit("clickLoadMore", {
+          detail: {
+            status: this.status
+          }
+        });
+      }
+    }
+  };
+  function _sfc_render$n(_ctx, _cache, $props, $setup, $data, $options) {
+    return vue.openBlock(), vue.createElementBlock("view", {
+      class: "uni-load-more",
+      onClick: _cache[0] || (_cache[0] = (...args) => $options.onClick && $options.onClick(...args))
+    }, [
+      !$data.webviewHide && ($props.iconType === "circle" || $props.iconType === "auto" && $data.platform === "android") && $props.status === "loading" && $props.showIcon ? (vue.openBlock(), vue.createElementBlock(
+        "view",
+        {
+          key: 0,
+          style: vue.normalizeStyle({ width: $props.iconSize + "px", height: $props.iconSize + "px" }),
+          class: "uni-load-more__img uni-load-more__img--android-MP"
+        },
+        [
+          vue.createElementVNode(
+            "view",
+            {
+              class: "uni-load-more__img-icon",
+              style: vue.normalizeStyle({ borderTopColor: $props.color, borderTopWidth: $props.iconSize / 12 })
+            },
+            null,
+            4
+            /* STYLE */
+          ),
+          vue.createElementVNode(
+            "view",
+            {
+              class: "uni-load-more__img-icon",
+              style: vue.normalizeStyle({ borderTopColor: $props.color, borderTopWidth: $props.iconSize / 12 })
+            },
+            null,
+            4
+            /* STYLE */
+          ),
+          vue.createElementVNode(
+            "view",
+            {
+              class: "uni-load-more__img-icon",
+              style: vue.normalizeStyle({ borderTopColor: $props.color, borderTopWidth: $props.iconSize / 12 })
+            },
+            null,
+            4
+            /* STYLE */
+          )
+        ],
+        4
+        /* STYLE */
+      )) : !$data.webviewHide && $props.status === "loading" && $props.showIcon ? (vue.openBlock(), vue.createElementBlock(
+        "view",
+        {
+          key: 1,
+          style: vue.normalizeStyle({ width: $props.iconSize + "px", height: $props.iconSize + "px" }),
+          class: "uni-load-more__img uni-load-more__img--ios-H5"
+        },
+        [
+          vue.createElementVNode("image", {
+            src: $data.imgBase64,
+            mode: "widthFix"
+          }, null, 8, ["src"])
+        ],
+        4
+        /* STYLE */
+      )) : vue.createCommentVNode("v-if", true),
+      $props.showText ? (vue.openBlock(), vue.createElementBlock(
+        "text",
+        {
+          key: 2,
+          class: "uni-load-more__text",
+          style: vue.normalizeStyle({ color: $props.color })
+        },
+        vue.toDisplayString($props.status === "more" ? $options.contentdownText : $props.status === "loading" ? $options.contentrefreshText : $options.contentnomoreText),
+        5
+        /* TEXT, STYLE */
+      )) : vue.createCommentVNode("v-if", true)
+    ]);
+  }
+  const __easycom_3$1 = /* @__PURE__ */ _export_sfc(_sfc_main$o, [["render", _sfc_render$n], ["__scopeId", "data-v-2c1dd21f"], ["__file", "C:/Users/86158/Documents/HBuilderProjects/PrePayApp/node_modules/@dcloudio/uni-ui/lib/uni-load-more/uni-load-more.vue"]]);
   const _sfc_main$n = {
     data() {
       return {
@@ -75912,6 +76022,8 @@ if (uni.restoreGlobal) {
         //         }
         //       }]
         //     },
+        showRechargeDialog: false,
+        showInstallInfoDialog: false,
         searchKey: "",
         jumpPage: null,
         deviceList: [],
@@ -75966,7 +76078,7 @@ if (uni.restoreGlobal) {
           }
         } catch (error2) {
           uni.showToast({
-            title: `数据加载失败: ${error2.message || "未知错误"}`,
+            title: "数据加载失败: ${error.message || '未知错误'}",
             icon: "none"
           });
         } finally {
@@ -76006,7 +76118,7 @@ if (uni.restoreGlobal) {
         });
       },
       async showStationDetail(station) {
-        formatAppLog("log", "at pages/list/list.vue:395", station);
+        formatAppLog("log", "at pages/list/list.vue:607", station);
         this.selectedStation = station;
         this.showDetailDialog = true;
         try {
@@ -76016,7 +76128,7 @@ if (uni.restoreGlobal) {
             devices
           };
         } catch (error2) {
-          formatAppLog("error", "at pages/list/list.vue:406", "加载设备失败:", error2);
+          formatAppLog("error", "at pages/list/list.vue:618", "加载设备失败:", error2);
           this.selectedStation.devices = [{
             name: "数据加载失败",
             code: "ERROR",
@@ -76029,7 +76141,7 @@ if (uni.restoreGlobal) {
         try {
           const res = await getStationDevices(station.stationName);
           if ((res == null ? void 0 : res.code) === 200 && res.data) {
-            formatAppLog("log", "at pages/list/list.vue:425", 666);
+            formatAppLog("log", "at pages/list/list.vue:637", 666);
             return res.data.map((device) => ({
               name: device.deviceName || "未命名设备",
               // 映射设备名称
@@ -76041,7 +76153,7 @@ if (uni.restoreGlobal) {
           }
           return [];
         } catch (error2) {
-          formatAppLog("error", "at pages/list/list.vue:437", "获取设备失败:", error2);
+          formatAppLog("error", "at pages/list/list.vue:649", "获取设备失败:", error2);
           return [{
             name: "数据加载失败",
             code: "ERROR",
@@ -76049,11 +76161,51 @@ if (uni.restoreGlobal) {
           }];
         }
       },
+      async showInstallInfo(device) {
+        this.selectedDevice = device;
+        this.showInstallInfoDialog = true;
+        try {
+          formatAppLog("log", "at pages/list/list.vue:663", device);
+          const res = await getDeviceInstallInfo(device.code);
+          if ((res == null ? void 0 : res.code) === 200 && res.data) {
+            this.selectedDevice = {
+              ...this.selectedDevice,
+              // 设备基础信息
+              deviceNumber: res.data.deviceNumber,
+              deviceName: res.data.deviceName,
+              type: res.data.type,
+              companyName: res.data.companyName,
+              deviceStation: res.data.deviceStation,
+              // 安装信息
+              installDate: res.data.installDate,
+              uploadTime: res.data.uploadTime,
+              // 运行状态
+              onlineState: res.data.onlineState,
+              switchState: res.data.switchState,
+              stopState: res.data.stopState,
+              alarm: res.data.alarm,
+              // 温度计信息
+              temp1In: res.data.temp1In,
+              temp2Out: res.data.temp2Out
+            };
+          }
+        } catch (error2) {
+          formatAppLog("error", "at pages/list/list.vue:694", "加载设备安装信息失败:", error2);
+          uni.showToast({
+            title: "设备安装信息加载失败",
+            icon: "none"
+          });
+        }
+      },
+      async showPayDetail(device) {
+        this.selectedDevice = device;
+        this.showRechargeDialog = true;
+      },
       async showDeviceDetail(device) {
         this.selectedDevice = device;
         this.showDeviceDetailDialog = true;
         try {
-          formatAppLog("log", "at pages/list/list.vue:452", device);
+          formatAppLog("log", "at pages/list/list.vue:712", device);
           const res = await getDetailDevices(device.code);
           if ((res == null ? void 0 : res.code) === 200 && res.data) {
             const { deviceInfo, temperatureInfo, tempDiffHistory } = res.data;
@@ -76093,7 +76245,7 @@ if (uni.restoreGlobal) {
             });
           }
         } catch (error2) {
-          formatAppLog("error", "at pages/list/list.vue:507", "加载设备失败:", error2);
+          formatAppLog("error", "at pages/list/list.vue:767", "加载设备失败:", error2);
           this.selectedStation.devices = [{
             name: "数据加载失败",
             code: "ERROR",
@@ -76104,6 +76256,12 @@ if (uni.restoreGlobal) {
       closeDeviceDialog() {
         this.showDeviceDetailDialog = false;
         this.selectedDevice = null;
+      },
+      closeInstallInfoDialog() {
+        this.showInstallInfoDialog = false;
+      },
+      closeRechargeDialog() {
+        this.showRechargeDialog = false;
       },
       closeDialog() {
         this.showDetailDialog = false;
@@ -76143,8 +76301,8 @@ if (uni.restoreGlobal) {
     var _a2, _b2, _c2;
     const _component_uni_search_bar = resolveEasycom(vue.resolveDynamicComponent("uni-search-bar"), UniSearchBar);
     const _component_uni_icons = resolveEasycom(vue.resolveDynamicComponent("uni-icons"), __easycom_0$1);
-    const _component_ec_canvas = vue.resolveComponent("ec-canvas");
-    const _component_uni_load_more = resolveEasycom(vue.resolveDynamicComponent("uni-load-more"), __easycom_2$2);
+    const _component_ec_canvas = resolveEasycom(vue.resolveDynamicComponent("ec-canvas"), __easycom_2$2);
+    const _component_uni_load_more = resolveEasycom(vue.resolveDynamicComponent("uni-load-more"), __easycom_3$1);
     return vue.openBlock(), vue.createElementBlock("view", { class: "container" }, [
       vue.createCommentVNode(" 标题区域 "),
       vue.createElementVNode("view", { class: "header" }, [
@@ -76406,8 +76564,14 @@ if (uni.restoreGlobal) {
                           class: "action-btn",
                           onClick: vue.withModifiers(($event) => $options.showDeviceDetail(device), ["stop"])
                         }, "查看详情", 8, ["onClick"]),
-                        vue.createElementVNode("text", { class: "action-btn" }, "安装信息"),
-                        vue.createElementVNode("text", { class: "action-btn" }, "充值")
+                        vue.createElementVNode("text", {
+                          class: "action-btn",
+                          onClick: vue.withModifiers(($event) => $options.showInstallInfo(device), ["stop"])
+                        }, "安装信息", 8, ["onClick"]),
+                        vue.createElementVNode("text", {
+                          class: "action-btn",
+                          onClick: vue.withModifiers(($event) => $options.showPayDetail(device), ["stop"])
+                        }, "充值", 8, ["onClick"])
                       ])
                     ])
                   ]);
@@ -76554,9 +76718,361 @@ if (uni.restoreGlobal) {
           ])
         ])
       ])) : vue.createCommentVNode("v-if", true),
+      vue.createCommentVNode(" 充值弹窗 "),
+      $data.showRechargeDialog ? (vue.openBlock(), vue.createElementBlock("view", {
+        key: 2,
+        class: "dialog-mask",
+        onClick: _cache[16] || (_cache[16] = (...args) => $options.closeRechargeDialog && $options.closeRechargeDialog(...args))
+      }, [
+        vue.createElementVNode("view", {
+          class: "dialog-content recharge-content",
+          onClick: _cache[15] || (_cache[15] = vue.withModifiers(() => {
+          }, ["stop"]))
+        }, [
+          vue.createElementVNode("view", { class: "dialog-header" }, [
+            vue.createElementVNode("text", { class: "dialog-title" }, "设备充值"),
+            vue.createVNode(_component_uni_icons, {
+              type: "closeempty",
+              size: "24",
+              color: "#999",
+              onClick: $options.closeRechargeDialog
+            }, null, 8, ["onClick"])
+          ]),
+          vue.createElementVNode(
+            "form",
+            {
+              onSubmit: _cache[14] || (_cache[14] = (...args) => _ctx.handleRecharge && _ctx.handleRecharge(...args))
+            },
+            [
+              vue.createElementVNode("view", { class: "form-item" }, [
+                vue.createElementVNode("label", { class: "form-label" }, "设备编号"),
+                vue.withDirectives(vue.createElementVNode(
+                  "input",
+                  {
+                    class: "form-input",
+                    type: "text",
+                    placeholder: "设备编号",
+                    "onUpdate:modelValue": _cache[9] || (_cache[9] = ($event) => _ctx.rechargeForm.deviceCode = $event),
+                    disabled: ""
+                  },
+                  null,
+                  512
+                  /* NEED_PATCH */
+                ), [
+                  [vue.vModelText, _ctx.rechargeForm.deviceCode]
+                ])
+              ]),
+              vue.createElementVNode("view", { class: "form-item" }, [
+                vue.createElementVNode("text", { class: "detail-label" }, "设备名称："),
+                vue.createElementVNode(
+                  "text",
+                  { class: "detail-value" },
+                  vue.toDisplayString($data.selectedDevice.name),
+                  1
+                  /* TEXT */
+                )
+              ]),
+              vue.createElementVNode("view", { class: "form-item" }, [
+                vue.createElementVNode("text", { class: "detail-label" }, "设备编号："),
+                vue.createElementVNode(
+                  "text",
+                  { class: "detail-value" },
+                  vue.toDisplayString($data.selectedDevice.code),
+                  1
+                  /* TEXT */
+                )
+              ]),
+              vue.createElementVNode("view", { class: "form-item" }, [
+                vue.createElementVNode("label", { class: "form-label" }, "充值天数"),
+                vue.createElementVNode("view", { class: "number-input-group" }, [
+                  vue.createElementVNode("button", {
+                    class: "number-btn",
+                    onClick: _cache[10] || (_cache[10] = (...args) => _ctx.decreaseDays && _ctx.decreaseDays(...args))
+                  }, "-"),
+                  vue.withDirectives(vue.createElementVNode(
+                    "input",
+                    {
+                      class: "form-input number-input",
+                      type: "number",
+                      placeholder: "充值天数",
+                      "onUpdate:modelValue": _cache[11] || (_cache[11] = ($event) => _ctx.rechargeForm.days = $event),
+                      min: "1",
+                      onChange: _cache[12] || (_cache[12] = (...args) => _ctx.validateDays && _ctx.validateDays(...args))
+                    },
+                    null,
+                    544
+                    /* NEED_HYDRATION, NEED_PATCH */
+                  ), [
+                    [
+                      vue.vModelText,
+                      _ctx.rechargeForm.days,
+                      void 0,
+                      { number: true }
+                    ]
+                  ]),
+                  vue.createElementVNode("button", {
+                    class: "number-btn",
+                    onClick: _cache[13] || (_cache[13] = (...args) => _ctx.increaseDays && _ctx.increaseDays(...args))
+                  }, "+")
+                ]),
+                vue.createElementVNode("view", { class: "price-calculation" }, [
+                  vue.createElementVNode(
+                    "text",
+                    null,
+                    "预计费用: ¥" + vue.toDisplayString(_ctx.rechargeForm.days * _ctx.unitPrice),
+                    1
+                    /* TEXT */
+                  )
+                ])
+              ]),
+              vue.createElementVNode("view", { class: "form-buttons" }, [
+                vue.createElementVNode("button", {
+                  class: "form-button",
+                  formType: "reset"
+                }, "取消"),
+                vue.createElementVNode("button", {
+                  class: "form-button form-button-confirm",
+                  formType: "submit"
+                }, "确定充值")
+              ])
+            ],
+            32
+            /* NEED_HYDRATION */
+          )
+        ])
+      ])) : vue.createCommentVNode("v-if", true),
+      vue.createCommentVNode(" 安装信息弹窗 "),
+      vue.createCommentVNode(" 安装信息弹窗 "),
+      $data.showInstallInfoDialog ? (vue.openBlock(), vue.createElementBlock("view", {
+        key: 3,
+        class: "dialog-mask",
+        onClick: _cache[18] || (_cache[18] = (...args) => $options.closeInstallInfoDialog && $options.closeInstallInfoDialog(...args))
+      }, [
+        vue.createElementVNode("view", {
+          class: "dialog-content install-info-content",
+          onClick: _cache[17] || (_cache[17] = vue.withModifiers(() => {
+          }, ["stop"]))
+        }, [
+          vue.createElementVNode("view", { class: "dialog-header" }, [
+            vue.createElementVNode("text", { class: "dialog-title" }, "设备安装信息"),
+            vue.createVNode(_component_uni_icons, {
+              type: "closeempty",
+              size: "24",
+              color: "#999",
+              onClick: $options.closeInstallInfoDialog
+            }, null, 8, ["onClick"])
+          ]),
+          vue.createElementVNode("view", { class: "install-info-header" }, [
+            vue.createElementVNode("text", { class: "info-header-title" }, "安装信息"),
+            vue.createElementVNode("button", { class: "modify-btn" }, [
+              vue.createVNode(_component_uni_icons, {
+                type: "compose",
+                size: "14",
+                color: "#fff"
+              }),
+              vue.createTextVNode(" 修改设备信息 ")
+            ])
+          ]),
+          vue.createElementVNode("scroll-view", {
+            "scroll-y": "",
+            class: "detail-scroll"
+          }, [
+            vue.createCommentVNode(" 基本信息 "),
+            vue.createElementVNode("view", { class: "detail-section" }, [
+              vue.createElementVNode("view", { class: "section-header" }, [
+                vue.createVNode(_component_uni_icons, {
+                  type: "info-filled",
+                  size: "16",
+                  color: "#1296db"
+                }),
+                vue.createElementVNode("text", { class: "section-title" }, "基本信息")
+              ]),
+              vue.createElementVNode("view", { class: "info-grid" }, [
+                vue.createElementVNode("view", { class: "info-item" }, [
+                  vue.createElementVNode("text", { class: "info-label" }, "设备编号："),
+                  vue.createElementVNode(
+                    "text",
+                    { class: "info-value" },
+                    vue.toDisplayString($data.selectedDevice.deviceNumber || "12000638"),
+                    1
+                    /* TEXT */
+                  )
+                ]),
+                vue.createElementVNode("view", { class: "info-item" }, [
+                  vue.createElementVNode("text", { class: "info-label" }, "设备名称："),
+                  vue.createElementVNode(
+                    "text",
+                    { class: "info-value" },
+                    vue.toDisplayString($data.selectedDevice.deviceName || "二网进水端头"),
+                    1
+                    /* TEXT */
+                  )
+                ]),
+                vue.createElementVNode("view", { class: "info-item" }, [
+                  vue.createElementVNode("text", { class: "info-label" }, "设备类型："),
+                  vue.createElementVNode(
+                    "text",
+                    { class: "info-value" },
+                    vue.toDisplayString($data.selectedDevice.type || "预付费"),
+                    1
+                    /* TEXT */
+                  )
+                ]),
+                vue.createElementVNode("view", { class: "info-item" }, [
+                  vue.createElementVNode("text", { class: "info-label" }, "所属公司："),
+                  vue.createElementVNode(
+                    "text",
+                    { class: "info-value" },
+                    vue.toDisplayString($data.selectedDevice.companyName || "甘肃白银靖城热力"),
+                    1
+                    /* TEXT */
+                  )
+                ]),
+                vue.createElementVNode("view", { class: "info-item wide-item" }, [
+                  vue.createElementVNode("text", { class: "info-label" }, "所属站点："),
+                  vue.createElementVNode(
+                    "text",
+                    { class: "info-value" },
+                    vue.toDisplayString($data.selectedDevice.deviceStation || "0号站"),
+                    1
+                    /* TEXT */
+                  )
+                ])
+              ])
+            ]),
+            vue.createCommentVNode(" 安装信息 "),
+            vue.createElementVNode("view", { class: "detail-section" }, [
+              vue.createElementVNode("view", { class: "section-header" }, [
+                vue.createVNode(_component_uni_icons, {
+                  type: "calendar-filled",
+                  size: "16",
+                  color: "#1296db"
+                }),
+                vue.createElementVNode("text", { class: "section-title" }, "安装信息")
+              ]),
+              vue.createElementVNode("view", { class: "info-grid" }, [
+                vue.createElementVNode("view", { class: "info-item" }, [
+                  vue.createElementVNode("text", { class: "info-label" }, "安装日期："),
+                  vue.createElementVNode(
+                    "text",
+                    { class: "info-value" },
+                    vue.toDisplayString($data.selectedDevice.installDate || "2020-11-02"),
+                    1
+                    /* TEXT */
+                  )
+                ]),
+                vue.createElementVNode("view", { class: "info-item" }, [
+                  vue.createElementVNode("text", { class: "info-label" }, "数据上传："),
+                  vue.createElementVNode(
+                    "text",
+                    { class: "info-value" },
+                    vue.toDisplayString($data.selectedDevice.uploadTime || "5") + "分钟/次",
+                    1
+                    /* TEXT */
+                  )
+                ])
+              ])
+            ]),
+            vue.createCommentVNode(" 运行状态 "),
+            vue.createElementVNode("view", { class: "detail-section" }, [
+              vue.createElementVNode("view", { class: "section-header" }, [
+                vue.createVNode(_component_uni_icons, {
+                  type: "gear-filled",
+                  size: "16",
+                  color: "#1296db"
+                }),
+                vue.createElementVNode("text", { class: "section-title" }, "运行状态")
+              ]),
+              vue.createElementVNode("view", { class: "info-grid" }, [
+                vue.createElementVNode("view", { class: "info-item" }, [
+                  vue.createElementVNode("text", { class: "info-label" }, "联网状态："),
+                  vue.createElementVNode(
+                    "view",
+                    {
+                      class: vue.normalizeClass(["status-tag", $data.selectedDevice.onlineState ? "online" : "offline"])
+                    },
+                    vue.toDisplayString($data.selectedDevice.onlineState ? "联网" : "离线"),
+                    3
+                    /* TEXT, CLASS */
+                  )
+                ]),
+                vue.createElementVNode("view", { class: "info-item" }, [
+                  vue.createElementVNode("text", { class: "info-label" }, "开关状态："),
+                  vue.createElementVNode(
+                    "view",
+                    {
+                      class: vue.normalizeClass(["status-tag", $data.selectedDevice.switchState ? "on" : "off"])
+                    },
+                    vue.toDisplayString($data.selectedDevice.switchState ? "开" : "关"),
+                    3
+                    /* TEXT, CLASS */
+                  )
+                ]),
+                vue.createElementVNode("view", { class: "info-item" }, [
+                  vue.createElementVNode("text", { class: "info-label" }, "停机状态："),
+                  vue.createElementVNode(
+                    "view",
+                    {
+                      class: vue.normalizeClass(["status-tag", $data.selectedDevice.stopState ? "stopped" : "running"])
+                    },
+                    vue.toDisplayString($data.selectedDevice.stopState ? "停机" : "非停机"),
+                    3
+                    /* TEXT, CLASS */
+                  )
+                ]),
+                vue.createElementVNode("view", { class: "info-item" }, [
+                  vue.createElementVNode("text", { class: "info-label" }, "开启提醒："),
+                  vue.createElementVNode(
+                    "view",
+                    {
+                      class: vue.normalizeClass(["status-tag", $data.selectedDevice.alarm ? "on" : "off"])
+                    },
+                    vue.toDisplayString($data.selectedDevice.alarm ? "开" : "关"),
+                    3
+                    /* TEXT, CLASS */
+                  )
+                ])
+              ])
+            ]),
+            vue.createCommentVNode(" 温度计信息 "),
+            vue.createElementVNode("view", { class: "detail-section" }, [
+              vue.createElementVNode("view", { class: "section-header" }, [
+                vue.createVNode(_component_uni_icons, {
+                  type: "mic-filled",
+                  size: "16",
+                  color: "#1296db"
+                }),
+                vue.createElementVNode("text", { class: "section-title" }, "温度计信息")
+              ]),
+              vue.createElementVNode("view", { class: "info-grid" }, [
+                vue.createElementVNode("view", { class: "info-item" }, [
+                  vue.createElementVNode("text", { class: "info-label" }, "一网回水温度计："),
+                  vue.createElementVNode(
+                    "text",
+                    { class: "info-value" },
+                    vue.toDisplayString($data.selectedDevice.temp1In || "31000822"),
+                    1
+                    /* TEXT */
+                  )
+                ]),
+                vue.createElementVNode("view", { class: "info-item" }, [
+                  vue.createElementVNode("text", { class: "info-label" }, "二网供水温度计："),
+                  vue.createElementVNode(
+                    "text",
+                    { class: "info-value" },
+                    vue.toDisplayString($data.selectedDevice.temp2Out || "31000819"),
+                    1
+                    /* TEXT */
+                  )
+                ])
+              ])
+            ])
+          ])
+        ])
+      ])) : vue.createCommentVNode("v-if", true),
       vue.createCommentVNode(" 加载提示 "),
       $data.pagination.loading ? (vue.openBlock(), vue.createElementBlock("view", {
-        key: 2,
+        key: 4,
         class: "loading-mask"
       }, [
         vue.createVNode(_component_uni_load_more, { status: "loading" })
