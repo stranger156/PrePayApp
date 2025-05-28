@@ -104,6 +104,7 @@ const stations = reactive([]);
 
 // 处理标记点击
 const handleMarkerTap = (e) => {
+	if(e.detail.markerId===1)return 
   const markerId = e.detail.markerId;
  const station = stations.find(item => item.id === markerId);
    selectedStation.value=JSON.parse(JSON.stringify(station))
@@ -121,14 +122,43 @@ const handleMapTap = () => {
 const handleEnter=()=>{
 	selectedStation.value = stations.find(item => item.address.includes(input.value.toLowerCase()))||null;
 }
-
+const getLocation=()=>{
+	 uni.getLocation({
+	        type: 'wgs84', // 坐标类型（wgs84返回gps坐标，gcj02返回国测局坐标）
+	        altitude: true, // 获取高度信息（需要设备支持）
+	        success: (res) => {
+				
+	          mapCenter.value.latitude = res.latitude;
+	          mapCenter.value.longitude = res.longitude;
+	          markers.push({
+	          			id: 1,
+	          			latitude: mapCenter.value.latitude,
+	          			longitude: mapCenter.value.longitude,
+	          			iconPath: '../../static/maker.png',
+	          			width: 10,
+	          			height: 10,
+	          			 anchor: { x: 0.5, y: 1 }
+	          })
+	        },
+	        fail: (err) => {
+	          console.error("定位失败:", err);
+	          uni.showToast({
+	            title: '获取位置失败，请检查定位权限',
+	            icon: 'none'
+	          });
+	        }
+	      })
+	
+}
 
 onMounted:{
+	getLocation()
+
 getStationList().then(res=>{
 	totalStations.value=res.data.records.length
 	res.data.records.forEach((item,index)=>{
 		markers.push({
-			id: index+1,
+			id: index+2,
 			latitude: item.latitude,
 			longitude: item.longitude,
 			iconPath: '../../static/mapLogo.png',

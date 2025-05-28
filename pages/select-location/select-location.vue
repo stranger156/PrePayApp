@@ -18,7 +18,7 @@
 </template>
 
 <script setup>
-import { ref } from 'vue'
+import { onMounted, ref } from 'vue'
 import { onLoad } from '@dcloudio/uni-app'
 
 const latitude = ref(39.909)
@@ -58,4 +58,39 @@ const confirmLocation = () => {
     })
   }
 }
+const getLocation=()=>{
+	 uni.getLocation({
+	        type: 'wgs84', // 坐标类型（wgs84返回gps坐标，gcj02返回国测局坐标）
+	        altitude: true, // 获取高度信息（需要设备支持）
+	        success: (res) => {
+				
+	          latitude.value = res.latitude;
+	         longitude.value = res.longitude;
+	          markers.value=[{
+	          			id: 1,
+	          			latitude: latitude.value,
+	          			longitude: longitude.value,
+	          			iconPath: '../../static/maker.png',
+	          			width: 10,
+	          			height: 10,
+	          			 anchor: { x: 0.5, y: 1 }
+	          }];
+			    selectedPoint.value = {
+					latitude:latitude,
+					longitude:longitude
+				}
+	        },
+	        fail: (err) => {
+	          console.error("定位失败:", err);
+	          uni.showToast({
+	            title: '获取位置失败，请检查定位权限',
+	            icon: 'none'
+	          });
+	        }
+	      })
+	
+}
+onMounted(()=>{
+	getLocation()
+})
 </script>
