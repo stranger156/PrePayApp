@@ -18,7 +18,7 @@
 </template>
 
 <script setup>
-import { onMounted, ref } from 'vue'
+import { ref, onMounted } from 'vue'
 import { getAuthority } from '../../store/user'
 const authority=ref('')
 const menuList = ref([
@@ -67,10 +67,10 @@ function logout() {
   })
 }
 onMounted(()=>{
-	async ()=>{
+	(async ()=>{
 		authority.value=await getAuthority()
 		if(authority.value === 'admin'){
-			menuList = ref([
+			menuList.value = [
 			  {
 				title: '企业管理',
 				icon: '/static/user_icon.png',
@@ -87,17 +87,17 @@ onMounted(()=>{
 				icon: '/static/setting_icon.png',
 				url: '/pages/change-password/change-password'
 			  },
-			])
+			]
 		}else if(authority.value === 'sale' || authority.value === 'user'){
-			menuList = ref([
+			menuList.value = [
 			  {
 				title: '修改密码',
 				icon: '/static/setting_icon.png',
 				url: '/pages/change-password/change-password'
 			  },
-			])
+			]
 		}
-	}
+	})()
 })
 </script>
 
