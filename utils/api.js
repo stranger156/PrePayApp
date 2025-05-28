@@ -293,6 +293,16 @@ export const getStationDevices = async (stationName) => {
   })
 }
 
+export const getDeviceInstallInfo = async (deviceNumber) => {
+  const token = await getTokenFromLocalStorage();
+  return request({
+    url: `/web/device/install/${deviceNumber}`,
+    method: 'GET',
+    headers: {
+      "token": token
+    }
+  })
+}
 export const getDetailDevices = async (deviceNumber) => {
   const token = await getTokenFromLocalStorage();
   return request({
