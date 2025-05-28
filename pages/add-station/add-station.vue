@@ -50,7 +50,7 @@
               class="coordinate-item"
 			    type="number"
             />
-            <button class="location-btn" @click="getLocation">选择位置</button>
+            <button class="location-btn" @click="goToMap">选择位置</button>
           </view>
         </uni-forms-item>
         
@@ -63,7 +63,7 @@
         </uni-forms-item>
         
         <!-- 换热站简介 -->
-        <uni-forms-item label="换热站简介" required name="description">
+        <uni-forms-item label="换热站简介"  name="description">
           <uni-easyinput 
             v-model="formData.detail" 
             placeholder="请输入换热站简介"
@@ -81,6 +81,7 @@
 import { onMounted, ref } from 'vue';
 import { onLoad } from '@dcloudio/uni-app';
 import { getDevice } from '../../store/user';
+import { addStation } from '../../utils/api';
 
 // 表单数据
 const formData = ref({
@@ -123,48 +124,113 @@ const rules = ref({
 
 // 获取当前位置
 const getLocation = () => {
-  uni.getLocation({
-    type: 'wgs84',
-    success: (res) => {
-      formData.value.longitude = res.longitude.toFixed(6);
-      formData.value.latitude = res.latitude.toFixed(6);
-      uni.showToast({
-        title: '获取位置成功',
-        icon: 'success'
-      });
-    },
-    fail: (err) => {
-      uni.showToast({
-        title: '获取位置失败',
-        icon: 'none'
-      });
-      console.error('获取位置失败:', err);
-    }
-  });
+  // uni.getLocation({
+  //   type: 'wgs84',
+  //   success: (res) => {
+  //     formData.value.longitude = res.longitude.toFixed(6);
+  //     formData.value.latitude = res.latitude.toFixed(6);
+  //     uni.showToast({
+  //       title: '获取位置成功',
+  //       icon: 'success'
+  //     });
+  //   },
+  //   fail: (err) => {
+  //     uni.showToast({
+  //       title: '获取位置失败',
+  //       icon: 'none'
+  //     });
+  //     console.error('获取位置失败:', err);
+  //   }
+  // });
 };
 
+//选择位置
+const selectedLocation = ref(null)
+const goToMap = () => {
+  uni.navigateTo({
+    url: '/pages/select-location/select-location',
+    events: {
+      // 接收从地图页面返回的数据
+      acceptLocation: (data) => {
+        selectedLocation.value = data
+		formData.value.longitude= selectedLocation.value.longitude
+		formData.value.latitude=selectedLocation.value.latitude
+      }
+    },
+    success: (res) => {
+      // 保存事件通道
+      mapPageEventChannel = res.eventChannel
+    }
+  })
+}
+let mapPageEventChannel = null
 // 提交表单
 const submitForm = () => {
-  const form = ref(null);
-  form.value.validate().then(() => {
-    uni.showLoading({
-      title: '提交中...'
-    });
-    
-    // 这里替换为实际的API调用
-    console.log('提交数据:', formData.value);
-    
-    setTimeout(() => {
-      uni.hideLoading();
-      uni.showToast({
-        title: '提交成功',
-        icon: 'success'
-      });
-      uni.navigateBack();
-    }, 1500);
-  }).catch(err => {
-    console.log('表单验证失败:', err);
-  });
+	if(!formData.value.stationName){
+		uni.showToast({
+		  title: '请输入换热站名称',
+		  icon: 'none'
+		});
+		return 
+	}
+	if(!formData.value.company){
+		uni.showToast({
+		  title: '请输入所属公司',
+		  icon: 'none'
+		});
+		return 
+	}
+	if(!formData.value.userName){
+		uni.showToast({
+		  title: '请输入站内负责人',
+		  icon: 'none'
+		});
+		return 
+	}
+	if(!formData.value.phone){
+		uni.showToast({
+		  title: '请输入联系方式',
+		  icon: 'none'
+		});
+		return 
+	}
+	if(!formData.value.latitude){
+		uni.showToast({
+		  title: '请输入完整的经纬度',
+		  icon: 'none'
+		});
+		return 
+	}
+	if(!formData.value.longitude){
+		uni.showToast({
+		  title: '请输入完整的经纬度',
+		  icon: 'none'
+		});
+		return 
+	}
+	if(!formData.value.address){
+		uni.showToast({
+		  title: '请输入换热站地址',
+		  icon: 'none'
+		});
+		return 
+	}
+
+	uni.showLoading({
+	  title: '提交中...'
+	});
+	addStation(formData.value).then(res=>{
+		setTimeout(() => {
+		  uni.hideLoading();
+		  uni.showToast({
+		    title: '提交成功',
+		    icon: 'success'
+		  });
+		 uni.navigateTo({
+		     url: '/pages/company-stationList/company-stationList'
+		   });
+		}, 1500);
+	})
 };
 onMounted(()=>{
 	getDevice().then(res=>{

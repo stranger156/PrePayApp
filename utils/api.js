@@ -107,20 +107,28 @@ export const fetchStationList = async(params) => {
 
 
 // 添加设备接口
-export const addDevice = (params) => {
+export const addDevice = async(params) => {
+	const token = await getTokenFromLocalStorage();
 	return request({
 		url: "/web/device/add",
 		method: 'POST',
-		params
+		headers: {
+			'token': token
+		},
+		data: params
 	});
 };
 
 // 修改换热站接口
-export const adviseStation = (params) => {
+export const updateStation = async(params) => {
+	const token = await getTokenFromLocalStorage();
 	return request({
 		url: "/web/stations/update",
 		method: 'PUT',
-		params
+		headers: {
+			'token': token
+		},
+		data: params
 	});
 };
 
@@ -157,10 +165,14 @@ export const updateCompany = async(params) => {
 };
 
 // 删除换热站接口
-export const deleteStation = (params) => {
+export const deleteStation=async(params)=> {
+	const token = await getTokenFromLocalStorage();
 	return request({
-		url: `/web/stations/delete/${params}`,
+		url: `/web/stations/${params}`,
 		method: 'DELETE',
+		headers: {
+			'token': token
+		}
 	});
 };
 
@@ -263,11 +275,15 @@ export const searchSaleUsers = (params) => {
 };
 
 // 添加换热站接口
-export const addStation = (params) => {
+export const addStation = async(params) => {
+	const token = await getTokenFromLocalStorage();  
 	return request({
 		url: "/web/stations/add",
 		method: 'POST',
-		params
+		headers: {
+		        "token": token
+		    },
+		data:params
 	});
 };
 
