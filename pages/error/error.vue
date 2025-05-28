@@ -109,7 +109,7 @@ export default {
 </script>
 
 <!-- 样式部分保持原有结构，建议补充以下优化 -->
-<style>
+<style scoped>
 	.container {
 	  display: flex;
 	  flex-direction: column;
