@@ -1,3 +1,4 @@
+
 const saveTokenToLocalStorage = (token) => {
     uni.setStorage({
         key: 'token',
@@ -32,6 +33,7 @@ const saveUser= (user) => {
         data: user,
         success: () => {
             console.log('user存储成功');
+			// eventBus.emit('user-changed', user) // 触发事件
         },
         fail: (err) => {
             console.error('user存储失败:', err);

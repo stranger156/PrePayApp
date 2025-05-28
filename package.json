@@ -5,6 +5,8 @@
     "echarts": "^5.6.0",
     "lodash": "^4.17.21",
     "mpvue-echarts": "^1.0.0",
+    "@amap/amap-jsapi-loader": "^1.0.1",
+    "@dcloudio/uni-ui": "^1.5.7",
     "tslib": "^2.8.1",
     "uuid": "^11.1.0",
     "zrender": "^5.6.1"
