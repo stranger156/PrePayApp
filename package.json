@@ -1,6 +1,5 @@
 {
   "dependencies": {
-
     "@dcloudio/uni-ui": "^1.5.7",
     "@element-plus/icons-vue": "^2.3.1",
     "echarts": "^5.6.0",
@@ -8,7 +7,6 @@
     "mpvue-echarts": "^1.0.0",
     "@amap/amap-jsapi-loader": "^1.0.1",
     "@dcloudio/uni-ui": "^1.5.7",
-
     "tslib": "^2.8.1",
     "uuid": "^11.1.0",
     "zrender": "^5.6.1"

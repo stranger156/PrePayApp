@@ -33,7 +33,7 @@
 <script setup>
 import { ref, onMounted, getCurrentInstance, reactive } from 'vue';
 import { login } from '../../utils/api';
-import { saveTokenToLocalStorage, saveUser } from '../../store/user';
+import { saveAuthority, saveTokenToLocalStorage, saveUser } from '../../store/user';
 // import { useStorage } from '@/utils/storage.js'; // 假设你已经封装了存储工具函数
 const userIcon="/static/username_icon.png" 
 // // 定义页面数据
@@ -96,14 +96,21 @@ const loginButton=()=>{
   }
   login(user).then((res)=>{
 	  if(res.code===200){
+		  console.log(res)
 		saveTokenToLocalStorage(res.data.token)
 		saveUser(user.username)
+		saveAuthority(res.data.userInfo.authority)
 		  uni.switchTab({
 		      url: '/pages/map/map' // 假设这是一个 tabBar 页面
 		  })
 		  // uni.navigateTo({
 		  //     url: '/pages/select-location/select-location'
 		  //   });
+	  }else{
+		uni.showToast({
+		  title: res.msg,
+		  icon: 'none'
+		})
 	  }
   })
 }
