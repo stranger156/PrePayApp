@@ -1,7 +1,7 @@
 <template>
   <view class="container">
 	  
-	  <view class="float-btn" @click="showAddModal">
+	  <view class="float-btn" @click="showAddModal" v-if='!isAdmin'>
 	        <uni-icons type="plusempty" size="30" color="#fff"></uni-icons>
 	      </view>
 		
@@ -72,8 +72,8 @@
 		  
 		   <view class="action-buttons">
 		        <button class="btn heat-station" @click="viewHeatStations">查看换热站</button>
-		        <button class="btn edit" @click="editCompany">修改信息</button>
-		        <button class="btn delete" @click="deletecompany">删除公司</button>
+		        <button class="btn edit" @click="editCompany" v-if='!isAdmin'>修改信息</button>
+		        <button class="btn delete" @click="deletecompany" v-if='!isAdmin'>删除公司</button>
 			</view>
         </view>
       </view>
@@ -244,13 +244,15 @@ import { fetchUserList } from '../../utils/api';
 import { addCompany } from '../../utils/api';
 import { deleteCompany } from '../../utils/api';
 import { updateCompany } from '../../utils/api';
-import { saveDevice } from '../../store/user';
+import { saveDevice, getAuthority } from '../../store/user';
 
 // 用户数据
 const users = ref([]);
 const currentUser = ref(null);
 const searchKeyword = ref('');
 const detailPopup = ref(null);
+const authority = ref('')
+const isAdmin = computed(() => authority.value === 'admin');
 
 async function deletecompany() {
   // 弹出确认对话框
@@ -312,6 +314,8 @@ const viewHeatStations=()=>{
 // 页面加载时获取数据
 onMounted(async () => {
   try {
+	authority.value = await getAuthority()
+	
     const res = await fetchCompanyList();
 	console.log(res)
     users.value = res.data?.records?.map((item, index) => ({
