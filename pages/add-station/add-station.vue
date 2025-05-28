@@ -63,7 +63,7 @@
         </uni-forms-item>
         
         <!-- 换热站简介 -->
-        <uni-forms-item label="换热站简介" required name="description">
+        <uni-forms-item label="换热站简介"  name="description">
           <uni-easyinput 
             v-model="formData.detail" 
             placeholder="请输入换热站简介"
@@ -166,29 +166,71 @@ const goToMap = () => {
 let mapPageEventChannel = null
 // 提交表单
 const submitForm = () => {
-	addStation(formData).then(res=>{
-		console.log(1111)
+	if(!formData.value.stationName){
+		uni.showToast({
+		  title: '请输入换热站名称',
+		  icon: 'none'
+		});
+		return 
+	}
+	if(!formData.value.company){
+		uni.showToast({
+		  title: '请输入所属公司',
+		  icon: 'none'
+		});
+		return 
+	}
+	if(!formData.value.userName){
+		uni.showToast({
+		  title: '请输入站内负责人',
+		  icon: 'none'
+		});
+		return 
+	}
+	if(!formData.value.phone){
+		uni.showToast({
+		  title: '请输入联系方式',
+		  icon: 'none'
+		});
+		return 
+	}
+	if(!formData.value.latitude){
+		uni.showToast({
+		  title: '请输入完整的经纬度',
+		  icon: 'none'
+		});
+		return 
+	}
+	if(!formData.value.longitude){
+		uni.showToast({
+		  title: '请输入完整的经纬度',
+		  icon: 'none'
+		});
+		return 
+	}
+	if(!formData.value.address){
+		uni.showToast({
+		  title: '请输入换热站地址',
+		  icon: 'none'
+		});
+		return 
+	}
+
+	uni.showLoading({
+	  title: '提交中...'
+	});
+	addStation(formData.value).then(res=>{
+		setTimeout(() => {
+		  uni.hideLoading();
+		  uni.showToast({
+		    title: '提交成功',
+		    icon: 'success'
+		  });
+		 uni.navigateTo({
+		     url: '/pages/company-stationList/company-stationList'
+		   });
+		}, 1500);
 	})
-  const form = ref(null);
-  form.value.validate().then(() => {
-    uni.showLoading({
-      title: '提交中...'
-    });
-    
-    // 这里替换为实际的API调用
-    console.log('提交数据:', formData.value);
-    
-    setTimeout(() => {
-      uni.hideLoading();
-      uni.showToast({
-        title: '提交成功',
-        icon: 'success'
-      });
-      uni.navigateBack();
-    }, 1500);
-  }).catch(err => {
-    console.log('表单验证失败:', err);
-  });
 };
 onMounted(()=>{
 	getDevice().then(res=>{

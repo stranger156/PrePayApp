@@ -28,7 +28,7 @@
     <view class="map-container">
      <map 
        id="stationMap"
-       style="width: 100%; height: 60%;"
+       style="width: 100%; height:60%;"
        :latitude="mapCenter.latitude"
        :longitude="mapCenter.longitude"
        :markers="markers"
@@ -78,13 +78,13 @@
    		       <text class="value">2023-08-20 14:30</text>
    		     </view>
    		   </view>
-   </view>
+</view> 
     </view>
   </view>
 </template>
 
 <script setup>
-import { onMounted, reactive, ref } from 'vue';
+import { onMounted, reactive, ref ,onUnmounted} from 'vue';
 import uniIcons from '@dcloudio/uni-ui/lib/uni-icons/uni-icons.vue'
 import { getStationList } from '../../utils/api';
 
@@ -122,8 +122,8 @@ const handleEnter=()=>{
 	selectedStation.value = stations.find(item => item.address.includes(input.value.toLowerCase()))||null;
 }
 
+
 onMounted:{
-	
 getStationList().then(res=>{
 	totalStations.value=res.data.records.length
 	res.data.records.forEach((item,index)=>{
@@ -218,26 +218,28 @@ getStationList().then(res=>{
 }
 
 .map-container {
-  flex-grow: 1;
+flex-grow: 1;
   border-radius: 10rpx;
   box-shadow: 0 4rpx 12rpx rgba(0, 0, 0, 0.05);
   margin: 0 20rpx 20rpx;
   overflow: hidden;
   position: relative;
+  z-index: 1; /* 确保低于 info-window */
 }
 
 .info-window {
-  position: fixed;
-  bottom: 20rpx;
-  left: 20rpx;
-  right: 20rpx;
-  background: white;
-  border-radius: 12rpx;
-  padding: 25rpx;
-  box-shadow: 0 8rpx 24rpx rgba(0, 0, 0, 0.1);
-  z-index: 999;
-	transform: translateZ(100px); /* 触发硬件加速 */
-	 animation: fadeIn 0.3s ease;
+	 position: fixed; /* 固定定位，确保不受地图影响 */
+	  bottom: 20rpx;
+	  left: 20rpx;
+	  right: 20rpx;
+	  background: white;
+	  border-radius: 12rpx;
+	  padding: 25rpx;
+	  box-shadow: 0 8rpx 24rpx rgba(0, 0, 0, 0.1);
+	  z-index: 9999; /* 设置足够高的 z-index */
+	  transform: translateZ(100px); /* 触发 GPU 加速 */
+	  animation: fadeIn 0.3s ease;
+
   .info-header {
     display: flex;
     justify-content: space-between;

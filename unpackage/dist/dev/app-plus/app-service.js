@@ -1265,7 +1265,7 @@ if (uni.restoreGlobal) {
           });
         });
       }
-      const __returned__ = { selectedStation, totalStations, input, mapCenter, markers, stations, handleMarkerTap, handleMapTap, handleEnter, onMounted: vue.onMounted, reactive: vue.reactive, ref: vue.ref, uniIcons: UniIcons, get getStationList() {
+      const __returned__ = { selectedStation, totalStations, input, mapCenter, markers, stations, handleMarkerTap, handleMapTap, handleEnter, onMounted: vue.onMounted, reactive: vue.reactive, ref: vue.ref, onUnmounted: vue.onUnmounted, uniIcons: UniIcons, get getStationList() {
         return getStationList;
       } };
       Object.defineProperty(__returned__, "__isScriptSetup", { enumerable: false, value: true });
@@ -84619,25 +84619,69 @@ ${i3}
       };
       let mapPageEventChannel = null;
       const submitForm = () => {
-        addStation(formData).then((res) => {
-          formatAppLog("log", "at pages/add-station/add-station.vue:170", 1111);
-        });
-        const form = vue.ref(null);
-        form.value.validate().then(() => {
-          uni.showLoading({
-            title: "提交中..."
+        if (!formData.value.stationName) {
+          uni.showToast({
+            title: "请输入换热站名称",
+            icon: "none"
           });
-          formatAppLog("log", "at pages/add-station/add-station.vue:179", "提交数据:", formData.value);
+          return;
+        }
+        if (!formData.value.company) {
+          uni.showToast({
+            title: "请输入所属公司",
+            icon: "none"
+          });
+          return;
+        }
+        if (!formData.value.userName) {
+          uni.showToast({
+            title: "请输入站内负责人",
+            icon: "none"
+          });
+          return;
+        }
+        if (!formData.value.phone) {
+          uni.showToast({
+            title: "请输入联系方式",
+            icon: "none"
+          });
+          return;
+        }
+        if (!formData.value.latitude) {
+          uni.showToast({
+            title: "请输入完整的经纬度",
+            icon: "none"
+          });
+          return;
+        }
+        if (!formData.value.longitude) {
+          uni.showToast({
+            title: "请输入完整的经纬度",
+            icon: "none"
+          });
+          return;
+        }
+        if (!formData.value.address) {
+          uni.showToast({
+            title: "请输入换热站地址",
+            icon: "none"
+          });
+          return;
+        }
+        uni.showLoading({
+          title: "提交中..."
+        });
+        addStation(formData.value).then((res) => {
           setTimeout(() => {
             uni.hideLoading();
             uni.showToast({
               title: "提交成功",
               icon: "success"
             });
-            uni.navigateBack();
+            uni.navigateTo({
+              url: "/pages/company-stationList/company-stationList"
+            });
           }, 1500);
-        }).catch((err) => {
-          formatAppLog("log", "at pages/add-station/add-station.vue:190", "表单验证失败:", err);
         });
       };
       vue.onMounted(() => {
@@ -84787,7 +84831,6 @@ ${i3}
             vue.createCommentVNode(" 换热站简介 "),
             vue.createVNode(_component_uni_forms_item, {
               label: "换热站简介",
-              required: "",
               name: "description"
             }, {
               default: vue.withCtx(() => [
