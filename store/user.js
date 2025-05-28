@@ -81,4 +81,31 @@ const getDevice = () => {
     });
 };
 
-export{saveTokenToLocalStorage,getTokenFromLocalStorage,saveUser,getUser,saveDevice,getDevice}
+const saveAuthority= (authority) => {
+    uni.setStorage({
+        key: 'authority',
+        data: authority,
+        success: () => {
+            console.log('authority存储成功');
+        },
+        fail: (err) => {
+            console.error('authority存储失败:', err);
+        }
+    });
+};
+
+const getAuthority = () => {
+    return new Promise((resolve, reject) => {
+        uni.getStorage({
+            key: 'authority',
+            success: (res) => {
+                resolve(res.data);
+            },
+            fail: (err) => {
+                console.error('authority获取失败:', err);
+                reject(err);
+            }
+        });
+    });
+};
+export{saveTokenToLocalStorage,getTokenFromLocalStorage,saveUser,getUser,saveDevice,getDevice,getAuthority,saveAuthority}

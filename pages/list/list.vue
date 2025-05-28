@@ -147,8 +147,18 @@
                       class="action-btn" 
                       @tap.stop="showDeviceDetail(device)"
                     >查看详情</text>
-                  <text class="action-btn">安装信息</text>
-                  <text class="action-btn">充值</text>
+					
+                   <text 
+                      class="action-btn" 
+                      @tap.stop="showInstallInfo(device)"
+                    >安装信息</text>
+                  
+				 
+                      <text 
+                        class="action-btn" 
+                        @tap.stop="showPayDetail(device)"
+                      >充值</text>
+					  
                 </view>
               </view>
             </view>
@@ -244,6 +254,206 @@
   </view>
 </view>
 
+<!-- 充值弹窗 -->
+    <view v-if="showRechargeDialog" class="dialog-mask" @tap="closeRechargeDialog">
+      <view class="dialog-content recharge-content" @tap.stop>
+        <view class="dialog-header">
+          <text class="dialog-title">设备充值</text>
+          <uni-icons 
+            type="closeempty" 
+            size="24" 
+            color="#999" 
+            @tap="closeRechargeDialog"
+          ></uni-icons>
+        </view>
+        <form @submit="handleRecharge">
+          <view class="form-item">
+            <label class="form-label">设备编号</label>
+            <input 
+              class="form-input" 
+              type="text" 
+              placeholder="设备编号" 
+              v-model="rechargeForm.deviceCode" 
+              :value="selectedDevice.code" 
+              disabled
+            />
+          </view>
+          <view class="form-item">
+            <text class="detail-label">设备名称：</text>
+            <text class="detail-value">{{ selectedDevice.name }}</text>
+          </view>
+		  <view class="form-item">
+		    <text class="detail-label">设备编号：</text>
+		    <text class="detail-value">{{ selectedDevice.code }}</text>
+		  </view>
+		  
+        <view class="form-item">
+          <label class="form-label">充值天数</label>
+          <view class="number-input-group">
+            <button class="number-btn" @click="decreaseDays">-</button>
+            <input 
+              class="form-input number-input" 
+              type="number" 
+              placeholder="充值天数" 
+              v-model.number="rechargeForm.days" 
+              min="1" 
+              @change="validateDays"
+            />
+            <button class="number-btn" @click="increaseDays">+</button>
+          </view>
+          <view class="price-calculation">
+            <text>预计费用: ¥{{ rechargeForm.days * unitPrice }}</text>
+          </view>
+        </view>
+		  
+          <view class="form-buttons">
+            <button 
+              class="form-button" 
+              formType="reset"
+            >取消</button>
+            <button 
+              class="form-button form-button-confirm" 
+              formType="submit"
+            >确定充值</button>
+          </view>
+        </form>
+      </view>
+    </view>
+	
+<!-- 安装信息弹窗 -->
+<!-- 安装信息弹窗 -->
+<view v-if="showInstallInfoDialog" class="dialog-mask" @tap="closeInstallInfoDialog">
+  <view class="dialog-content install-info-content" @tap.stop>
+    <view class="dialog-header">
+      <text class="dialog-title">设备安装信息</text>
+      <uni-icons 
+        type="closeempty" 
+        size="24" 
+        color="#999" 
+        @tap="closeInstallInfoDialog"
+      ></uni-icons>
+    </view>
+
+    <view class="install-info-header">
+      <text class="info-header-title">安装信息</text>
+      <button class="modify-btn">
+        <uni-icons type="compose" size="14" color="#fff"></uni-icons>
+        修改设备信息
+      </button>
+    </view>
+
+    <scroll-view scroll-y class="detail-scroll">
+      <!-- 基本信息 -->
+      <view class="detail-section">
+        <view class="section-header">
+          <uni-icons type="info-filled" size="16" color="#1296db"></uni-icons>
+          <text class="section-title">基本信息</text>
+        </view>
+        
+        <view class="info-grid">
+          <view class="info-item">
+            <text class="info-label">设备编号：</text>
+            <text class="info-value">{{ selectedDevice.deviceNumber || '12000638' }}</text>
+          </view>
+          <view class="info-item">
+            <text class="info-label">设备名称：</text>
+            <text class="info-value">{{ selectedDevice.deviceName || '二网进水端头' }}</text>
+          </view>
+          <view class="info-item">
+            <text class="info-label">设备类型：</text>
+            <text class="info-value">{{ selectedDevice.type || '预付费' }}</text>
+          </view>
+          <view class="info-item">
+            <text class="info-label">所属公司：</text>
+            <text class="info-value">{{ selectedDevice.companyName || '甘肃白银靖城热力' }}</text>
+          </view>
+          <view class="info-item wide-item">
+            <text class="info-label">所属站点：</text>
+            <text class="info-value">{{ selectedDevice.deviceStation || '0号站' }}</text>
+          </view>
+        </view>
+      </view>
+
+      <!-- 安装信息 -->
+      <view class="detail-section">
+        <view class="section-header">
+          <uni-icons type="calendar-filled" size="16" color="#1296db"></uni-icons>
+          <text class="section-title">安装信息</text>
+        </view>
+        
+        <view class="info-grid">
+          <view class="info-item">
+            <text class="info-label">安装日期：</text>
+            <text class="info-value">{{ selectedDevice.installDate || '2020-11-02' }}</text>
+          </view>
+          <view class="info-item">
+            <text class="info-label">数据上传：</text>
+            <text class="info-value">{{ selectedDevice.uploadTime || '5' }}分钟/次</text>
+          </view>
+        </view>
+      </view>
+
+      <!-- 运行状态 -->
+      <view class="detail-section">
+        <view class="section-header">
+          <uni-icons type="gear-filled" size="16" color="#1296db"></uni-icons>
+          <text class="section-title">运行状态</text>
+        </view>
+        
+        <view class="info-grid">
+          <view class="info-item">
+            <text class="info-label">联网状态：</text>
+            <view class="status-tag" 
+                  :class="selectedDevice.onlineState ? 'online' : 'offline'">
+              {{ selectedDevice.onlineState ? '联网' : '离线' }}
+            </view>
+          </view>
+          <view class="info-item">
+            <text class="info-label">开关状态：</text>
+            <view class="status-tag"
+                  :class="selectedDevice.switchState ? 'on' : 'off'">
+              {{ selectedDevice.switchState ? '开' : '关' }}
+            </view>
+          </view>
+          <view class="info-item">
+            <text class="info-label">停机状态：</text>
+            <view class="status-tag"
+                  :class="selectedDevice.stopState ? 'stopped' : 'running'">
+              {{ selectedDevice.stopState ? '停机' : '非停机' }}
+            </view>
+          </view>
+          <view class="info-item">
+            <text class="info-label">开启提醒：</text>
+            <view class="status-tag"
+                  :class="selectedDevice.alarm ? 'on' : 'off'">
+              {{ selectedDevice.alarm ? '开' : '关' }}
+            </view>
+          </view>
+        </view>
+      </view>
+
+      <!-- 温度计信息 -->
+      <view class="detail-section">
+        <view class="section-header">
+          <uni-icons type="mic-filled" size="16" color="#1296db"></uni-icons>
+          <text class="section-title">温度计信息</text>
+        </view>
+        
+        <view class="info-grid">
+          <view class="info-item">
+            <text class="info-label">一网回水温度计：</text>
+            <text class="info-value">{{ selectedDevice.temp1In || '31000822' }}</text>
+          </view>
+          <view class="info-item">
+            <text class="info-label">二网供水温度计：</text>
+            <text class="info-value">{{ selectedDevice.temp2Out || '31000819' }}</text>
+          </view>
+        </view>
+      </view>
+    </scroll-view>
+  </view>
+  
+</view>
     <!-- 加载提示 -->
     <view v-if="pagination.loading" class="loading-mask">
       <uni-load-more status="loading" />
@@ -252,7 +462,7 @@
 </template>
 
 <script>
-import { getStationList,getStationDevices,getDetailDevices } from '@/utils/api';
+import { getStationList,getStationDevices,getDetailDevices,getDeviceInstallInfo } from '@/utils/api';
 import * as echarts from 'echarts';
 export default {
   data() {
@@ -291,7 +501,8 @@ export default {
 		//         }
 		//       }]
 		//     },
-	  	
+	  showRechargeDialog:false,	
+	  showInstallInfoDialog:false,
       searchKey: '',
       jumpPage: null,
       deviceList: [],
@@ -350,7 +561,7 @@ export default {
         }
       } catch (error) {
         uni.showToast({
-          title: `数据加载失败: ${error.message || '未知错误'}`,
+          title: "数据加载失败: ${error.message || '未知错误'}",
           icon: 'none'
         });
       } finally {
@@ -390,6 +601,7 @@ export default {
 	
       }));
     },
+		
 		
  async showStationDetail(station) { // [!code focus]
 	console.log(station)
@@ -441,8 +653,56 @@ async   generateDeviceList(station) {
       status: '异常'
     }];
   }
+  
+},
+async showInstallInfo(device) {
+  this.selectedDevice = device;
+  this.showInstallInfoDialog = true;
+  
+  try {
+    console.log(device);
+    const res = await getDeviceInstallInfo(device.code);
+    
+    // 成功响应处理
+    if (res?.code === 200 && res.data) {
+      // 更新 selectedDevice 对象，包含安装信息
+      this.selectedDevice = {
+        ...this.selectedDevice,
+        // 设备基础信息
+        deviceNumber: res.data.deviceNumber,
+        deviceName: res.data.deviceName,
+        type: res.data.type,
+        companyName: res.data.companyName,
+        deviceStation: res.data.deviceStation,
+        
+        // 安装信息
+        installDate: res.data.installDate,
+        uploadTime: res.data.uploadTime,
+        
+        // 运行状态
+        onlineState: res.data.onlineState,
+        switchState: res.data.switchState,
+        stopState: res.data.stopState,
+        alarm: res.data.alarm,
+        
+        // 温度计信息
+        temp1In: res.data.temp1In,
+        temp2Out: res.data.temp2Out
+      };
+    }
+  } catch (error) {
+    console.error('加载设备安装信息失败:', error);
+    uni.showToast({
+      title: '设备安装信息加载失败',
+      icon: 'none'
+    });
+  }
 },
 
+async showPayDetail(device) {
+	this.selectedDevice = device;
+	this.showRechargeDialog = true;
+},
 async showDeviceDetail(device) {
 		 
 	      this.selectedDevice = device;
@@ -512,11 +772,20 @@ async showDeviceDetail(device) {
 		    }];
 		  }
 		},
-	    closeDeviceDialog() {
+		
+		
+closeDeviceDialog() {
 	      this.showDeviceDetailDialog = false;
 	      this.selectedDevice = null;
 	    },
+closeInstallInfoDialog(){
+	this.showInstallInfoDialog = false;
+},	
+		
+closeRechargeDialog() {
+	     this.showRechargeDialog = false;
 	    
+	   }, 
 
     closeDialog() {
       this.showDetailDialog = false;
@@ -559,24 +828,6 @@ async showDeviceDetail(device) {
 
 <style scoped>
 /* 原有样式保持不变... */
-
-/* 图表容器样式 */
-.ec-canvas {
-  width: 100%;
-  margin-top: 15px;
-  padding: 10px;
-  background: #fff;
-  border-radius: 8px;
-  box-shadow: 0 2px 8px rgba(0,0,0,0.1);
-}
-
-/* 无数据提示 */
-.empty-tip {
-  text-align: center;
-  padding: 20px;
-  color: #888;
-}
-
 .container {
   padding: 20rpx;
   height: 100vh;
@@ -894,5 +1145,287 @@ async showDeviceDetail(device) {
   align-items: center;
   justify-content: center;
 }
+/* 充值弹窗样式 */
+.recharge-content {
+  width: 85%;
+  max-width: 700rpx;
+  border-radius: 16rpx;
+  overflow: hidden;
+  background-color: #fff;
+  box-shadow: 0 10rpx 30rpx rgba(0,0,0,0.1);
+}
 
+.dialog-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 30rpx 30rpx 20rpx;
+  border-bottom: 1rpx solid #eee;
+}
+
+.dialog-title {
+  font-size: 32rpx;
+  font-weight: 600;
+  color: #333;
+}
+
+.form-item {
+  padding: 25rpx 30rpx;
+  border-bottom: 1rpx solid #eee;
+}
+
+.form-label {
+  display: block;
+  font-size: 28rpx;
+  color: #666;
+  margin-bottom: 15rpx;
+}
+
+.form-input {
+  width: 100%;
+  height: 80rpx;
+  line-height: 80rpx;
+  padding: 0 20rpx;
+  border: 1rpx solid #ddd;
+  border-radius: 10rpx;
+  font-size: 28rpx;
+  color: #333;
+  background-color: #f8f8f8;
+}
+
+.form-input[disabled] {
+  color: #999;
+  background-color: #f5f5f5;
+  cursor: not-allowed;
+}
+
+.form-buttons {
+  display: flex;
+  justify-content: space-between;
+  padding: 30rpx;
+}
+
+.form-button {
+  flex: 1;
+  height: 88rpx;
+  line-height: 88rpx;
+  text-align: center;
+  border-radius: 12rpx;
+  font-size: 30rpx;
+  font-weight: 500;
+}
+
+.form-button:first-child {
+  margin-right: 20rpx;
+  background-color: #f5f5f5;
+  color: #666;
+}
+
+.form-button-confirm {
+  background-color: #007AFF;
+  color: #fff;
+}
+
+/* 动画效果 */
+.dialog-mask {
+  transition: opacity 0.3s ease;
+}
+
+.recharge-content {
+  transform: translateY(0);
+  transition: transform 0.3s ease;
+}
+
+.dialog-mask.enter {
+  opacity: 0;
+}
+
+.dialog-mask.enter-active {
+  opacity: 1;
+}
+
+.recharge-content.enter {
+  transform: translateY(50rpx);
+}
+
+.recharge-content.enter-active {
+  transform: translateY(0);
+}
+
+/*这里的是安装信息弹窗的样式*/
+.dialog-content {
+  background: #fff;
+  border-radius: 8px;
+  padding: 20px;
+  width: 600px;
+  max-height: 80vh;
+  overflow-y: auto;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.dialog-content.install-info-content {
+  background: #fff;
+  border-radius: 12rpx;
+  padding: 0;
+  width: 90%;
+  max-width: 700rpx;
+  max-height: 85vh;
+  box-shadow: 0 10rpx 30rpx rgba(0, 0, 0, 0.1);
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+}
+
+.dialog-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 25rpx 30rpx;
+  border-bottom: 1rpx solid #eee;
+}
+
+.dialog-title {
+  font-size: 30rpx;
+  font-weight: bold;
+  color: #333;
+}
+
+.install-info-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 20rpx 30rpx;
+  border-bottom: 1rpx solid #eee;
+}
+
+.info-header-title {
+  font-size: 28rpx;
+  font-weight: bold;
+  color: #333;
+}
+
+.modify-btn {
+  background-color: #1296db;
+  color: #fff;
+  font-size: 24rpx;
+  padding: 8rpx 16rpx;
+  border-radius: 30rpx;
+  display: flex;
+  align-items: center;
+  border: none;
+  line-height: 1.5;
+}
+
+.modify-btn uni-icons {
+  margin-right: 8rpx;
+}
+
+.detail-scroll {
+  flex: 1;
+  padding: 20rpx;
+}
+
+.detail-section {
+  margin-bottom: 30rpx;
+  border-radius: 8rpx;
+  overflow: hidden;
+  background: #fff;
+}
+
+.section-header {
+  display: flex;
+  align-items: center;
+  padding: 20rpx 0;
+  margin-bottom: 15rpx;
+}
+
+.section-title {
+  font-size: 28rpx;
+  font-weight: bold;
+  color: #333;
+  margin-left: 12rpx;
+}
+
+.info-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 20rpx;
+}
+
+.info-item {
+  padding: 10rpx 0;
+}
+
+.wide-item {
+  grid-column: span 2;
+}
+
+.info-label {
+  font-size: 26rpx;
+  color: #666;
+}
+
+.info-value {
+  font-size: 26rpx;
+  color: #333;
+  font-weight: 500;
+}
+
+.status-tag {
+  display: inline-block;
+  padding: 4rpx 16rpx;
+  border-radius: 30rpx;
+  font-size: 24rpx;
+  color: white;
+  text-align: center;
+}
+
+.status-tag.online {
+  background-color: #67c23a;
+}
+
+.status-tag.offline {
+  background-color: #909399;
+}
+
+.status-tag.on {
+  background-color: #67c23a;
+}
+
+.status-tag.off {
+  background-color: #909399;
+}
+
+.status-tag.running {
+  background-color: #67c23a;
+}
+
+.status-tag.stopped {
+  background-color: #f56c6c;
+}
+
+/* 修改设备信息区块的样式为浅灰色背景 */
+.detail-section {
+  background-color: #f9f9f9;
+  padding: 15rpx 20rpx;
+  border-radius: 8rpx;
+}
+
+/* 信息项目两列布局样式 */
+.info-item {
+  display: flex;
+  flex-direction: column;
+}
+
+/* 按钮样式调整 */
+.modify-btn {
+  height: 60rpx;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.modify-btn uni-icons {
+  margin-right: 8rpx;
+}
 </style>

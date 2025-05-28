@@ -24,6 +24,7 @@ const request = (options) => {
                 }
             },
             fail: (err) => {
+				console.log(5555)
                 uni.showToast({
                     title: '网络请求失败',
                     icon: 'none'
