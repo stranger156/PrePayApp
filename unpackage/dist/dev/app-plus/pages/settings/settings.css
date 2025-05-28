@@ -1,0 +1,35 @@
+
+.setting-page {
+  background-color: #fff;
+}
+.menu-item {
+  display: flex;
+  align-items: center;
+  padding: 16px;
+  border-bottom: 1px solid #f0f0f0;
+}
+.icon {
+  width: 24px;
+  height: 24px;
+}
+.title {
+  flex: 1;
+  margin-left: 12px;
+  font-size: 16px;
+  color: #333;
+}
+.arrow {
+  width: 18px;
+  height: 18px;
+}
+.logout-wrapper {
+  margin-top: 32px;
+  padding: 0 16px;
+}
+.logout-button {
+  background-color: #007aff;
+  color: white;
+  border-radius: 8px;
+  font-size: 16px;
+  padding: 6px 0;
+}

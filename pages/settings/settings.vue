@@ -18,13 +18,15 @@
 </template>
 
 <script setup>
-import { ref } from 'vue'
-
+import { onMounted, ref } from 'vue'
+import { getAuthority } from '../../store/user'
+const authority=ref('')
 const menuList = ref([
   {
     title: '企业管理',
     icon: '/static/user_icon.png',
-    url: '/pages/user/user'
+    url: '/pages/user/user',
+	
   },
   {
     title: '账号管理',
@@ -64,6 +66,39 @@ function logout() {
     }
   })
 }
+onMounted(()=>{
+	async ()=>{
+		authority.value=await getAuthority()
+		if(authority.value === 'admin'){
+			menuList = ref([
+			  {
+				title: '企业管理',
+				icon: '/static/user_icon.png',
+				url: '/pages/user/user',
+				
+			  },
+			  {
+				title: '账号管理',
+				icon: '/static/account_icon.png',
+				url: '/pages/account/account'
+			  },
+			  {
+				title: '修改密码',
+				icon: '/static/setting_icon.png',
+				url: '/pages/change-password/change-password'
+			  },
+			])
+		}else if(authority.value === 'sale' || authority.value === 'user'){
+			menuList = ref([
+			  {
+				title: '修改密码',
+				icon: '/static/setting_icon.png',
+				url: '/pages/change-password/change-password'
+			  },
+			])
+		}
+	}
+})
 </script>
 
 <style>
