@@ -1,9 +1,9 @@
 import {
   BoundingRect_default,
   OrientedBoundingRect_default
-} from "./chunk-DDFKF4JE.js";
+} from "./chunk-EJX2B5IF.js";
 
-// ../../../lvdeproject/PrePayApp/node_modules/echarts/lib/label/labelLayoutHelper.js
+// C:/Users/86158/Documents/HBuilderProjects/PrePayApp/node_modules/echarts/lib/label/labelLayoutHelper.js
 function prepareLayoutList(input) {
   var list = [];
   for (var i = 0; i < input.length; i++) {
@@ -229,4 +229,4 @@ export {
   shiftLayoutOnY,
   hideOverlap
 };
-//# sourceMappingURL=chunk-B6RQXES6.js.map
+//# sourceMappingURL=chunk-O3EFILQC.js.map

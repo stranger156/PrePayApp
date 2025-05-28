@@ -9,9 +9,9 @@ import {
   getLayoutRect,
   retrieve2,
   windowOpen
-} from "./chunk-DDFKF4JE.js";
+} from "./chunk-EJX2B5IF.js";
 
-// ../../../lvdeproject/PrePayApp/node_modules/echarts/lib/component/title/install.js
+// C:/Users/86158/Documents/HBuilderProjects/PrePayApp/node_modules/echarts/lib/component/title/install.js
 var TitleModel = (
   /** @class */
   function(_super) {
@@ -186,4 +186,4 @@ function install(registers) {
 export {
   install
 };
-//# sourceMappingURL=chunk-2VETM7BB.js.map
+//# sourceMappingURL=chunk-T5EH6274.js.map

@@ -1,91 +1,91 @@
 {
-  "hash": "c985508a",
-  "configHash": "91c44cd6",
-  "lockfileHash": "225533bb",
-  "browserHash": "75ca81f9",
+  "hash": "b7d65706",
+  "configHash": "ef3f5643",
+  "lockfileHash": "2ff5b345",
+  "browserHash": "d5cef46f",
   "optimized": {
     "echarts": {
       "src": "../../../../../node_modules/echarts/index.js",
       "file": "echarts.js",
-      "fileHash": "4e1313f6",
+      "fileHash": "fef9ca4e",
       "needsInterop": false
     },
     "echarts/lib/echarts": {
       "src": "../../../../../node_modules/echarts/lib/echarts.js",
       "file": "echarts_lib_echarts.js",
-      "fileHash": "05e94d20",
+      "fileHash": "4d7b5c03",
       "needsInterop": false
     },
     "echarts/lib/chart/line": {
       "src": "../../../../../node_modules/echarts/lib/chart/line.js",
       "file": "echarts_lib_chart_line.js",
-      "fileHash": "fd73706d",
+      "fileHash": "55512091",
       "needsInterop": false
     },
     "echarts/lib/component/tooltip": {
       "src": "../../../../../node_modules/echarts/lib/component/tooltip.js",
       "file": "echarts_lib_component_tooltip.js",
-      "fileHash": "bd057795",
+      "fileHash": "79faf198",
       "needsInterop": false
     },
     "echarts/lib/component/title": {
       "src": "../../../../../node_modules/echarts/lib/component/title.js",
       "file": "echarts_lib_component_title.js",
-      "fileHash": "bc02a246",
+      "fileHash": "69e91d4c",
       "needsInterop": false
     },
     "echarts/lib/component/grid": {
       "src": "../../../../../node_modules/echarts/lib/component/grid.js",
       "file": "echarts_lib_component_grid.js",
-      "fileHash": "8c38f8ac",
+      "fileHash": "98c950be",
       "needsInterop": false
     },
     "echarts/lib/component/dataZoom": {
       "src": "../../../../../node_modules/echarts/lib/component/dataZoom.js",
       "file": "echarts_lib_component_dataZoom.js",
-      "fileHash": "62ed9202",
+      "fileHash": "2701134c",
       "needsInterop": false
     }
   },
   "chunks": {
-    "chunk-NVJEVG76": {
-      "file": "chunk-NVJEVG76.js"
+    "chunk-NIBOORWE": {
+      "file": "chunk-NIBOORWE.js"
     },
-    "chunk-2RT3ZKXA": {
-      "file": "chunk-2RT3ZKXA.js"
+    "chunk-NZIAKPRX": {
+      "file": "chunk-NZIAKPRX.js"
     },
-    "chunk-VXYV4QH6": {
-      "file": "chunk-VXYV4QH6.js"
+    "chunk-4HA7ZEVR": {
+      "file": "chunk-4HA7ZEVR.js"
     },
-    "chunk-ESL3WZ2C": {
-      "file": "chunk-ESL3WZ2C.js"
+    "chunk-USQVFVFQ": {
+      "file": "chunk-USQVFVFQ.js"
     },
-    "chunk-2VETM7BB": {
-      "file": "chunk-2VETM7BB.js"
+    "chunk-T5EH6274": {
+      "file": "chunk-T5EH6274.js"
     },
-    "chunk-MXSXKNGR": {
-      "file": "chunk-MXSXKNGR.js"
+    "chunk-M5R4W33I": {
+      "file": "chunk-M5R4W33I.js"
     },
-    "chunk-JMTJQPKG": {
-      "file": "chunk-JMTJQPKG.js"
+    "chunk-YKDACUSK": {
+      "file": "chunk-YKDACUSK.js"
     },
-    "chunk-VJV7CSKE": {
-      "file": "chunk-VJV7CSKE.js"
+    "chunk-3OGBFDFX": {
+      "file": "chunk-3OGBFDFX.js"
     },
-    "chunk-B6RQXES6": {
-      "file": "chunk-B6RQXES6.js"
+    "chunk-O3EFILQC": {
+      "file": "chunk-O3EFILQC.js"
     },
-    "chunk-RUNVTC7T": {
-      "file": "chunk-RUNVTC7T.js"
+    "chunk-VBLLVBXR": {
+      "file": "chunk-VBLLVBXR.js"
     },
-    "chunk-BWM7UK7S": {
-      "file": "chunk-BWM7UK7S.js"
+    "chunk-SQ3A7GEI": {
+      "file": "chunk-SQ3A7GEI.js"
     },
-    "chunk-YGQNYZ3X": {
-      "file": "chunk-YGQNYZ3X.js"
+    "chunk-7URDEZC3": {
+      "file": "chunk-7URDEZC3.js"
     },
-    "chunk-DDFKF4JE": {
-      "file": "chunk-DDFKF4JE.js"
+    "chunk-EJX2B5IF": {
+      "file": "chunk-EJX2B5IF.js"
     }
   }
 }

@@ -2,7 +2,7 @@ import {
   createFloat32Array,
   getStackedDimension,
   isDimensionStacked
-} from "./chunk-YGQNYZ3X.js";
+} from "./chunk-7URDEZC3.js";
 import {
   BoundingRect_default,
   ONE_DAY,
@@ -58,9 +58,9 @@ import {
   secondsSetterName,
   timeUnits,
   warn
-} from "./chunk-DDFKF4JE.js";
+} from "./chunk-EJX2B5IF.js";
 
-// ../../../lvdeproject/PrePayApp/node_modules/echarts/lib/layout/barGrid.js
+// C:/Users/86158/Documents/HBuilderProjects/PrePayApp/node_modules/echarts/lib/layout/barGrid.js
 var STACK_PREFIX = "__ec_stack_";
 function getSeriesStackId(seriesModel) {
   return seriesModel.get("stack") || STACK_PREFIX + seriesModel.seriesIndex;
@@ -445,7 +445,7 @@ function getValueAxisStart(baseAxis, valueAxis) {
   return valueAxis.toGlobalCoord(valueAxis.dataToCoord(valueAxis.type === "log" ? startValue > 0 ? startValue : 1 : startValue));
 }
 
-// ../../../lvdeproject/PrePayApp/node_modules/echarts/lib/scale/Scale.js
+// C:/Users/86158/Documents/HBuilderProjects/PrePayApp/node_modules/echarts/lib/scale/Scale.js
 var Scale = (
   /** @class */
   function() {
@@ -491,7 +491,7 @@ var Scale = (
 enableClassManagement(Scale);
 var Scale_default = Scale;
 
-// ../../../lvdeproject/PrePayApp/node_modules/echarts/lib/data/OrdinalMeta.js
+// C:/Users/86158/Documents/HBuilderProjects/PrePayApp/node_modules/echarts/lib/data/OrdinalMeta.js
 var uidBase = 0;
 var OrdinalMeta = (
   /** @class */
@@ -556,7 +556,7 @@ function getName(obj) {
 }
 var OrdinalMeta_default = OrdinalMeta;
 
-// ../../../lvdeproject/PrePayApp/node_modules/echarts/lib/scale/helper.js
+// C:/Users/86158/Documents/HBuilderProjects/PrePayApp/node_modules/echarts/lib/scale/helper.js
 function isValueNice(val) {
   var exp10 = Math.pow(10, quantityExponent(Math.abs(val)));
   var f = Math.abs(val / exp10);
@@ -622,7 +622,7 @@ function scale(val, extent) {
   return val * (extent[1] - extent[0]) + extent[0];
 }
 
-// ../../../lvdeproject/PrePayApp/node_modules/echarts/lib/scale/Ordinal.js
+// C:/Users/86158/Documents/HBuilderProjects/PrePayApp/node_modules/echarts/lib/scale/Ordinal.js
 var OrdinalScale = (
   /** @class */
   function(_super) {
@@ -742,7 +742,7 @@ var OrdinalScale = (
 Scale_default.registerClass(OrdinalScale);
 var Ordinal_default = OrdinalScale;
 
-// ../../../lvdeproject/PrePayApp/node_modules/echarts/lib/scale/Interval.js
+// C:/Users/86158/Documents/HBuilderProjects/PrePayApp/node_modules/echarts/lib/scale/Interval.js
 var roundNumber = round;
 var IntervalScale = (
   /** @class */
@@ -928,7 +928,7 @@ var IntervalScale = (
 Scale_default.registerClass(IntervalScale);
 var Interval_default = IntervalScale;
 
-// ../../../lvdeproject/PrePayApp/node_modules/echarts/lib/scale/Time.js
+// C:/Users/86158/Documents/HBuilderProjects/PrePayApp/node_modules/echarts/lib/scale/Time.js
 var bisect = function(a, x, lo, hi) {
   while (lo < hi) {
     var mid = lo + hi >>> 1;
@@ -1298,7 +1298,7 @@ function getIntervalTicks(bottomUnitName, approxInterval, isUTC, extent) {
 Scale_default.registerClass(TimeScale);
 var Time_default = TimeScale;
 
-// ../../../lvdeproject/PrePayApp/node_modules/echarts/lib/scale/Log.js
+// C:/Users/86158/Documents/HBuilderProjects/PrePayApp/node_modules/echarts/lib/scale/Log.js
 var scaleProto = Scale_default.prototype;
 var intervalScaleProto = Interval_default.prototype;
 var roundingErrorFix = round;
@@ -1412,7 +1412,7 @@ function fixRoundingError(val, originalVal) {
 Scale_default.registerClass(LogScale);
 var Log_default = LogScale;
 
-// ../../../lvdeproject/PrePayApp/node_modules/echarts/lib/coord/scaleRawExtentInfo.js
+// C:/Users/86158/Documents/HBuilderProjects/PrePayApp/node_modules/echarts/lib/coord/scaleRawExtentInfo.js
 var ScaleRawExtentInfo = (
   /** @class */
   function() {
@@ -1550,7 +1550,7 @@ function parseAxisModelMinMax(scale2, minMax) {
   return minMax == null ? null : eqNaN(minMax) ? NaN : scale2.parse(minMax);
 }
 
-// ../../../lvdeproject/PrePayApp/node_modules/echarts/lib/coord/axisHelper.js
+// C:/Users/86158/Documents/HBuilderProjects/PrePayApp/node_modules/echarts/lib/coord/axisHelper.js
 function getScaleExtent(scale2, model) {
   var scaleType = scale2.type;
   var rawExtentResult = ensureScaleRawExtentInfo(scale2, model, scale2.getExtent()).calculate();
@@ -1785,4 +1785,4 @@ export {
   getDataDimensionsOnAxis,
   unionAxisExtentFromData
 };
-//# sourceMappingURL=chunk-BWM7UK7S.js.map
+//# sourceMappingURL=chunk-SQ3A7GEI.js.map
