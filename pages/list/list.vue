@@ -76,7 +76,7 @@
             @click="handleJump"
             :disabled="pagination.loading"
           >
-            前往
+            前 往
           </button>
         </view>
       </view>
@@ -159,6 +159,11 @@
                         @tap.stop="showPayDetail(device)"
                       >充值</text>
 					  
+					<text 
+					    class="action-btn delete-btn" 
+					    @tap.stop="confirmDeleteDevice(device)"
+					  >删除设备</text>
+					  
                 </view>
               </view>
             </view>
@@ -225,31 +230,28 @@
       </view>
 
       <!-- 历史记录 -->
-      <view class="detail-section">
-        <text class="section-title">温差历史记录（{{ selectedDevice.history?.length || 0 }}条）</text>
-        <view class="history-chart">
-          <!-- 这里可以集成echarts图表 -->
-            
-             <!-- 图表容器 -->
-             <ec-canvas 
-               id="temp-chart" 
-               ref="tempChart"
-               :option="chartOption" 
-               canvas-id="temp-chart"
-               width="100%"
-               height="300px"
-             />
-             
-             <!-- 无数据提示 -->
-             <view 
-               v-if="selectedDevice.history?.length === 0" 
-               class="empty-tip"
-             >
-               暂无历史记录
-             </view>
-			 
-        </view>
-      </view>
+     <view class="detail-section">
+       <text class="section-title">温差历史记录（{{ selectedDevice.history?.length || 0 }}条）</text>
+       
+       <!-- 历史记录图表 -->
+       <view class="chart-container" v-if="selectedDevice.history?.length > 0">
+         <!-- 使用uni-app中的ec-canvas组件 -->
+         <ec-canvas 
+           id="tempChart" 
+           canvas-id="tempChart"
+           :ec="tempChartInit"
+           style="width: 100%; height: 300px;"
+         ></ec-canvas>
+       </view>
+       
+       <!-- 无数据提示 -->
+       <view v-if="!selectedDevice.history?.length" class="no-data">
+         <text>暂无历史数据</text>
+       </view>
+     </view>
+	  
+	  
+	  
     </scroll-view>
   </view>
 </view>
@@ -290,19 +292,19 @@
         <view class="form-item">
           <label class="form-label">充值天数</label>
           <view class="number-input-group">
-            <button class="number-btn" @click="decreaseDays">-</button>
+            <button class="number-btn minus-btn" @tap.stop="decreaseDays">-</button>
             <input 
               class="form-input number-input" 
               type="number" 
-              placeholder="充值天数" 
+              placeholder="输入天数" 
               v-model.number="rechargeForm.days" 
               min="1" 
-              @change="validateDays"
+              @input="validateDays"
             />
-            <button class="number-btn" @click="increaseDays">+</button>
+            <button class="number-btn plus-btn" @tap.stop="increaseDays">+</button>
           </view>
           <view class="price-calculation">
-            <text>预计费用: ¥{{ rechargeForm.days * unitPrice }}</text>
+            <text>预计费用: ¥{{ (rechargeForm.days * unitPrice).toFixed(2) }}</text>
           </view>
         </view>
 		  
@@ -315,12 +317,24 @@
               class="form-button form-button-confirm" 
               formType="submit"
             >确定充值</button>
+			
+			
+			
           </view>
         </form>
       </view>
     </view>
-	
-<!-- 安装信息弹窗 -->
+<!-- 删除确认弹窗 -->
+<view v-if="showDeleteConfirm" class="confirm-mask" @tap="cancelDelete">
+  <view class="confirm-dialog" @tap.stop>
+    <view class="confirm-title">确认删除</view>
+    <view class="confirm-content">确定要删除设备"{{ deviceToDelete?.name }}"吗？此操作不可恢复。</view>
+    <view class="confirm-buttons">
+      <button class="confirm-btn cancel-btn" @tap="cancelDelete">取消</button>
+      <button class="confirm-btn delete-btn" @tap="confirmDelete">确认删除</button>
+    </view>
+  </view>
+</view>
 <!-- 安装信息弹窗 -->
 <view v-if="showInstallInfoDialog" class="dialog-mask" @tap="closeInstallInfoDialog">
   <view class="dialog-content install-info-content" @tap.stop>
@@ -462,12 +476,26 @@
 </template>
 
 <script>
-import { getStationList,getStationDevices,getDetailDevices,getDeviceInstallInfo } from '@/utils/api';
-import * as echarts from 'echarts';
+import { getStationList,getStationDevices,getDetailDevices,getDeviceInstallInfo, } from '@/utils/api';
+
+import * as echarts from 'echarts/lib/echarts';
+import 'echarts/lib/chart/line';
+import 'echarts/lib/component/tooltip';
+import 'echarts/lib/component/title';
+import 'echarts/lib/component/grid';
+import 'echarts/lib/component/dataZoom';
+
 export default {
   data() {
     return {
 		
+		 showDeleteConfirm: false,
+		    deviceToDelete: null,
+		rechargeForm: {
+		      deviceCode: '',
+		      days: 1  // 默认值
+		    },
+		    unitPrice: 10 ,
 		// chartOption: {
 		//       tooltip: {
 		//         trigger: 'axis',
@@ -518,7 +546,59 @@ export default {
       },
       allData: [],
       backendPage: 1,
-      hasMore: true
+      hasMore: true,//、
+	  // 图表初始化对象
+	        tempChartInit: {
+	          lazyLoad: true // 延迟加载
+	        }
+	  // 图表配置
+	        // chartOption: {
+	        //   tooltip: {
+	        //     trigger: 'axis',
+	        //     formatter: '{b}<br/>{a}: {c}°C'
+	        //   },
+	        //   grid: {
+	        //     left: '3%',
+	        //     right: '4%',
+	        //     bottom: '3%',
+	        //     containLabel: true
+	        //   },
+	        //   xAxis: {
+	        //     type: 'category',
+	        //     data: [],
+	        //     axisLabel: {
+	        //       formatter: value => value.split(' ')[0], // 只显示日期
+	        //       interval: 0,
+	        //       rotate: 30
+	        //     }
+	        //   },
+	        //   yAxis: {
+	        //     type: 'value',
+	        //     axisLabel: {
+	        //       formatter: '{value} °C'
+	        //     }
+	        //   },
+	        //   series: [{
+	        //     name: '温差',
+	        //     type: 'line',
+	        //     data: [],
+	        //     smooth: true,
+	        //     symbol: 'circle',
+	        //     symbolSize: 6,
+	        //     itemStyle: {
+	        //       color: '#1296db' // 主色
+	        //     },
+	        //     lineStyle: {
+	        //       width: 3
+	        //     },
+	        //     areaStyle: {
+	        //       color: new echarts.graphic.LinearGradient(0, 0, 0, 1, [
+	        //         { offset: 0, color: 'rgba(18,150,219,0.6)' },
+	        //         { offset: 1, color: 'rgba(18,150,219,0.1)' }
+	        //       ])
+	        //     }
+	        //   }]
+	        // }
     };
   },
   computed: {
@@ -528,17 +608,162 @@ export default {
   },
   
     mounted() {
-      this.initChart();
+     
     },
   methods: {
+		initTempChart() {
+		      // 确保有历史数据
+		      if (!this.selectedDevice?.history?.length) return;
+		      
+		      // 获取图表组件实例
+		      this.$nextTick(() => {
+		        // 获取图表组件实例
+		        if (this.$refs.tempChart) {
+		          const chart = this.$refs.tempChart.init(echarts);
+		          
+		          // 准备图表数据
+		          const xData = this.selectedDevice.history.map(item => item.time);
+		          const yData = this.selectedDevice.history.map(item => item.value);
+		          
+		          // 设置图表选项
+		          const option = {
+		            tooltip: {
+		              trigger: 'axis',
+		              formatter: '{b}<br/>温差: {c}°C'
+		            },
+		            grid: {
+		              left: '3%',
+		              right: '4%',
+		              bottom: '3%',
+		              containLabel: true
+		            },
+		            xAxis: {
+		              type: 'category',
+		              data: xData,
+		              axisLabel: {
+		                interval: 0,
+		                rotate: 45,
+		                fontSize: 10
+		              }
+		            },
+		            yAxis: {
+		              type: 'value',
+		              name: '温差(°C)',
+		              axisLabel: {
+		                formatter: '{value}°C'
+		              }
+		            },
+		            series: [{
+		              name: '温差',
+		              type: 'line',
+		              data: yData,
+		              smooth: true,
+		              symbolSize: 6,
+		              itemStyle: {
+		                color: '#1296db'
+		              },
+		              markLine: {
+		                data: [
+		                  { type: 'average', name: '平均值' }
+		                ]
+		              }
+		            }]
+		          };
+		          
+		          // 设置图表
+		          chart.setOption(option);
+		        }
+		      });
+		    },
 	  
-	  initChart() {
-	        const chart = echarts.init(this.$refs.canvas, null, {
-	          width: this.width,
-	          height: this.height
-	        });
-	        chart.setOption(this.option);
+	  // 确认删除设备
+	    // 显示删除确认弹窗
+	      confirmDeleteDevice(device) {
+	        this.deviceToDelete = device;
+	        this.showDeleteConfirm = true;
 	      },
+	      
+	      // 取消删除
+	      cancelDelete() {
+	        this.showDeleteConfirm = false;
+	        this.deviceToDelete = null;
+	      },
+	      
+	    // 删除设备
+	     // 确认删除
+	      async confirmDelete() {
+	        if (!this.deviceToDelete) return;
+	        
+	        try {
+	          uni.showLoading({
+	            title: '正在删除...'
+	          });
+	          
+	          // 调用删除设备API
+	          const res = await deleteDeviceById(this.deviceToDelete.code);
+	          
+	          if (res?.code === 200) {
+	            uni.showToast({
+	              title: '设备删除成功',
+	              icon: 'success'
+	            });
+	            
+	            // 从列表中移除该设备
+	            if (this.selectedStation && this.selectedStation.devices) {
+	              const index = this.selectedStation.devices.findIndex(
+	                item => item.code === this.deviceToDelete.code
+	              );
+	              if (index !== -1) {
+	                this.selectedStation.devices.splice(index, 1);
+	              }
+	            }
+	          } else {
+	            uni.showToast({
+	              title: res?.msg || '删除失败',
+	              icon: 'none'
+	            });
+	          }
+	        } catch (error) {
+	          console.error('删除设备失败:', error);
+	          uni.showToast({
+	            title: '删除设备失败，请稍后重试',
+	            icon: 'none'
+	          });
+	        } finally {
+	          uni.hideLoading();
+	          this.showDeleteConfirm = false;
+	          this.deviceToDelete = null;
+	        }
+	      },
+	      
+		
+	   increaseDays() {
+	      this.rechargeForm.days = parseInt(this.rechargeForm.days || 1) + 1;
+	      this.validateDays();
+	    },
+	    
+	    // 减少天数
+	    decreaseDays() {
+	      if (this.rechargeForm.days > 1) {
+	        this.rechargeForm.days = parseInt(this.rechargeForm.days) - 1;
+	      }
+	      this.validateDays();
+	    },
+	    
+	    // 验证天数输入
+	    validateDays() {
+	      // 确保是数字且大于0
+	      let days = parseInt(this.rechargeForm.days);
+	      if (isNaN(days) || days < 1) {
+	        this.rechargeForm.days = 1;
+	      } else {
+	        this.rechargeForm.days = days;
+	      }
+	    },
+	    
+		
+	
+	    
 	    
     async loadDeviceData() {
       if (this.pagination.loading || !this.hasMore) return;
@@ -699,79 +924,59 @@ async showInstallInfo(device) {
   }
 },
 
-async showPayDetail(device) {
-	this.selectedDevice = device;
-	this.showRechargeDialog = true;
-},
-async showDeviceDetail(device) {
-		 
-	      this.selectedDevice = device;
-	      this.showDeviceDetailDialog = true;
-		
-		  try {
-			console.log(device)
-			const res =await  getDetailDevices(device.code);
-			   
-			
-			// 成功响应处理
-			if (res?.code === 200 && res.data) {
-				  const { deviceInfo, temperatureInfo, tempDiffHistory } = res.data;
-				      
-				      // 合并数据到 selectedDevice
-				      this.selectedDevice = {
-				        ...this.selectedDevice,
-				        // 设备基础信息
-				        code: deviceInfo.deviceNumber,
-				        installDate: deviceInfo.addTime,
-				        updateTime: deviceInfo.dateTime,
-				        status: deviceInfo.deviceState ? '正常' : '离线',
-				        remainingTime: `${deviceInfo.day}天${deviceInfo.hour}小时${deviceInfo.minute}分`,
-				        
-				        // 温度信息
-				        temp1: temperatureInfo.temp1In,
-				        temp2: temperatureInfo.temp2Out,
-				        tempDiff: (temperatureInfo.temp2Out - temperatureInfo.temp1In).toFixed(1),
-				        
-				        // 历史记录（取前10条）
-				        history: tempDiffHistory.slice(0, 10).map(item => ({
-				          time: item.addTime,
-				          value: item.diff
-				        }))
-						
-						
-						
-						
-				      };
-					  
-					  // 更新图表数据
-					        this.chartOption = {
-					          ...this.chartOption,
-					          xAxis: {
-					            ...this.chartOption.xAxis,
-					            data: this.selectedDevice.history.map(item => item.time)
-					          },
-					          series: [{
-					            ...this.chartOption.series[0],
-					            data: this.selectedDevice.history.map(item => item.value)
-					          }]
-					        };
-					  
-					        // 强制更新图表
-					        this.$nextTick(() => {
-					          const chart = echarts.getInstanceByDom(this.$refs.tempChart);
-					          if (chart) chart.setOption(this.chartOption);
-					        });
-			}
-			
-		  } catch (error) {
-		    console.error('加载设备失败:', error);
-		    this.selectedStation.devices = [{
-		      name: '数据加载失败', 
-		      code: 'ERROR', 
-		      status: '异常'
-		    }];
-		  }
-		},
+async  showPayDetail(device) {
+    this.selectedDevice = device;
+    this.rechargeForm.deviceCode = device.code;
+    this.rechargeForm.days = 1; // 默认一天
+    this.showRechargeDialog = true;
+  },
+ async showDeviceDetail(device) {
+      this.selectedDevice = device;
+      this.showDeviceDetailDialog = true;
+      
+      try {
+        console.log(device);
+        const res = await getDetailDevices(device.code);
+        
+        // 成功响应处理
+        if (res?.code === 200 && res.data) {
+          const { deviceInfo, temperatureInfo, tempDiffHistory } = res.data;
+              
+          // 合并数据到 selectedDevice
+          this.selectedDevice = {
+            ...this.selectedDevice,
+            // 设备基础信息
+            code: deviceInfo.deviceNumber,
+            installDate: deviceInfo.addTime,
+            updateTime: deviceInfo.dateTime,
+            status: deviceInfo.deviceState ? '正常' : '离线',
+            remainingTime: `${deviceInfo.day}天${deviceInfo.hour}小时${deviceInfo.minute}分`,
+            
+            // 温度信息
+            temp1: temperatureInfo.temp1In,
+            temp2: temperatureInfo.temp2Out,
+            tempDiff: (temperatureInfo.temp2Out - temperatureInfo.temp1In).toFixed(1),
+            
+            // 历史记录（取前10条）
+            history: tempDiffHistory.slice(0, 10).map(item => ({
+              time: item.addTime,
+              value: item.diff
+            }))
+          };
+          
+          // 初始化图表
+          this.$nextTick(() => {
+            this.initTempChart();
+          });
+        }
+      } catch (error) {
+        console.error('加载设备失败:', error);
+        uni.showToast({
+          title: '加载设备数据失败',
+          icon: 'none'
+        });
+      }
+    },
 		
 		
 closeDeviceDialog() {
@@ -914,65 +1119,76 @@ closeRechargeDialog() {
   margin: 24rpx 0;
 }
 
+/* 调整分页控件位置和样式 */
 .pagination {
+ position: relative;
+ /* bottom:100rpx; */
   display: flex;
-  justify-content: space-between;
+  flex-wrap: wrap;
+  justify-content: center;
   align-items: center;
-  padding: 20rpx 30rpx;
+  padding: 20rpx 16rpx;
   background: white;
-  margin-top: 20rpx;
-  border-radius: 12rpx;
-  position: sticky;
-  bottom: 0;
+  /* margin: 20rpx 10rpx 120rpx 10rpx; *//* 增加底部边距，避开导航栏 */
+  border-radius: 16rpx;
+  box-shadow: 0 2rpx 10rpx rgba(0, 0, 0, 0.05);
+  /* position: relative; */ /* 改为相对定位，不再固定在底部 */
+  z-index: 100;
 }
 
+/* 页码按钮样式 */
 .page-btn {
+  height: 70rpx;
+  min-width: 100rpx;
+  padding: 0 20rpx;
   font-size: 28rpx;
-  padding: 12rpx 40rpx;
-  background-color: #007AFF;
+  background: #007AFF;
   color: white;
   border-radius: 8rpx;
-  line-height: 1.5;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: none;
 }
 
-.page-btn[disabled] {
-  background-color: #ddd;
-  color: #999;
-  opacity: 0.7;
-}
-
+/* 页码信息样式 */
 .page-info {
   font-size: 28rpx;
-  color: #666;
-  margin: 0 20rpx;
-  flex-shrink: 0;
+  color: #333;
+  margin: 0 10rpx;
 }
 
+/* 跳转控件样式 */
 .page-jump {
   display: flex;
   align-items: center;
-  margin-left: 30rpx;
 }
 
+/* 输入框样式 */
 .jump-input {
-  width: 120rpx;
+  width: 80rpx;
   height: 60rpx;
-  border: 1rpx solid #ddd;
+  background: #fff;
   border-radius: 8rpx;
-  padding: 0 20rpx;
-  margin: 0 10rpx;
+  padding: 0 10rpx;
+  margin-right: 20rpx; /* 增加输入框与按钮之间的距离 */
   text-align: center;
   font-size: 28rpx;
+  color: #333;
+  border: 1rpx solid #ddd;
 }
 
+/* 跳转按钮样式 */
 .jump-btn {
   height: 60rpx;
-  padding: 0 30rpx;
-  background-color: #007AFF;
+  min-width: 70rpx;
+  padding: 0 15rpx;
+  background: #007AFF;
   color: white;
   border-radius: 8rpx;
-  font-size: 28rpx;
+  font-size: 24rpx;
   line-height: 60rpx;
+  border: none;
 }
 
 .loading-mask {
@@ -988,17 +1204,7 @@ closeRechargeDialog() {
   z-index: 999;
 }
 
-@media (max-width: 480px) {
-  .page-jump {
-    margin-left: 10rpx;
-  }
-  .jump-input {
-    width: 80rpx;
-  }
-  .jump-btn {
-    padding: 0 20rpx;
-  }
-}
+
 /* 新增弹窗样式 */
 .dialog-mask {
   position: fixed;
@@ -1214,7 +1420,11 @@ closeRechargeDialog() {
   font-size: 30rpx;
   font-weight: 500;
 }
-
+/* 删除按钮特殊样式 */
+.delete-btn {
+  color: #ff4444;
+  border-color: #ff4444;
+}
 .form-button:first-child {
   margin-right: 20rpx;
   background-color: #f5f5f5;
@@ -1427,5 +1637,123 @@ closeRechargeDialog() {
 
 .modify-btn uni-icons {
   margin-right: 8rpx;
+}
+
+/* 数字输入组样式 */
+.number-input-group {
+  display: flex;
+  align-items: center;
+  margin: 10rpx 0;
+  width: 100%;
+  border: 1px solid #ddd;
+  border-radius: 8rpx;
+  overflow: hidden;
+  height: 80rpx;
+}
+
+.number-btn {
+  width: 80rpx;
+  height: 80rpx;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-color: #f5f5f5;
+  color: #333;
+  font-size: 32rpx;
+  font-weight: bold;
+  padding: 0;
+  margin: 0;
+  border: none;
+  line-height: 1;
+}
+
+.minus-btn {
+  border-right: 1px solid #ddd;
+}
+
+.plus-btn {
+  border-left: 1px solid #ddd;
+}
+
+.number-input {
+  flex: 1;
+  height: 80rpx;
+  text-align: center;
+  border: none;
+  background-color: #fff;
+  padding: 0;
+  margin: 0;
+  min-width: 80rpx;
+}
+
+.price-calculation {
+  margin-top: 15rpx;
+  font-size: 28rpx;
+  color: #ff6600;
+  text-align: right;
+}
+
+/* 确认删除弹窗样式 */
+.confirm-mask {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(0, 0, 0, 0.6);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 9999; /* 确保是最高层级 */
+}
+
+.confirm-dialog {
+  width: 80%;
+  max-width: 600rpx;
+  background-color: #fff;
+  border-radius: 12rpx;
+  padding: 40rpx 30rpx;
+  box-shadow: 0 4rpx 20rpx rgba(0, 0, 0, 0.1);
+}
+
+.confirm-title {
+  font-size: 32rpx;
+  font-weight: bold;
+  color: #333;
+  margin-bottom: 20rpx;
+  text-align: center;
+}
+
+.confirm-content {
+  font-size: 28rpx;
+  color: #666;
+  margin-bottom: 30rpx;
+  text-align: center;
+  padding: 0 20rpx;
+}
+
+.confirm-buttons {
+  display: flex;
+  justify-content: space-between;
+}
+
+.confirm-btn {
+  flex: 1;
+  height: 80rpx;
+  line-height: 80rpx;
+  text-align: center;
+  border-radius: 8rpx;
+  font-size: 28rpx;
+  margin: 0 15rpx;
+}
+
+.cancel-btn {
+  background-color: #f5f5f5;
+  color: #666;
+}
+
+.delete-btn {
+  background-color: #ff4444;
+  color: #fff;
 }
 </style>

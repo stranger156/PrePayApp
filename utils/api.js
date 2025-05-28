@@ -344,3 +344,14 @@ export const getStationList=async()=>{
 			}
 	})
 }
+
+export const deleteDeviceById = async (deviceCode) => {
+  const token = await getTokenFromLocalStorage();
+  return request({
+    url: `/web/device/${deviceCode}`,
+    method: 'DELETE',
+    headers: {
+      "token": token
+    }
+  })
+}
