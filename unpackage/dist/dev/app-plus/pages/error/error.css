@@ -1,0 +1,101 @@
+
+.container[data-v-b8db5817] {
+	  display: flex;
+	  flex-direction: column;
+	  height: 100vh;
+	  background-color: #f5f5f5;
+	  position: relative;
+}
+	
+	/* 顶部标题栏 */
+.header[data-v-b8db5817] {
+	  height: 2.8125rem;
+	  background-color: #4285f4;
+	  display: flex;
+	  align-items: center;
+	  justify-content: center;
+	  padding-top: 0.625rem;
+}
+.header-title[data-v-b8db5817] {
+	  color: #FFFFFF;
+	  font-size: 1.125rem;
+	  font-weight: bold;
+}
+	
+	/* 错误记录列表 */
+.error-list[data-v-b8db5817] {
+	  flex: 1;
+}
+.error-item[data-v-b8db5817] {
+	  padding: 0.625rem 0.9375rem;
+	  background-color: #FFFFFF;
+	  border-bottom: 0.03125rem solid #EEEEEE;
+	  display: flex;
+	  flex-direction: row;
+	  align-items: center;
+}
+.error-icon[data-v-b8db5817] {
+	  width: 2.8125rem;
+	  height: 2.8125rem;
+	  margin-right: 0.9375rem;
+}
+.error-info[data-v-b8db5817] {
+	  flex: 1;
+	  display: flex;
+	  flex-direction: column;
+}
+.error-title[data-v-b8db5817] {
+	  display: flex;
+	  flex-direction: row;
+	  align-items: center;
+	  margin-bottom: 0.25rem;
+}
+.error-username[data-v-b8db5817] {
+	  font-size: 1.0625rem;
+	  color: #666666;
+	  margin-right: 0.625rem;
+}
+.error-count[data-v-b8db5817] {
+	  font-size: 0.9375rem;
+	  color: #666666;
+}
+.error-time[data-v-b8db5817] {
+	  font-size: 0.625rem;
+	  color: #999999;
+}
+	
+	/* 浮动添加按钮 */
+.add-button[data-v-b8db5817] {
+	  position: fixed;
+	  right: 1.25rem;
+	  bottom: 1.25rem;
+	  width: 3.125rem;
+	  height: 3.125rem;
+	  background-color: #FFFFFF;
+	  border-radius: 50%;
+	  display: flex;
+	  align-items: center;
+	  justify-content: center;
+	  box-shadow: 0 0.125rem 0.3125rem rgba(0, 0, 0, 0.1);
+}
+.add-icon[data-v-b8db5817] {
+	  font-size: 1.875rem;
+	  color: #666666;
+	  line-height: 2.8125rem;
+}
+/* 新增点击效果 */
+.error-item[data-v-b8db5817] {
+  transition: all 0.2s;
+}
+.error-item[data-v-b8db5817]:active {
+  background-color: #f0f0f0;
+  transform: scale(0.98);
+}
+
+/* 优化时间显示 */
+.error-time[data-v-b8db5817] {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  max-width: 12.5rem;
+}
