@@ -173,6 +173,15 @@
       </view>
     </view>
 	
+	
+<!-- 在页面最外层添加 -->
+<view v-if="showCustomToast" class="custom-toast">
+  <view class="custom-toast-content">
+    <uni-icons type="checkmarkempty" size="24" color="#fff"></uni-icons>
+    <text>保存成功</text>
+  </view>
+</view>
+
 	<!-- 设备详情弹窗 -->
 <view v-if="showDeviceDetailDialog" class="dialog-mask" @tap="closeDeviceDialog">
   <view class="dialog-content device-detail-content" @tap.stop>
@@ -261,7 +270,7 @@
             @tap="closeRechargeDialog"
           ></uni-icons>
         </view>
-        <form @submit="handleRecharge">
+        <form>
           <view class="form-item">
             <label class="form-label">设备编号</label>
             <input 
@@ -276,10 +285,6 @@
             <text class="detail-label">设备名称：</text>
             <text class="detail-value">{{ selectedDevice.name }}</text>
           </view>
-		  <view class="form-item">
-		    <text class="detail-label">设备编号：</text>
-		    <text class="detail-value">{{ selectedDevice.code }}</text>
-		  </view>
 		  
         <view class="form-item">
           <label class="form-label">充值天数</label>
@@ -304,11 +309,13 @@
             <button 
               class="form-button" 
               formType="reset"
+			  @tap="closeRechargeDialog"
             >取消</button>
             <button 
               class="form-button form-button-confirm" 
               formType="submit"
-            >确定充值</button>
+			  @tap="submitCharge"
+            >充值</button>
 			
 			
 			
@@ -320,7 +327,7 @@
 <view v-if="showDeleteConfirm" class="confirm-mask" @tap="cancelDelete">
   <view class="confirm-dialog" @tap.stop>
     <view class="confirm-title">确认删除</view>
-    <view class="confirm-content">确定要删除设备"{{ deviceToDelete?.name }}"吗？此操作不可恢复。</view>
+    <view class="confirm-content">确定要删除设备"{{ deviceToDelete?.name }}"吗？设备删除后相关数据将无法恢复（请将现场设备移除后删除，否则设备仍将向服务器发送数据）</view>
     <view class="confirm-buttons">
       <button class="confirm-btn cancel-btn" @tap="cancelDelete">取消</button>
       <button class="confirm-btn delete-btn" @tap="confirmDelete">确认删除</button>
@@ -342,10 +349,139 @@
 
     <view class="install-info-header">
       <text class="info-header-title">安装信息</text>
-      <button class="modify-btn">
-        <uni-icons type="compose" size="14" color="#fff"></uni-icons>
-        修改设备信息
+      <!-- 安装信息弹窗 -->
+<view v-if="showInstallInfoDialog" class="dialog-mask" @tap="closeInstallInfoDialog">
+  <view class="dialog-content install-info-content" @tap.stop>
+    <view class="dialog-header">
+      <text class="dialog-title">设备安装信息</text>
+      <uni-icons 
+        type="closeempty" 
+        size="24" 
+        color="#999" 
+        @tap="closeInstallInfoDialog"
+      ></uni-icons>
+    </view>
+
+    <view class="install-info-header">
+      <text class="info-header-title">安装信息</text>
+      <button class="modify-btn" @tap="showEditDeviceDialog">
+              <uni-icons type="compose" size="14" color="#fff"></uni-icons>
+              修改设备信息
       </button>
+    </view>
+
+    <scroll-view scroll-y class="detail-scroll">
+      <!-- 基本信息 -->
+      <view class="detail-section">
+        <view class="section-header">
+          <uni-icons type="info-filled" size="16" color="#1296db"></uni-icons>
+          <text class="section-title">基本信息</text>
+        </view>
+        
+        <view class="info-grid">
+          <view class="info-item">
+            <text class="info-label">设备编号：</text>
+            <text class="info-value">{{ selectedDevice.deviceNumber || '无设备号码' }}</text>
+          </view>
+          <view class="info-item">
+            <text class="info-label">设备名称：</text>
+            <text class="info-value">{{ selectedDevice.deviceName || '无设备名称' }}</text>
+          </view>
+          <view class="info-item">
+            <text class="info-label">设备类型：</text>
+            <text class="info-value">{{ selectedDevice.type || '无设备类型' }}</text>
+          </view>
+          <view class="info-item">
+            <text class="info-label">所属公司：</text>
+            <text class="info-value">{{ selectedDevice.companyName || '无公司名称' }}</text>
+          </view>
+          <view class="info-item wide-item">
+            <text class="info-label">所属站点：</text>
+            <text class="info-value">{{ selectedDevice.deviceStation || '无所属站点' }}</text>
+          </view>
+        </view>
+      </view>
+
+      <!-- 安装信息 -->
+      <view class="detail-section">
+        <view class="section-header">
+          <uni-icons type="calendar-filled" size="16" color="#1296db"></uni-icons>
+          <text class="section-title">安装信息</text>
+        </view>
+        
+        <view class="info-grid">
+          <view class="info-item">
+            <text class="info-label">安装日期：</text>
+            <text class="info-value">{{ selectedDevice.installDate || '2020-11-02' }}</text>
+          </view>
+          <view class="info-item">
+            <text class="info-label">数据上传：</text>
+            <text class="info-value">{{ selectedDevice.uploadTime || '5' }}分钟/次</text>
+          </view>
+        </view>
+      </view>
+
+      <!-- 运行状态 -->
+      <view class="detail-section">
+        <view class="section-header">
+          <uni-icons type="gear-filled" size="16" color="#1296db"></uni-icons>
+          <text class="section-title">运行状态</text>
+        </view>
+        
+        <view class="info-grid">
+          <view class="info-item">
+            <text class="info-label">联网状态：</text>
+            <view class="status-tag" 
+                  :class="selectedDevice.onlineState ? 'online' : 'offline'">
+              {{ selectedDevice.onlineState ? '联网' : '离线' }}
+            </view>
+          </view>
+          <view class="info-item">
+            <text class="info-label">开关状态：</text>
+            <view class="status-tag"
+                  :class="selectedDevice.switchState ? 'on' : 'off'">
+              {{ selectedDevice.switchState ? '开' : '关' }}
+            </view>
+          </view>
+          <view class="info-item">
+            <text class="info-label">停机状态：</text>
+            <view class="status-tag"
+                  :class="selectedDevice.stopState ? 'stopped' : 'running'">
+              {{ selectedDevice.stopState ? '停机' : '非停机' }}
+            </view>
+          </view>
+          <view class="info-item">
+            <text class="info-label">开启提醒：</text>
+            <view class="status-tag"
+                  :class="selectedDevice.alarm ? 'on' : 'off'">
+              {{ selectedDevice.alarm ? '开' : '关' }}
+            </view>
+          </view>
+        </view>
+      </view>
+
+      <!-- 温度计信息 -->
+      <view class="detail-section">
+        <view class="section-header">
+          <uni-icons type="mic-filled" size="16" color="#1296db"></uni-icons>
+          <text class="section-title">温度计信息</text>
+        </view>
+        
+        <view class="info-grid">
+          <view class="info-item">
+            <text class="info-label">一网回水温度计：</text>
+            <text class="info-value">{{ selectedDevice.temp1In || '31000822' }}</text>
+          </view>
+          <view class="info-item">
+            <text class="info-label">二网供水温度计：</text>
+            <text class="info-value">{{ selectedDevice.temp2Out || '31000819' }}</text>
+          </view>
+        </view>
+      </view>
+    </scroll-view>
+  </view>
+  
+</view>
     </view>
 
     <scroll-view scroll-y class="detail-scroll">
@@ -460,6 +596,184 @@
   </view>
   
 </view>
+
+<!-- 编辑设备信息弹窗 -->
+<view v-if="showEditDialog" class="dialog-mask" @tap="closeEditDialog">
+  <view class="edit-dialog" @tap.stop>
+    <view class="dialog-header">
+      <text class="dialog-title">编辑设备信息</text>
+      <uni-icons 
+        type="closeempty" 
+        size="24" 
+        color="#999" 
+        @tap="closeEditDialog"
+      ></uni-icons>
+    </view>
+
+    <scroll-view scroll-y class="edit-form">
+      <!-- 设备编号 - 不可修改 -->
+      <view class="form-group">
+        <text class="form-label required">设备编号</text>
+        <input 
+          class="form-input disabled" 
+          type="text" 
+          v-model="editForm.deviceNumber" 
+          disabled
+        />
+      </view>
+
+      <!-- 设备名称 - 可修改 -->
+      <view class="form-group">
+        <text class="form-label required">设备名称</text>
+        <input 
+          class="form-input" 
+          type="text" 
+          v-model="editForm.deviceName" 
+          placeholder="请输入设备名称" 
+        />
+      </view>
+
+      <!-- 设备类型 - 不可修改 -->
+      <view class="form-group">
+        <text class="form-label required">设备类型</text>
+        <input 
+          class="form-input disabled" 
+          type="text" 
+          v-model="editForm.type" 
+          disabled
+        />
+      </view>
+
+      <!-- 所属公司 - 有下拉选择 -->
+      <view class="form-group">
+        <text class="form-label required">所属公司</text>
+        <picker 
+          class="form-picker" 
+          :value="companyIndex" 
+          :range="companyList" 
+          range-key="name" 
+          @change="handleCompanyChange"
+        >
+          <view class="picker-view">
+            {{ editForm.companyName || '请选择公司' }}
+            <uni-icons type="arrowdown" size="16" color="#999"></uni-icons>
+          </view>
+        </picker>
+      </view>
+
+      <!-- 所属站点 - 有下拉选择 -->
+      <view class="form-group">
+        <text class="form-label required">所属站点</text>
+        <picker 
+          class="form-picker" 
+          :value="stationIndex" 
+          :range="stationList" 
+          range-key="name" 
+          @change="handleStationChange"
+          :disabled="!editForm.companyName"
+        >
+          <view class="picker-view">
+            {{ editForm.deviceStation || '请选择站点' }}
+            <uni-icons type="arrowdown" size="16" color="#999"></uni-icons>
+          </view>
+        </picker>
+      </view>
+
+     <view class="form-group">
+       <text class="form-label required">安装日期</text>
+       <uni-datetime-picker
+         type="date"
+         v-model="editForm.installDate"
+         @change="handleDateChange"
+         return-type="string"
+         format="yyyy-MM-dd"
+       />
+     </view>
+      <!-- 数据上传频率 -->
+      <view class="form-group">
+        <text class="form-label required">数据上传频率</text>
+        <view class="number-input-group">
+          <button class="number-btn minus-btn" @tap="decreaseUploadTime">-</button>
+          <input 
+            class="form-input number-input" 
+            type="number" 
+            v-model.number="editForm.uploadTime" 
+            min="1" 
+            max="60"
+            @input="validateUploadTime"
+          />
+          <button class="number-btn plus-btn" @tap="increaseUploadTime">+</button>
+          <text class="unit-text">分钟/次</text>
+        </view>
+      </view>
+
+      <!-- 开关状态设置 -->
+      <view class="form-group">
+        <text class="form-label required">联网状态</text>
+        <switch 
+          :checked="editForm.onlineState" 
+          @change="(e) => editForm.onlineState = e.detail.value"
+          color="#1296db"
+        />
+      </view>
+
+      <view class="form-group">
+        <text class="form-label required">开关状态</text>
+        <switch 
+          :checked="editForm.switchState" 
+          @change="(e) => editForm.switchState = e.detail.value"
+          color="#1296db"
+        />
+      </view>
+
+      <view class="form-group">
+        <text class="form-label required">停机状态</text>
+        <switch 
+          :checked="editForm.stopState" 
+          @change="(e) => editForm.stopState = e.detail.value"
+          color="#1296db"
+        />
+      </view>
+
+      <view class="form-group">
+        <text class="form-label required">开启提醒</text>
+        <switch 
+          :checked="editForm.alarm" 
+          @change="(e) => editForm.alarm = e.detail.value"
+          color="#1296db"
+        />
+      </view>
+
+      <!-- 温度计信息 -->
+      <view class="form-group">
+        <text class="form-label required">一网回水温度计</text>
+        <input 
+          class="form-input" 
+          type="text" 
+          v-model="editForm.temp1In" 
+          placeholder="请输入一网回水温度计编号" 
+        />
+      </view>
+
+      <view class="form-group">
+        <text class="form-label required">二网供水温度计</text>
+        <input 
+          class="form-input" 
+          type="text" 
+          v-model="editForm.temp2Out" 
+          placeholder="请输入二网供水温度计编号" 
+        />
+      </view>
+    </scroll-view>
+    
+    <!-- 底部按钮 -->
+    <view class="dialog-footer">
+      <button class="footer-btn cancel-btn" @tap="closeEditDialog">取消</button>
+      <button class="footer-btn confirm-btn" @tap="saveDeviceInfo">保存</button>
+    </view>
+  </view>
+</view>
+
     <!-- 加载提示 -->
     <view v-if="pagination.loading" class="loading-mask">
       <uni-load-more status="loading" />
@@ -467,13 +781,40 @@
   </view>
 </template>
 
+<<<<<<< HEAD
 <script >
 import { getStationList,getStationDevices,getDetailDevices,getDeviceInstallInfo, } from '@/utils/api';
+=======
+<script>
+import { getStationList,getStationDevices,getDetailDevices,getDeviceInstallInfo, chargeDevice, charge, updateDeviceInfo} from '@/utils/api';
+>>>>>>> 8026848d91a3cf3faec480cd0e948f1b28a4044a
 
 
 export default {
   data() {
     return {
+		
+		 showCustomToast: false,
+		 showEditDialog: false,
+		    editForm: {
+		      deviceNumber: '',
+		      deviceName: '',
+		      type: '预付费', // 默认值
+		      companyName: '',
+		      deviceStation: '',
+		      installDate: '',
+		      uploadTime: 5, // 默认值
+		      onlineState: false,
+		      switchState: false,
+		      stopState: false,
+		      alarm: false,
+		      temp1In: '',
+		      temp2Out: ''
+		    },
+		    companyList: [],
+		    companyIndex: 0,
+		    stationList: [],
+		    stationIndex: 0,
 
 		 showDeleteConfirm: false,
 		    deviceToDelete: null,
@@ -536,6 +877,27 @@ export default {
 	    ]
 	  }
 	},
+		showEditDialog: false,
+		    companyList: [], // 公司列表
+		    companyIndex: 0,
+		    stationList: [], // 站点列表
+		    stationIndex: 0,
+		    editForm: {
+		      deviceNumber: '',
+		      deviceName: '',
+		      type: '',
+		      companyName: '',
+		      deviceStation: '',
+		      installDate: '',
+		      uploadTime: 5,
+		      onlineState: true,
+		      switchState: true,
+		      stopState: false,
+		      alarm: false,
+		      temp1In: '',
+		      temp2Out: ''
+		    },
+
 	  showRechargeDialog:false,	
 	  showInstallInfoDialog:false,
       searchKey: '',
@@ -551,6 +913,9 @@ export default {
         total: 984,
         loading: false
       },
+	  originalAllData: [], // 保存原始完整数据
+	      filteredData: [], // 经过搜索过滤后的数据
+	      isSearchActive: false, // 标记是否处于搜索状态
       allData: [],
       backendPage: 1,
       hasMore: true,//、
@@ -558,54 +923,7 @@ export default {
 	        tempChartInit: {
 	          lazyLoad: true // 延迟加载
 	        }
-	  // 图表配置
-	        // chartOption: {
-	        //   tooltip: {
-	        //     trigger: 'axis',
-	        //     formatter: '{b}<br/>{a}: {c}°C'
-	        //   },
-	        //   grid: {
-	        //     left: '3%',
-	        //     right: '4%',
-	        //     bottom: '3%',
-	        //     containLabel: true
-	        //   },
-	        //   xAxis: {
-	        //     type: 'category',
-	        //     data: [],
-	        //     axisLabel: {
-	        //       formatter: value => value.split(' ')[0], // 只显示日期
-	        //       interval: 0,
-	        //       rotate: 30
-	        //     }
-	        //   },
-	        //   yAxis: {
-	        //     type: 'value',
-	        //     axisLabel: {
-	        //       formatter: '{value} °C'
-	        //     }
-	        //   },
-	        //   series: [{
-	        //     name: '温差',
-	        //     type: 'line',
-	        //     data: [],
-	        //     smooth: true,
-	        //     symbol: 'circle',
-	        //     symbolSize: 6,
-	        //     itemStyle: {
-	        //       color: '#1296db' // 主色
-	        //     },
-	        //     lineStyle: {
-	        //       width: 3
-	        //     },
-	        //     areaStyle: {
-	        //       color: new echarts.graphic.LinearGradient(0, 0, 0, 1, [
-	        //         { offset: 0, color: 'rgba(18,150,219,0.6)' },
-	        //         { offset: 1, color: 'rgba(18,150,219,0.1)' }
-	        //       ])
-	        //     }
-	        //   }]
-	        // }
+	  
     };
   },
   computed: {
@@ -622,9 +940,263 @@ export default {
          });
        
     },
-  methods: {
 
+  methods: {
+	  
+	   // 显示编辑设备信息弹窗
+	    showEditDeviceDialog() {
+	      // 初始化表单数据
+	      this.editForm = {
+	        deviceNumber: this.selectedDevice.deviceNumber || '',
+	        deviceName: this.selectedDevice.deviceName || '',
+	        type: this.selectedDevice.type || '预付费',
+	        companyName: this.selectedDevice.companyName || '',
+	        deviceStation: this.selectedDevice.deviceStation || '',
+	        installDate: this.selectedDevice.installDate || this.formatDate(new Date()),
+	        uploadTime: this.selectedDevice.uploadTime || 5,
+	        onlineState: this.selectedDevice.onlineState || false,
+	        switchState: this.selectedDevice.switchState || false,
+	        stopState: this.selectedDevice.stopState || false,
+	        alarm: this.selectedDevice.alarm || false,
+	        temp1In: this.selectedDevice.temp1In || '',
+	        temp2Out: this.selectedDevice.temp2Out || ''
+	      };
+	      
+	      // 加载公司和站点数据
+	      this.loadCompanyList();
+	      this.loadDeviceData();
+	      
+	      this.showEditDialog = true;
+	    },
+	    
+	    // 关闭编辑弹窗
+	    closeEditDialog() {
+	      this.showEditDialog = false;
+	    },
+	    
+	    // 格式化日期
+	    formatDate(date) {
+	      const year = date.getFullYear();
+	      const month = String(date.getMonth() + 1).padStart(2, '0');
+	      const day = String(date.getDate()).padStart(2, '0');
+	      return `${year}-${month}-${day}`;
+	    },
+	    
+	    // 加载公司列表
+	    async loadCompanyList() {
+	      try {
+	        // 假设有一个获取公司列表的API
+	        const res = await getCompanyList();
+	        if (res?.code === 200 && res.data) {
+	          this.companyList = res.data;
+	          // 找到当前选中的公司索引
+	          const index = this.companyList.findIndex(item => 
+	            item.name === this.editForm.companyName
+	          );
+	          this.companyIndex = index > -1 ? index : 0;
+	        }
+	      } catch (error) {
+	        console.error('加载公司列表失败:', error);
+	      }
+	    },
+	    
+	    
+	    
+	    // 处理公司选择变化
+	    handleCompanyChange(e) {
+	      this.companyIndex = e.detail.value;
+	      this.editForm.companyName = this.companyList[this.companyIndex].name;
+	    },
+	    
+	    // 处理站点选择变化
+	    handleStationChange(e) {
+	      this.stationIndex = e.detail.value;
+	      this.editForm.deviceStation = this.stationList[this.stationIndex].name;
+	    },
+	    
+	    // 处理日期选择变化
+	    handleDateChange(e) {
+	      this.editForm.installDate = e.detail.value;
+	    },
+	    
+	    // 减少上传时间间隔
+	    decreaseUploadTime() {
+	      if (this.editForm.uploadTime > 1) {
+	        this.editForm.uploadTime--;
+	      }
+	    },
+	    
+	    // 增加上传时间间隔
+	    increaseUploadTime() {
+	      if (this.editForm.uploadTime < 60) {
+	        this.editForm.uploadTime++;
+	      }
+	    },
+	    
+	    // 验证上传时间间隔
+	    validateUploadTime() {
+	      let value = parseInt(this.editForm.uploadTime);
+	      if (isNaN(value) || value < 1) {
+	        this.editForm.uploadTime = 1;
+	      } else if (value > 60) {
+	        this.editForm.uploadTime = 60;
+	      } else {
+	        this.editForm.uploadTime = value;
+	      }
+	    },
+	    
+	    // 保存设备信息
+	 // list.vue 中的 saveDeviceInfo 方法
+	 async saveDeviceInfo() {
+	   try {
+	     // 表单验证
+	     if (!this.editForm.deviceNumber) {
+	       uni.showToast({
+	         title: '请输入设备编号',
+	         icon: 'none'
+	       });
+	       return;
+	     }
+	     
+	     if (!this.editForm.deviceName) {
+	       uni.showToast({
+	         title: '请输入设备名称',
+	         icon: 'none'
+	       });
+	       return;
+	     }
+	     
+	     // 更多验证可以根据需要添加...
+	     
+	     uni.showLoading({
+	       title: '保存中...'
+	     });
+	     
+	     // 调用API函数更新设备信息
+	     const res = await updateDeviceInfo(this.editForm);
+	     
+	     if (res.code === 200) {
+			 console.log("hello")
+			 
+			 // 在保存成功时
+			 this.showCustomToast = true;
+			 setTimeout(() => {
+			   this.showCustomToast = false;
+			 }, 3000);
+	    // 确保Toast显示在最上层
+	    uni.showToast({
+	      title: '保存成功',
+	      icon: 'success',
+	      duration: 3000,
+	      position: 'top', // 显示在顶部
+	      mask: true // 添加遮罩层，防止用户点击
+	    });
+	         
+	         
+	         
+	       
+	       // 更新当前显示的设备信息
+	       this.selectedDevice = {
+	         ...this.selectedDevice,
+	         ...this.editForm
+	       };
+	       
+	       // 关闭编辑弹窗
+	       this.closeEditDialog();
+	       
+	       // 如果需要，刷新设备列表
+	
+	     } else {
+	       uni.showToast({
+	         title: res.msg || '保存失败',
+	         icon: 'none'
+	       });
+	     }
+	   } catch (error) {
+	     console.error('保存设备信息失败:', error);
+	     uni.showToast({
+	       title: '网络异常，请稍后重试',
+	       icon: 'none'
+	     });
+	   } finally {
+	     uni.hideLoading();
+	   }
+	 },
 		
+		
+		  handleDateChange(value) {
+		    this.editForm.installDate = value;
+		    console.log('选择的日期:', value);
+		  },
+		
+		
+		
+		initTempChart() {
+		      // 确保有历史数据
+		      if (!this.selectedDevice?.history?.length) return;
+		      
+		      // 获取图表组件实例
+		      this.$nextTick(() => {
+		        // 获取图表组件实例
+		        if (this.$refs.tempChart) {
+		          const chart = this.$refs.tempChart.init(echarts);
+		          
+		          // 准备图表数据
+		          const xData = this.selectedDevice.history.map(item => item.time);
+		          const yData = this.selectedDevice.history.map(item => item.value);
+		          
+		          // 设置图表选项
+		          const option = {
+		            tooltip: {
+		              trigger: 'axis',
+		              formatter: '{b}<br/>温差: {c}°C'
+		            },
+		            grid: {
+		              left: '3%',
+		              right: '4%',
+		              bottom: '3%',
+		              containLabel: true
+		            },
+		            xAxis: {
+		              type: 'category',
+		              data: xData,
+		              axisLabel: {
+		                interval: 0,
+		                rotate: 45,
+		                fontSize: 10
+		              }
+		            },
+		            yAxis: {
+		              type: 'value',
+		              name: '温差(°C)',
+		              axisLabel: {
+		                formatter: '{value}°C'
+		              }
+		            },
+		            series: [{
+		              name: '温差',
+		              type: 'line',
+		              data: yData,
+		              smooth: true,
+		              symbolSize: 6,
+		              itemStyle: {
+		                color: '#1296db'
+		              },
+		              markLine: {
+		                data: [
+		                  { type: 'average', name: '平均值' }
+		                ]
+		              }
+		            }]
+		          };
+		          
+		          // 设置图表
+		          chart.setOption(option);
+		        }
+		      });
+		    },
+	  
+
 	  // 确认删除设备
 	    // 显示删除确认弹窗
 	      confirmDeleteDevice(device) {
@@ -686,62 +1258,122 @@ export default {
 	      },
 	      
 		
+	   // 在methods中添加或修改handleRecharge方法
+	 // 修改handleRecharge方法，移除e.preventDefault()
+	 async handleRecharge(e) {
+	   try {
+	     // 移除 e.preventDefault() 这一行
+	     // uniapp表单事件不支持这个方法
+	     
+	     // 表单验证
+	     if (!this.rechargeForm.days || this.rechargeForm.days < 1) {
+	       uni.showToast({
+	         title: '请输入有效的充值天数',
+	         icon: 'none'
+	       });
+	       return;
+	     }
+	     
+	     // 显示加载提示
+	     uni.showLoading({
+	       title: '充值中...'
+	     });
+	     
+	     // 准备请求参数
+	     const params = {
+	       deviceNumber: this.selectedDevice.code, // 设备编号
+	       days: this.rechargeForm.days // 充值天数
+	     };
+	     
+	     // 调用充值API
+	     const res = await chargeDevice(params);
+	     
+	     // 处理响应
+	     if (res?.code === 200) {
+	       // 充值成功
+	       uni.showToast({
+	         title: '充值成功',
+	         icon: 'success'
+	       });
+	       
+	       // 关闭充值弹窗
+	       this.closeRechargeDialog();
+	       
+	       // 如果需要，可以刷新设备数据
+	       if (this.selectedDevice) {
+	         // 重新获取设备详情，更新剩余时间等信息
+	         this.showDeviceDetail(this.selectedDevice);
+	       }
+	     } else {
+	       // 充值失败
+	       uni.showToast({
+	         title: res?.msg || '充值失败',
+	         icon: 'none'
+	       });
+	     }
+	   } catch (error) {
+	     console.error('设备充值失败:', error);
+	     uni.showToast({
+	       title: '设备充值异常，请稍后重试',
+	       icon: 'none'
+	     });
+	   } finally {
+	     // 隐藏加载提示
+	     uni.hideLoading();
+	   }
+	 },
+	   
+	   // 增加表单验证方法
+	   validateDays() {
+	     let days = parseInt(this.rechargeForm.days);
+	     if (isNaN(days) || days < 1) {
+	       this.rechargeForm.days = 1;
+	     } else {
+	       this.rechargeForm.days = days;
+	     }
+	   },
+	   
+	   // 增加递增/递减天数的方法
 	   increaseDays() {
-	      this.rechargeForm.days = parseInt(this.rechargeForm.days || 1) + 1;
-	      this.validateDays();
-	    },
-	    
-	    // 减少天数
-	    decreaseDays() {
-	      if (this.rechargeForm.days > 1) {
-	        this.rechargeForm.days = parseInt(this.rechargeForm.days) - 1;
-	      }
-	      this.validateDays();
-	    },
-	    
-	    // 验证天数输入
-	    validateDays() {
-	      // 确保是数字且大于0
-	      let days = parseInt(this.rechargeForm.days);
-	      if (isNaN(days) || days < 1) {
-	        this.rechargeForm.days = 1;
-	      } else {
-	        this.rechargeForm.days = days;
-	      }
-	    },
-	    
+	     this.rechargeForm.days = parseInt(this.rechargeForm.days || 1) + 1;
+	   },
+	   
+	   decreaseDays() {
+	     if (this.rechargeForm.days > 1) {
+	       this.rechargeForm.days = parseInt(this.rechargeForm.days) - 1;
+	     }
+	   },
 		
 	
 	    
 	    
     async loadDeviceData() {
-      if (this.pagination.loading || !this.hasMore) return;
-      
-      this.pagination.loading = true;
-      try {
-        const res = await getStationList(
-          this.backendPage,
-          20,
-          this.searchKey
-        );
-
-        if (res?.code === 200 && res.data) {
-          const data = res.data;
-          this.allData = [...this.allData, ...data.records];
-          this.pagination.total = data.total;
-          this.hasMore = data.records.length >= 20;
-          this.backendPage++;
-          this.updateCurrentPageData();
+        if (this.pagination.loading || !this.hasMore) return;
+        
+        this.pagination.loading = true;
+        try {
+          const res = await getStationList();
+    
+          if (res?.code === 200 && res.data) {
+            console.log(res);
+            const data = res.data;
+            this.allData = [...this.allData, ...data.records];
+            this.originalAllData = [...this.allData]; // 保存一份原始数据
+            this.pagination.total = data.total;
+            this.hasMore = data.records.length >= 20;
+            this.backendPage++;
+            this.updateCurrentPageData();
+          }
+        } catch (error) {
+          uni.showToast({
+            title: `数据加载失败: ${error.message || '未知错误'}`,
+            icon: 'none'
+          });
+        } finally {
+          this.pagination.loading = false;
         }
-      } catch (error) {
-        uni.showToast({
-          title: "数据加载失败: ${error.message || '未知错误'}",
-          icon: 'none'
-        });
-      } finally {
-        this.pagination.loading = false;
-      }
-    },
+      },
+
 
     updateCurrentPageData() {
       const start = (this.pagination.current - 1) * this.pagination.size;
@@ -808,7 +1440,7 @@ async   generateDeviceList(station) {
 	
     // 成功响应处理
     if (res?.code === 200 && res.data) {
-		console.log(666)
+		console.log(res)
       return res.data.map(device => ({
         name: device.deviceName || '未命名设备',  // 映射设备名称
         code: device.deviceNumber || 'N/A',      // 映射设备编号
@@ -828,6 +1460,51 @@ async   generateDeviceList(station) {
     }];
   }
   
+},
+async submitCharge() {
+  try {
+    // 显示确认对话框
+    const [confirmError, confirmResult] = await uni.showModal({
+      title: '充值确认',
+      content: `确定要为设备【${this.selectedDevice.name}】充值 ${this.rechargeForm.days} 天吗？`,
+      confirmText: '确认充值',
+      cancelText: '取消',
+      confirmColor: '#ff0000',
+      showCancel: true
+    }).then(res => [null, res]).catch(err => [err]);
+
+    // 处理确认结果
+    if (confirmResult?.cancel) {
+      return;
+    }
+
+    if (confirmError) {
+      throw new Error('确认对话框加载失败');
+    }
+
+    // 执行充值请求
+    const res = await charge({
+      'deviceAmount': this.rechargeForm.days,
+      'deviceName': this.selectedDevice.name,
+      'deviceNumber': this.rechargeForm.deviceCode
+    });
+
+    console.log('充值响应:', res);
+    
+    if (res?.code === 200) {
+      uni.showToast({ title: '充值成功' });
+      // 这里可以添加成功后的其他逻辑（如刷新页面、重置表单等）
+    } else {
+      throw new Error(res?.message || '未知错误');
+    }
+
+  } catch (error) {
+    console.error('充值流程错误:', error);
+    uni.showToast({
+      title: error?.message || '充值失败',
+      icon: 'none'
+    });
+  }
 },
 async showInstallInfo(device) {
   this.selectedDevice = device;
@@ -873,12 +1550,17 @@ async showInstallInfo(device) {
   }
 },
 
-async  showPayDetail(device) {
-    this.selectedDevice = device;
-    this.rechargeForm.deviceCode = device.code;
-    this.rechargeForm.days = 1; // 默认一天
-    this.showRechargeDialog = true;
-  },
+// 修改showPayDetail方法
+showPayDetail(device) {
+  this.selectedDevice = device;
+  // 初始化充值表单
+  this.rechargeForm = {
+    deviceCode: device.code,  // 设备编号
+    days: 1                  // 默认充值1天
+  };
+  this.showRechargeDialog=true;
+},
+
  async showDeviceDetail(device) {
       this.selectedDevice = device;
       this.showDeviceDetailDialog = true;
@@ -956,34 +1638,105 @@ closeRechargeDialog() {
       this.selectedStation = null;
     },
 
-    handleSearch() {
-      this.pagination.current = 1;
-      this.backendPage = 1;
-      this.allData = [];
-      this.hasMore = true;
-      this.loadDeviceData();
-    },
+      handleSearch() {
+        // 如果搜索关键词为空，显示所有数据
+        if (!this.searchKey.trim()) {
+          this.clearSearch();
+          return;
+        }
+    
+        this.isSearchActive = true;
+        
+        // 过滤数据
+        this.filteredData = this.originalAllData.filter(item => {
+          // 可以根据需要搜索多个字段
+          const stationNameMatch = item.stationName?.toLowerCase().includes(this.searchKey.toLowerCase());
+          const companyMatch = item.company?.toLowerCase().includes(this.searchKey.toLowerCase());
+          const addressMatch = item.address?.toLowerCase().includes(this.searchKey.toLowerCase());
+          const personMatch = item.person?.toLowerCase().includes(this.searchKey.toLowerCase());
+          
+          // 任一字段匹配即可
+          return stationNameMatch || companyMatch || addressMatch || personMatch;
+        });
+        
+        // 更新分页信息
+        this.pagination.total = this.filteredData.length;
+        this.pagination.current = 1; // 重置到第一页
+        
+        // 更新显示的数据
+        this.updateCurrentPageData();
+        
+        // 显示搜索结果数量
+        uni.showToast({
+          title: `找到 ${this.filteredData.length} 个匹配结果`,
+          icon: 'none'
+        });
+      },
 
-    changePage(step) {
-      const newPage = this.pagination.current + step;
-      if (newPage > 0 && newPage <= this.totalPages) {
-        this.pagination.current = newPage;
+
+	// 清除搜索
+	  clearSearch() {
+	    this.searchKey = '';
+	    this.isSearchActive = false;
+	    this.filteredData = [];
+	    
+	    // 恢复原始数据
+	    this.allData = [...this.originalAllData];
+	    this.pagination.total = this.originalAllData.length;
+	    this.pagination.current = 1; // 重置到第一页
+	    
+	    // 更新显示的数据
+	    this.updateCurrentPageData();
+	  },
+	  
+    updateCurrentPageData() {
+        const start = (this.pagination.current - 1) * this.pagination.size;
+        const end = start + this.pagination.size;
+        
+        // 根据是否在搜索状态选择数据源
+        const sourceData = this.isSearchActive ? this.filteredData : this.allData;
+        
+        // 获取当前页的数据
+        const currentPageData = sourceData.slice(start, end);
+        
+        // 处理并更新显示的数据
+        this.deviceList = this.processStationData(currentPageData);
+      },
+      
+      // 页面切换
+      changePage(step) {
+        const newPage = this.pagination.current + step;
+        // 计算总页数
+        const totalPages = Math.ceil(
+          (this.isSearchActive ? this.filteredData.length : this.allData.length) / 
+          this.pagination.size
+        );
+        
+        if (newPage > 0 && newPage <= totalPages) {
+          this.pagination.current = newPage;
+          this.updateCurrentPageData();
+        }
+      },
+      
+      // 跳转到指定页
+      handleJump() {
+        if (!this.jumpPage || isNaN(this.jumpPage)) return;
+        
+        // 计算总页数
+        const totalPages = Math.ceil(
+          (this.isSearchActive ? this.filteredData.length : this.allData.length) / 
+          this.pagination.size
+        );
+        
+        const targetPage = Math.max(1, 
+          Math.min(parseInt(this.jumpPage), totalPages)
+        );
+        
+        this.pagination.current = targetPage;
+        this.jumpPage = null;
         this.updateCurrentPageData();
       }
     },
-
-    handleJump() {
-      if (!this.jumpPage || isNaN(this.jumpPage)) return;
-      
-      const targetPage = Math.max(1, 
-        Math.min(parseInt(this.jumpPage), this.totalPages)
-      );
-      
-      this.pagination.current = targetPage;
-      this.jumpPage = null;
-      this.updateCurrentPageData();
-    }
-  },
   onLoad() {
     this.loadDeviceData();
   }
@@ -1086,13 +1839,13 @@ closeRechargeDialog() {
   flex-wrap: wrap;
   justify-content: center;
   align-items: center;
-  padding: 20rpx 16rpx;
+  padding: 2.625rem 16rpx;
   background: white;
   /* margin: 20rpx 10rpx 120rpx 10rpx; *//* 增加底部边距，避开导航栏 */
   border-radius: 16rpx;
   box-shadow: 0 2rpx 10rpx rgba(0, 0, 0, 0.05);
   /* position: relative; */ /* 改为相对定位，不再固定在底部 */
-  z-index: 100;
+/*  z-index: 100; */
 }
 
 /* 页码按钮样式 */
@@ -1160,7 +1913,7 @@ closeRechargeDialog() {
   display: flex;
   justify-content: center;
   align-items: center;
-  z-index: 999;
+  /* z-index: 999; */
 }
 
 
@@ -1175,16 +1928,16 @@ closeRechargeDialog() {
   display: flex;
   justify-content: center;
   align-items: center;
-  z-index: 1000;
+  z-index: 600;
 }
 
 .dialog-content {
   background: white;
-  width: 90%;
+  width: 100%;
   max-width: 600rpx;
   border-radius: 16rpx;
   padding: 30rpx;
-  max-height: 80vh;
+  max-height: 100vh;
 }
 
 .dialog-header {
@@ -1202,10 +1955,12 @@ closeRechargeDialog() {
 
 .detail-scroll {
   max-height: 60vh;
+  
 }
 
 .detail-section {
   margin-bottom: 30rpx;
+  margin-right: 20px;
   border-bottom: 1rpx solid #eee;
   padding-bottom: 20rpx;
 }
@@ -1261,6 +2016,7 @@ closeRechargeDialog() {
 
 .action-btn {
   color: #007AFF;
+  text-align: center;
   font-size: 24rpx;
   padding: 5rpx 10rpx;
   border: 1rpx solid #007AFF;
@@ -1270,7 +2026,7 @@ closeRechargeDialog() {
 /* 设备详情特有样式 */
 .device-detail-content {
   width: 85%;
-  max-width: 700rpx;
+  max-width: 600rpx;
 }
 
 .temperature-grid {
@@ -1313,7 +2069,7 @@ closeRechargeDialog() {
 /* 充值弹窗样式 */
 .recharge-content {
   width: 85%;
-  max-width: 700rpx;
+  max-width: 600rpx;
   border-radius: 16rpx;
   overflow: hidden;
   background-color: #fff;
@@ -1346,8 +2102,9 @@ closeRechargeDialog() {
   margin-bottom: 15rpx;
 }
 
-.form-input {
-  width: 100%;
+/* 调整输入框宽度 */
+.form-input, .form-picker, .picker-view {
+   /* 从100%减小到70%，您可以根据需要调整这个值 */
   height: 80rpx;
   line-height: 80rpx;
   padding: 0 20rpx;
@@ -1358,11 +2115,40 @@ closeRechargeDialog() {
   background-color: #f8f8f8;
 }
 
-.form-input[disabled] {
-  color: #999;
-  background-color: #f5f5f5;
-  cursor: not-allowed;
+/* 修改表单组布局，使输入框对齐 */
+.form-group {
+  display: flex;
+  align-items: center;
+  margin-bottom: 20rpx;
 }
+
+/* 调整标签宽度，保持一致性 */
+.form-label {
+  width: 30%; /* 设置固定宽度 */
+  font-size: 28rpx;
+  color: #333;
+}
+
+/* 确保数字输入组的样式也保持一致 */
+
+
+.number-btn {
+  width: 60rpx;
+  height: 60rpx;
+  line-height: 56rpx;
+  text-align: center;
+  border: 1rpx solid #ddd;
+  border-radius: 10rpx;
+  background-color: #f8f8f8;
+}
+
+.unit-text {
+  margin-left: 10rpx;
+  font-size: 26rpx;
+  color: #666;
+}
+
+
 
 .form-buttons {
   display: flex;
@@ -1425,10 +2211,10 @@ closeRechargeDialog() {
 .dialog-content {
   background: #fff;
   border-radius: 8px;
-  padding: 20px;
+  padding: 10px;
   width: 600px;
   max-height: 80vh;
-  overflow-y: auto;
+  /* overflow-y: auto; */
   box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
 }
 
@@ -1576,7 +2362,7 @@ closeRechargeDialog() {
 /* 修改设备信息区块的样式为浅灰色背景 */
 .detail-section {
   background-color: #f9f9f9;
-  padding: 15rpx 20rpx;
+  padding: 0.46875rem 1.625rem;
   border-radius: 8rpx;
 }
 
@@ -1603,7 +2389,7 @@ closeRechargeDialog() {
   display: flex;
   align-items: center;
   margin: 10rpx 0;
-  width: 100%;
+  width: 60%;
   border: 1px solid #ddd;
   border-radius: 8rpx;
   overflow: hidden;
@@ -1663,7 +2449,7 @@ closeRechargeDialog() {
   display: flex;
   justify-content: center;
   align-items: center;
-  z-index: 9999; /* 确保是最高层级 */
+  /* z-index: 9999; /* 确保是最高层级 */
 }
 
 .confirm-dialog {
@@ -1724,5 +2510,169 @@ closeRechargeDialog() {
   box-shadow: 0 4rpx 24rpx rgba(0,0,0,0.05); /* 添加微妙阴影 */
   overflow: hidden;      /* 防止内容溢出 */
   padding: 8rpx;         /* 增加内边距 */
+}
+
+/* 编辑设备信息弹窗样式改进 */
+.edit-dialog {
+  position: relative;
+  width: 90%;
+  max-width: 700rpx;
+  max-height: 80vh;
+  background: #fff;
+  border-radius: 12rpx;
+  display: flex;
+  flex-direction: column;
+  box-shadow: 0 10rpx 30rpx rgba(0, 0, 0, 0.1);
+}
+
+.edit-form {
+  flex: 1;
+  padding: 20rpx 30rpx;
+  overflow-y: auto;
+}
+
+.form-group {
+  margin-bottom: 20rpx;
+  display: flex;
+  align-items: center;
+}
+
+/* 修改标签区域的宽度和对齐方式 */
+.form-label {
+  width: 160rpx; /* 减小标签宽度 */
+  font-size: 28rpx;
+  color: #333;
+  text-align: left; /* 改为左对齐 */
+  margin-right: 20rpx;
+  flex-shrink: 0; /* 防止缩小 */
+}
+
+.required::before {
+  content: '*';
+  color: #f56c6c;
+  margin-right: 4rpx;
+}
+
+/* 调整输入框样式 */
+
+
+
+
+.picker-view {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  height: 70rpx;
+  padding: 0 20rpx;
+  border: 1rpx solid #ebeef5;
+  border-radius: 8rpx;
+  background-color: #f8f9fa;
+  font-size: 28rpx;
+}
+
+
+
+.number-btn {
+  width: 60rpx; /* 减小按钮宽度 */
+  height: 70rpx;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background: #f0f0f0;
+  border: 1rpx solid #ebeef5;
+  font-size: 32rpx;
+  padding: 0;
+  margin: 0;
+}
+
+.minus-btn {
+  border-radius: 8rpx 0 0 8rpx;
+}
+
+.plus-btn {
+  border-radius: 0 8rpx 8rpx 0;
+}
+
+.number-input {
+  flex: 0 0 80rpx; /* 减小输入框宽度 */
+  text-align: center;
+  border-radius: 0;
+  border-left: none;
+  border-right: none;
+}
+
+.unit-text {
+  margin-left: 15rpx;
+  font-size: 26rpx;
+  color: #666;
+}
+
+/* 简化底部按钮组的样式 */
+.dialog-footer {
+  display: flex;
+  padding: 20rpx;
+  border-top: 1rpx solid #ebeef5;
+}
+
+.footer-btn {
+  flex: 1;
+  height: 80rpx;
+  line-height: 80rpx;
+  text-align: center;
+  border-radius: 8rpx;
+  font-size: 28rpx;
+  margin: 0 10rpx;
+}
+
+.cancel-btn {
+  background: #f8f9fa;
+  color: #666;
+  border: 1rpx solid #dcdfe6;
+}
+
+.confirm-btn {
+  background: #1296db;
+  color: #fff;
+}
+
+.custom-toast {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+  padding-top: 10%;
+  z-index: 99999; /* 确保这个值足够大 */
+  pointer-events: none; /* 允许点击穿透 */
+}
+
+.custom-toast-content {
+  background-color: rgba(0, 0, 0, 0.7);
+  color: #fff;
+  border-radius: 8px;
+  padding: 15px 20px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 10px;
+}
+
+.picker-view-date {
+  width: 100%;
+  height: 80rpx;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 20rpx;
+  background-color: #f8f8f8;
+  border: 1px solid #ddd;
+  border-radius: 10rpx;
+}
+
+.calendar-icon {
+  font-size: 32rpx;
 }
 </style>

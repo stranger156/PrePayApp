@@ -362,12 +362,12 @@ const submitDeviceForm = async () => {
   }
 
   // 新增确认对话框
-  const [confirmError] = await uni.showModal({
+  const {confirm} = await uni.showModal({
     title: '确认添加设备',
     content: `确定要添加设备【${deviceForm.value.deviceName}】吗？`,
   }).catch(() => ({ confirm: false }))
 
-  if (!confirmError?.confirm) return
+  if (!confirm) return
 
   try {
     // 数据格式转换（保持原有逻辑）

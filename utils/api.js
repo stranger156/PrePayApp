@@ -11,8 +11,6 @@ export const login = (params) => {
 };
 
 
-
-
 // 获取公司列表接口
 export const fetchCompanyList =async()=> {
 	const token = await getTokenFromLocalStorage();
@@ -343,15 +341,4 @@ export const getStationList=async()=>{
 			size:10000
 			}
 	})
-}
-
-export const deleteDeviceById = async (deviceCode) => {
-  const token = await getTokenFromLocalStorage();
-  return request({
-    url: `/web/device/${deviceCode}`,
-    method: 'DELETE',
-    headers: {
-      "token": token
-    }
-  })
 }
