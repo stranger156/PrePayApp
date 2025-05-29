@@ -172,6 +172,15 @@
       </view>
     </view>
 	
+	
+<!-- 在页面最外层添加 -->
+<view v-if="showCustomToast" class="custom-toast">
+  <view class="custom-toast-content">
+    <uni-icons type="checkmarkempty" size="24" color="#fff"></uni-icons>
+    <text>保存成功</text>
+  </view>
+</view>
+
 	<!-- 设备详情弹窗 -->
 <view v-if="showDeviceDetailDialog" class="dialog-mask" @tap="closeDeviceDialog">
   <view class="dialog-content device-detail-content" @tap.stop>
@@ -327,7 +336,7 @@
 <view v-if="showDeleteConfirm" class="confirm-mask" @tap="cancelDelete">
   <view class="confirm-dialog" @tap.stop>
     <view class="confirm-title">确认删除</view>
-    <view class="confirm-content">确定要删除设备"{{ deviceToDelete?.name }}"吗？此操作不可恢复。</view>
+    <view class="confirm-content">确定要删除设备"{{ deviceToDelete?.name }}"吗？设备删除后相关数据将无法恢复（请将现场设备移除后删除，否则设备仍将向服务器发送数据）</view>
     <view class="confirm-buttons">
       <button class="confirm-btn cancel-btn" @tap="cancelDelete">取消</button>
       <button class="confirm-btn delete-btn" @tap="confirmDelete">确认删除</button>
@@ -367,7 +376,7 @@
       <button class="modify-btn" @tap="showEditDeviceDialog">
               <uni-icons type="compose" size="14" color="#fff"></uni-icons>
               修改设备信息
-            </button>
+      </button>
     </view>
 
     <scroll-view scroll-y class="detail-scroll">
@@ -611,18 +620,18 @@
     </view>
 
     <scroll-view scroll-y class="edit-form">
-      <!-- 设备编号 -->
+      <!-- 设备编号 - 不可修改 -->
       <view class="form-group">
         <text class="form-label required">设备编号</text>
         <input 
-          class="form-input" 
+          class="form-input disabled" 
           type="text" 
           v-model="editForm.deviceNumber" 
-          placeholder="请输入设备编号" 
+          disabled
         />
       </view>
 
-      <!-- 设备名称 -->
+      <!-- 设备名称 - 可修改 -->
       <view class="form-group">
         <text class="form-label required">设备名称</text>
         <input 
@@ -633,19 +642,18 @@
         />
       </view>
 
-      <!-- 设备类型 -->
+      <!-- 设备类型 - 不可修改 -->
       <view class="form-group">
         <text class="form-label required">设备类型</text>
         <input 
-          class="form-input" 
+          class="form-input disabled" 
           type="text" 
           v-model="editForm.type" 
-          placeholder="预付费" 
           disabled
         />
       </view>
 
-      <!-- 所属公司 -->
+      <!-- 所属公司 - 有下拉选择 -->
       <view class="form-group">
         <text class="form-label required">所属公司</text>
         <picker 
@@ -662,7 +670,7 @@
         </picker>
       </view>
 
-      <!-- 所属站点 -->
+      <!-- 所属站点 - 有下拉选择 -->
       <view class="form-group">
         <text class="form-label required">所属站点</text>
         <picker 
@@ -671,6 +679,7 @@
           :range="stationList" 
           range-key="name" 
           @change="handleStationChange"
+          :disabled="!editForm.companyName"
         >
           <view class="picker-view">
             {{ editForm.deviceStation || '请选择站点' }}
@@ -679,22 +688,16 @@
         </picker>
       </view>
 
-      <!-- 安装日期 -->
-      <view class="form-group">
-        <text class="form-label required">安装日期</text>
-        <picker 
-          class="form-picker" 
-          mode="date" 
-          :value="editForm.installDate" 
-          @change="handleDateChange"
-        >
-          <view class="picker-view">
-            {{ editForm.installDate || '请选择日期' }}
-            <uni-icons type="calendar" size="16" color="#999"></uni-icons>
-          </view>
-        </picker>
-      </view>
-
+     <view class="form-group">
+       <text class="form-label required">安装日期</text>
+       <uni-datetime-picker
+         type="date"
+         v-model="editForm.installDate"
+         @change="handleDateChange"
+         return-type="string"
+         format="yyyy-MM-dd"
+       />
+     </view>
       <!-- 数据上传频率 -->
       <view class="form-group">
         <text class="form-label required">数据上传频率</text>
@@ -780,7 +783,6 @@
   </view>
 </view>
 
-
     <!-- 加载提示 -->
     <view v-if="pagination.loading" class="loading-mask">
       <uni-load-more status="loading" />
@@ -789,7 +791,7 @@
 </template>
 
 <script>
-import { getStationList,getStationDevices,getDetailDevices,getDeviceInstallInfo, chargeDevice} from '@/utils/api';
+import { getStationList,getStationDevices,getDetailDevices,getDeviceInstallInfo, chargeDevice,updateDeviceInfo} from '@/utils/api';
 
 import * as echarts from 'echarts/lib/echarts';
 import 'echarts/lib/chart/line';
@@ -802,6 +804,27 @@ export default {
   data() {
     return {
 		
+		 showCustomToast: false,
+		 showEditDialog: false,
+		    editForm: {
+		      deviceNumber: '',
+		      deviceName: '',
+		      type: '预付费', // 默认值
+		      companyName: '',
+		      deviceStation: '',
+		      installDate: '',
+		      uploadTime: 5, // 默认值
+		      onlineState: false,
+		      switchState: false,
+		      stopState: false,
+		      alarm: false,
+		      temp1In: '',
+		      temp2Out: ''
+		    },
+		    companyList: [],
+		    companyIndex: 0,
+		    stationList: [],
+		    stationIndex: 0,
 		 showDeleteConfirm: false,
 		    deviceToDelete: null,
 		rechargeForm: {
@@ -854,54 +877,7 @@ export default {
 	        tempChartInit: {
 	          lazyLoad: true // 延迟加载
 	        }
-	  // 图表配置
-	        // chartOption: {
-	        //   tooltip: {
-	        //     trigger: 'axis',
-	        //     formatter: '{b}<br/>{a}: {c}°C'
-	        //   },
-	        //   grid: {
-	        //     left: '3%',
-	        //     right: '4%',
-	        //     bottom: '3%',
-	        //     containLabel: true
-	        //   },
-	        //   xAxis: {
-	        //     type: 'category',
-	        //     data: [],
-	        //     axisLabel: {
-	        //       formatter: value => value.split(' ')[0], // 只显示日期
-	        //       interval: 0,
-	        //       rotate: 30
-	        //     }
-	        //   },
-	        //   yAxis: {
-	        //     type: 'value',
-	        //     axisLabel: {
-	        //       formatter: '{value} °C'
-	        //     }
-	        //   },
-	        //   series: [{
-	        //     name: '温差',
-	        //     type: 'line',
-	        //     data: [],
-	        //     smooth: true,
-	        //     symbol: 'circle',
-	        //     symbolSize: 6,
-	        //     itemStyle: {
-	        //       color: '#1296db' // 主色
-	        //     },
-	        //     lineStyle: {
-	        //       width: 3
-	        //     },
-	        //     areaStyle: {
-	        //       color: new echarts.graphic.LinearGradient(0, 0, 0, 1, [
-	        //         { offset: 0, color: 'rgba(18,150,219,0.6)' },
-	        //         { offset: 1, color: 'rgba(18,150,219,0.1)' }
-	        //       ])
-	        //     }
-	        //   }]
-	        // }
+	  
     };
   },
   computed: {
@@ -1018,45 +994,91 @@ export default {
 	    },
 	    
 	    // 保存设备信息
-	    async saveDeviceInfo() {
-	      try {
-	        uni.showLoading({
-	          title: '保存中...'
-	        });
-	        
-	        // 调用保存设备信息的API
-	        const res = await updateDeviceInfo(this.editForm);
-	        
-	        if (res?.code === 200) {
-	          uni.showToast({
-	            title: '保存成功',
-	            icon: 'success'
-	          });
-	          
-	          // 更新当前显示的设备信息
-	          this.selectedDevice = {
-	            ...this.selectedDevice,
-	            ...this.editForm
-	          };
-	          
-	          // 关闭编辑弹窗
-	          this.closeEditDialog();
-	        } else {
-	          uni.showToast({
-	            title: res?.msg || '保存失败',
-	            icon: 'none'
-	          });
-	        }
-	      } catch (error) {
-	        console.error('保存设备信息失败:', error);
-	        uni.showToast({
-	          title: '保存设备信息失败',
-	          icon: 'none'
-	        });
-	      } finally {
-	        uni.hideLoading();
-	      }
-	    },
+	 // list.vue 中的 saveDeviceInfo 方法
+	 async saveDeviceInfo() {
+	   try {
+	     // 表单验证
+	     if (!this.editForm.deviceNumber) {
+	       uni.showToast({
+	         title: '请输入设备编号',
+	         icon: 'none'
+	       });
+	       return;
+	     }
+	     
+	     if (!this.editForm.deviceName) {
+	       uni.showToast({
+	         title: '请输入设备名称',
+	         icon: 'none'
+	       });
+	       return;
+	     }
+	     
+	     // 更多验证可以根据需要添加...
+	     
+	     uni.showLoading({
+	       title: '保存中...'
+	     });
+	     
+	     // 调用API函数更新设备信息
+	     const res = await updateDeviceInfo(this.editForm);
+	     
+	     if (res.code === 200) {
+			 console.log("hello")
+			 
+			 // 在保存成功时
+			 this.showCustomToast = true;
+			 setTimeout(() => {
+			   this.showCustomToast = false;
+			 }, 3000);
+	    // 确保Toast显示在最上层
+	    uni.showToast({
+	      title: '保存成功',
+	      icon: 'success',
+	      duration: 3000,
+	      position: 'top', // 显示在顶部
+	      mask: true // 添加遮罩层，防止用户点击
+	    });
+	         
+	         
+	         
+	       
+	       // 更新当前显示的设备信息
+	       this.selectedDevice = {
+	         ...this.selectedDevice,
+	         ...this.editForm
+	       };
+	       
+	       // 关闭编辑弹窗
+	       this.closeEditDialog();
+	       
+	       // 如果需要，刷新设备列表
+	
+	     } else {
+	       uni.showToast({
+	         title: res.msg || '保存失败',
+	         icon: 'none'
+	       });
+	     }
+	   } catch (error) {
+	     console.error('保存设备信息失败:', error);
+	     uni.showToast({
+	       title: '网络异常，请稍后重试',
+	       icon: 'none'
+	     });
+	   } finally {
+	     uni.hideLoading();
+	   }
+	 },
+		
+		
+		  handleDateChange(value) {
+		    this.editForm.installDate = value;
+		    console.log('选择的日期:', value);
+		  },
+		
+		
+		
 		initTempChart() {
 		      // 确保有历史数据
 		      if (!this.selectedDevice?.history?.length) return;
@@ -1709,7 +1731,7 @@ closeRechargeDialog() {
   flex-wrap: wrap;
   justify-content: center;
   align-items: center;
-  padding: 20rpx 16rpx;
+  padding: 2.625rem 16rpx;
   background: white;
   /* margin: 20rpx 10rpx 120rpx 10rpx; *//* 增加底部边距，避开导航栏 */
   border-radius: 16rpx;
@@ -2491,5 +2513,46 @@ closeRechargeDialog() {
 .confirm-btn {
   background: #1296db;
   color: #fff;
+}
+
+.custom-toast {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+  padding-top: 10%;
+  z-index: 99999; /* 确保这个值足够大 */
+  pointer-events: none; /* 允许点击穿透 */
+}
+
+.custom-toast-content {
+  background-color: rgba(0, 0, 0, 0.7);
+  color: #fff;
+  border-radius: 8px;
+  padding: 15px 20px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 10px;
+}
+
+.picker-view-date {
+  width: 100%;
+  height: 80rpx;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 20rpx;
+  background-color: #f8f8f8;
+  border: 1px solid #ddd;
+  border-radius: 10rpx;
+}
+
+.calendar-icon {
+  font-size: 32rpx;
 }
 </style>

@@ -367,3 +367,14 @@ export const chargeDevice = async (data) => {
     }
   });
 }
+export const updateDeviceInfo = async (data) => {
+  const token = await getTokenFromLocalStorage();
+  return request({
+    url: '/web/device/update',
+    method: 'PUT',
+    data,
+    headers: {
+      "token": token
+    }
+  });
+}
