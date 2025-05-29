@@ -268,7 +268,7 @@
             @tap="closeRechargeDialog"
           ></uni-icons>
         </view>
-        <form @submit="handleRecharge">
+        <form>
           <view class="form-item">
             <label class="form-label">设备编号</label>
             <input 
@@ -283,10 +283,6 @@
             <text class="detail-label">设备名称：</text>
             <text class="detail-value">{{ selectedDevice.name }}</text>
           </view>
-		  <view class="form-item">
-		    <text class="detail-label">设备编号：</text>
-		    <text class="detail-value">{{ selectedDevice.code }}</text>
-		  </view>
 		  
         <view class="form-item">
           <label class="form-label">充值天数</label>
@@ -311,11 +307,13 @@
             <button 
               class="form-button" 
               formType="reset"
+			  @tap="closeRechargeDialog"
             >取消</button>
             <button 
               class="form-button form-button-confirm" 
               formType="submit"
-            >确定充值</button>
+			  @tap="submitCharge"
+            >充值</button>
 			
 			
 			
@@ -789,7 +787,7 @@
 </template>
 
 <script>
-import { getStationList,getStationDevices,getDetailDevices,getDeviceInstallInfo, chargeDevice} from '@/utils/api';
+import { getStationList,getStationDevices,getDetailDevices,getDeviceInstallInfo, chargeDevice, charge} from '@/utils/api';
 
 import * as echarts from 'echarts/lib/echarts';
 import 'echarts/lib/chart/line';
@@ -1386,6 +1384,51 @@ async   generateDeviceList(station) {
   }
   
 },
+async submitCharge() {
+  try {
+    // 显示确认对话框
+    const [confirmError, confirmResult] = await uni.showModal({
+      title: '充值确认',
+      content: `确定要为设备【${this.selectedDevice.name}】充值 ${this.rechargeForm.days} 天吗？`,
+      confirmText: '确认充值',
+      cancelText: '取消',
+      confirmColor: '#ff0000',
+      showCancel: true
+    }).then(res => [null, res]).catch(err => [err]);
+
+    // 处理确认结果
+    if (confirmResult?.cancel) {
+      return;
+    }
+
+    if (confirmError) {
+      throw new Error('确认对话框加载失败');
+    }
+
+    // 执行充值请求
+    const res = await charge({
+      'deviceAmount': this.rechargeForm.days,
+      'deviceName': this.selectedDevice.name,
+      'deviceNumber': this.rechargeForm.deviceCode
+    });
+
+    console.log('充值响应:', res);
+    
+    if (res?.code === 200) {
+      uni.showToast({ title: '充值成功' });
+      // 这里可以添加成功后的其他逻辑（如刷新页面、重置表单等）
+    } else {
+      throw new Error(res?.message || '未知错误');
+    }
+
+  } catch (error) {
+    console.error('充值流程错误:', error);
+    uni.showToast({
+      title: error?.message || '充值失败',
+      icon: 'none'
+    });
+  }
+},
 async showInstallInfo(device) {
   this.selectedDevice = device;
   this.showInstallInfoDialog = true;
@@ -1438,7 +1481,7 @@ showPayDetail(device) {
     deviceCode: device.code,  // 设备编号
     days: 1                  // 默认充值1天
   };
-  this.showRechargeDialog = true;
+  this.showRechargeDialog=true;
 },
 
  async showDeviceDetail(device) {
@@ -1715,7 +1758,7 @@ closeRechargeDialog() {
   border-radius: 16rpx;
   box-shadow: 0 2rpx 10rpx rgba(0, 0, 0, 0.05);
   /* position: relative; */ /* 改为相对定位，不再固定在底部 */
-  z-index: 100;
+/*  z-index: 100; */
 }
 
 /* 页码按钮样式 */
@@ -1783,7 +1826,7 @@ closeRechargeDialog() {
   display: flex;
   justify-content: center;
   align-items: center;
-  z-index: 999;
+  /* z-index: 999; */
 }
 
 
@@ -1798,7 +1841,7 @@ closeRechargeDialog() {
   display: flex;
   justify-content: center;
   align-items: center;
-  z-index: 1000;
+  /* z-index: 1000; */
 }
 
 .dialog-content {
@@ -2319,7 +2362,7 @@ closeRechargeDialog() {
   display: flex;
   justify-content: center;
   align-items: center;
-  z-index: 9999; /* 确保是最高层级 */
+  /* z-index: 9999; /* 确保是最高层级 */
 }
 
 .confirm-dialog {

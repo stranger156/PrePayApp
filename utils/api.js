@@ -274,6 +274,24 @@ export const searchSaleUsers = (params) => {
 	});
 };
 
+// 充值接口
+export const charge = async(params) => {
+	console.log(params)
+	const token = await getTokenFromLocalStorage();
+	return request({
+		url: "/web/device/charge",
+		method: 'POST',
+		headers: {
+			'token': token
+		},
+		data: {
+			'amount': params.deviceAmount,
+			'deviceName': params.deviceName,
+			'deviceNumber': params.deviceNumber
+		}
+	});
+};
+
 // 添加换热站接口
 export const addStation = async(params) => {
 	const token = await getTokenFromLocalStorage();  
