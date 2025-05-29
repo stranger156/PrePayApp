@@ -1639,7 +1639,7 @@ closeRechargeDialog() {
 /* 原有样式保持不变... */
 .container {
   padding: 20rpx;
-  height: 100vh;
+  height: 90vh;
   background-color: #f5f5f5;
   position: relative;
 }
@@ -1666,7 +1666,7 @@ closeRechargeDialog() {
 }
 
 .scroll-view {
-  height: calc(100vh - 240rpx);
+  height: calc(100vh - 350rpx);
 }
 
 .station-item {
@@ -1825,11 +1825,11 @@ closeRechargeDialog() {
 
 .dialog-content {
   background: white;
-  width: 90%;
+  width: 100%;
   max-width: 600rpx;
   border-radius: 16rpx;
   padding: 30rpx;
-  max-height: 80vh;
+  max-height: 100vh;
 }
 
 .dialog-header {
@@ -1852,6 +1852,7 @@ closeRechargeDialog() {
 
 .detail-section {
   margin-bottom: 30rpx;
+  margin-right: 20px;
   border-bottom: 1rpx solid #eee;
   padding-bottom: 20rpx;
 }
@@ -1907,6 +1908,7 @@ closeRechargeDialog() {
 
 .action-btn {
   color: #007AFF;
+  text-align: center;
   font-size: 24rpx;
   padding: 5rpx 10rpx;
   border: 1rpx solid #007AFF;
@@ -1916,7 +1918,7 @@ closeRechargeDialog() {
 /* 设备详情特有样式 */
 .device-detail-content {
   width: 85%;
-  max-width: 700rpx;
+  max-width: 600rpx;
 }
 
 .temperature-grid {
@@ -1959,7 +1961,7 @@ closeRechargeDialog() {
 /* 充值弹窗样式 */
 .recharge-content {
   width: 85%;
-  max-width: 700rpx;
+  max-width: 600rpx;
   border-radius: 16rpx;
   overflow: hidden;
   background-color: #fff;
@@ -2101,10 +2103,10 @@ closeRechargeDialog() {
 .dialog-content {
   background: #fff;
   border-radius: 8px;
-  padding: 20px;
+  padding: 10px;
   width: 600px;
   max-height: 80vh;
-  overflow-y: auto;
+  /* overflow-y: auto; */
   box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
 }
 
