@@ -249,6 +249,7 @@
        :opts="chartOptions"
        canvasId="lineChart"
        canvas2d
+	   style="width:90%;"
      />
    </view>
   
@@ -784,7 +785,6 @@
 <script>
 import { getStationList,getStationDevices,getDetailDevices,getDeviceInstallInfo, chargeDevice, charge, updateDeviceInfo} from '@/utils/api';
 
-
 export default {
   data() {
     return {
@@ -854,10 +854,14 @@ export default {
 	    position: 'top',
 	    float: 'center'     // 图例居中显示
 	  },
+	   padding: [0, 5, 0, 0], // 上、右、下、左
 	  xAxis: {
 	    disableGrid: true,
 		labelCount:4,
+		boundaryGap:true,
+		 rotate: 45, // 或 -45 度
 		fontSize:10,
+		  padding: [10, 10, 10, 10], // 左、上、右、下,
 	    axisLabel: {
 	      rotate: 150        // 刻度标签旋转角度
 	    }
@@ -1568,7 +1572,7 @@ showPayDetail(device) {
 		let xarr=[]
 		let yarr=[]
 		for(let i=0;i<res.data.tempDiffHistory.length;i+=20){
-			xarr.push(res.data.tempDiffHistory[i].addTime.slice(0,10))
+			xarr.push(res.data.tempDiffHistory[i].addTime.slice(5,10))
 			yarr.push(res.data.tempDiffHistory[i].diff)
 		}
 		// res.data.tempDiffHistory.forEach(item=>{
@@ -1742,7 +1746,7 @@ closeRechargeDialog() {
 /* 原有样式保持不变... */
 .container {
   padding: 20rpx;
-  height: 90vh;
+  height: 80vh;
   background-color: #f5f5f5;
   position: relative;
 }
@@ -1769,7 +1773,7 @@ closeRechargeDialog() {
 }
 
 .scroll-view {
-  height: calc(100vh - 350rpx);
+  height: calc(90vh - 350rpx);
 }
 
 .station-item {
@@ -2497,7 +2501,7 @@ closeRechargeDialog() {
   color: #fff;
 }
 .chart-container {
-  width: 100%;
+  width: 60vw;
   height:auto; /* 使用视口高度单位 */
   min-height: 400rpx; /* 最小高度保障 */
   background-color: #fff; /* 修复背景色错误 */
