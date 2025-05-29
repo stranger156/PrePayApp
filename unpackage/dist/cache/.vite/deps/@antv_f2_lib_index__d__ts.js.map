@@ -1,0 +1,7 @@
+{
+  "version": 3,
+  "sources": ["../../../../../node_modules/@antv/f2/lib/index.d.ts"],
+  "sourcesContent": ["export * from '@antv/f-engine';\nexport { default as Chart, ChartProps } from './chart';\nexport { Scale, ScaleConfig } from './deps/f2-scale/src';\nexport * from './components';\ndeclare const _default: {\n    version: string;\n};\nexport default _default;\n"],
+  "mappings": ";;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;AAAA;AAAA;AAAA;AAAA;AAAA;AAAA;AAAA;AAAA;AAAA;AAAA;AAAA;AAAA;AAAA;AAAA;AAAA;AAAA;AAAA;AAAA;AAAA;AAAA;AAAA;AAAA;AAAA;AAAA;AAAA;AAAA;AACA,mBAA6C;AAC7C,iBAAmC;AACnC,4BAAc;AAId,IAAO,kBAAQ;",
+  "names": []
+}

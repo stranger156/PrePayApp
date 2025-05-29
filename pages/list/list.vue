@@ -146,6 +146,7 @@
                     <text 
                       class="action-btn" 
                       @tap.stop="showDeviceDetail(device)"
+					
                     >查看详情</text>
 					
                    <text 
@@ -232,26 +233,18 @@
       <!-- 历史记录 -->
      <view class="detail-section">
        <text class="section-title">温差历史记录（{{ selectedDevice.history?.length || 0 }}条）</text>
-       
-       <!-- 历史记录图表 -->
-       <view class="chart-container" v-if="selectedDevice.history?.length > 0">
-         <!-- 使用uni-app中的ec-canvas组件 -->
-         <ec-canvas 
-           id="tempChart" 
-           canvas-id="tempChart"
-           :ec="tempChartInit"
-           style="width: 100%; height: 300px;"
-         ></ec-canvas>
-       </view>
-       
-       <!-- 无数据提示 -->
-       <view v-if="!selectedDevice.history?.length" class="no-data">
-         <text>暂无历史数据</text>
-       </view>
+   <view class="chart-container">
+     <qiun-data-charts 
+       type="line"
+       :chartData="chartData"
+       :opts="chartOptions"
+       canvasId="lineChart"
+       canvas2d
+     />
+   </view>
+  
      </view>
-	  
-	  
-	  
+	   
     </scroll-view>
   </view>
 </view>
@@ -474,20 +467,14 @@
   </view>
 </template>
 
-<script>
+<script >
 import { getStationList,getStationDevices,getDetailDevices,getDeviceInstallInfo, } from '@/utils/api';
 
-import * as echarts from 'echarts/lib/echarts';
-import 'echarts/lib/chart/line';
-import 'echarts/lib/component/tooltip';
-import 'echarts/lib/component/title';
-import 'echarts/lib/component/grid';
-import 'echarts/lib/component/dataZoom';
 
 export default {
   data() {
     return {
-		
+
 		 showDeleteConfirm: false,
 		    deviceToDelete: null,
 		rechargeForm: {
@@ -495,39 +482,60 @@ export default {
 		      days: 1  // 默认值
 		    },
 		    unitPrice: 10 ,
-		// chartOption: {
-		//       tooltip: {
-		//         trigger: 'axis',
-		//         formatter: '{b}<br/>{a}: {c}°C'
-		//       },
-		//       xAxis: {
-		//         type: 'category',
-		//         data: [],
-		//         axisLabel: {
-		//           formatter: value => value.split(' ')[0] // 只显示日期
-		//         }
-		//       },
-		//       yAxis: {
-		//         type: 'value',
-		//         axisLabel: {
-		//           formatter: '{value} °C'
-		//         }
-		//       },
-		//       series: [{
-		//         name: '温差',
-		//         type: 'line',
-		//         data: [],
-		//         itemStyle: {
-		//           color: '#1890ff' // 主色
-		//         },
-		//         areaStyle: {
-		//           color: new echarts.graphic.LinearGradient(0, 0, 0, 1, [
-		//             { offset: 0, color: 'rgba(24,144,255,0.6)' },
-		//             { offset: 1, color: 'rgba(24,144,255,0.1)' }
-		//           ])
-		//         }
-		//       }]
-		//     },
+	chartData:{
+	  categories: [],
+	  series: [
+	      {
+	        name: '温差',
+	        data: [],
+	        color: '#5470c6',
+	        // 关键修改：禁用数据点标签
+	        point: {
+	          show: false  // 关闭数值标签显示
+	        }
+	      }
+	    ]
+	},
+	// 图表配置项
+	chartOptions :{
+	  padding: [15, 0, 0, 15], // 上右下左内边距
+	  backgroundColor: '#ffffff', // 明确设置背景色
+	  extra: {
+	    line: {
+	      type: 'curve',    // 平滑曲线类型
+	      width: 4,         // 线宽
+	      activePoint: true ,// 启用激活点样式
+		        onTop: true,    // 确保线在顶部
+		        connectNulls: true  ,// 连接空值
+		    point: { show: false }   // 同时隐藏数据点标记
+		 
+	    }
+	  },
+	   dataLabel: false,
+	   point:false,
+	  legend: {
+	    show: true,
+	    position: 'top',
+	    float: 'center'     // 图例居中显示
+	  },
+	  xAxis: {
+	    disableGrid: true,
+		labelCount:5,
+		fontSize:10,
+	    axisLabel: {
+	      rotate: 150        // 刻度标签旋转角度
+	    }
+	  },
+	  yAxis: {
+	    gridType: 'dash',   // 虚线网格
+	    dashLength: 4,      // 虚线长度
+	    splitNumber: 5,     // 网格分割段数
+	    data: [
+	      { min: -5,
+		   max:5},       // 明确Y轴范围
+	    ]
+	  }
+	},
 	  showRechargeDialog:false,	
 	  showInstallInfoDialog:false,
       searchKey: '',
@@ -607,74 +615,16 @@ export default {
   },
   
     mounted() {
-     
+       this.$nextTick(() => {
+           setTimeout(() => {
+             // 如果需要可以在这里更新图表数据
+           }, 300);
+         });
+       
     },
   methods: {
-		initTempChart() {
-		      // 确保有历史数据
-		      if (!this.selectedDevice?.history?.length) return;
-		      
-		      // 获取图表组件实例
-		      this.$nextTick(() => {
-		        // 获取图表组件实例
-		        if (this.$refs.tempChart) {
-		          const chart = this.$refs.tempChart.init(echarts);
-		          
-		          // 准备图表数据
-		          const xData = this.selectedDevice.history.map(item => item.time);
-		          const yData = this.selectedDevice.history.map(item => item.value);
-		          
-		          // 设置图表选项
-		          const option = {
-		            tooltip: {
-		              trigger: 'axis',
-		              formatter: '{b}<br/>温差: {c}°C'
-		            },
-		            grid: {
-		              left: '3%',
-		              right: '4%',
-		              bottom: '3%',
-		              containLabel: true
-		            },
-		            xAxis: {
-		              type: 'category',
-		              data: xData,
-		              axisLabel: {
-		                interval: 0,
-		                rotate: 45,
-		                fontSize: 10
-		              }
-		            },
-		            yAxis: {
-		              type: 'value',
-		              name: '温差(°C)',
-		              axisLabel: {
-		                formatter: '{value}°C'
-		              }
-		            },
-		            series: [{
-		              name: '温差',
-		              type: 'line',
-		              data: yData,
-		              smooth: true,
-		              symbolSize: 6,
-		              itemStyle: {
-		                color: '#1296db'
-		              },
-		              markLine: {
-		                data: [
-		                  { type: 'average', name: '平均值' }
-		                ]
-		              }
-		            }]
-		          };
-		          
-		          // 设置图表
-		          chart.setOption(option);
-		        }
-		      });
-		    },
-	  
+
+		
 	  // 确认删除设备
 	    // 显示删除确认弹窗
 	      confirmDeleteDevice(device) {
@@ -936,7 +886,21 @@ async  showPayDetail(device) {
       try {
         console.log(device);
         const res = await getDetailDevices(device.code);
-        
+		console.log(res.data)
+        console.log(res.data.tempDiffHistory.length)
+		let xarr=[]
+		let yarr=[]
+		for(let i=0;i<res.data.tempDiffHistory.length;i+=20){
+			xarr.push(res.data.tempDiffHistory[i].addTime.slice(0,10))
+			yarr.push(res.data.tempDiffHistory[i].diff)
+		}
+		// res.data.tempDiffHistory.forEach(item=>{
+		// 	xarr.push(item.addTime.slice(0,10))
+		// 	yarr.push(item.diff)
+		// })
+		this.chartData.categories=xarr
+		this.chartData.series[0].data=yarr
+		console.log(this.chartData.series[0].data)
         // 成功响应处理
         if (res?.code === 200 && res.data) {
           const { deviceInfo, temperatureInfo, tempDiffHistory } = res.data;
@@ -962,11 +926,7 @@ async  showPayDetail(device) {
               value: item.diff
             }))
           };
-          
-          // 初始化图表
-          this.$nextTick(() => {
-            this.initTempChart();
-          });
+        
         }
       } catch (error) {
         console.error('加载设备失败:', error);
@@ -1034,7 +994,7 @@ closeRechargeDialog() {
 /* 原有样式保持不变... */
 .container {
   padding: 20rpx;
-  height: 100vh;
+  height: 90vh;
   background-color: #f5f5f5;
   position: relative;
 }
@@ -1061,7 +1021,7 @@ closeRechargeDialog() {
 }
 
 .scroll-view {
-  height: calc(100vh - 240rpx);
+  height: calc(100vh - 350rpx);
 }
 
 .station-item {
@@ -1754,5 +1714,15 @@ closeRechargeDialog() {
 .delete-btn {
   background-color: #ff4444;
   color: #fff;
+}
+.chart-container {
+  width: 100%;
+  height:auto; /* 使用视口高度单位 */
+  min-height: 400rpx; /* 最小高度保障 */
+  background-color: #fff; /* 修复背景色错误 */
+  border-radius: 16rpx;  /* 添加圆角 */
+  box-shadow: 0 4rpx 24rpx rgba(0,0,0,0.05); /* 添加微妙阴影 */
+  overflow: hidden;      /* 防止内容溢出 */
+  padding: 8rpx;         /* 增加内边距 */
 }
 </style>

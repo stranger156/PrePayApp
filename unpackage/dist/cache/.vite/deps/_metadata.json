@@ -1,0 +1,52 @@
+{
+  "hash": "adad84e7",
+  "configHash": "ef3f5643",
+  "lockfileHash": "b3556737",
+  "browserHash": "b1dfdd93",
+  "optimized": {
+    "@antv/f2": {
+      "src": "../../../../../node_modules/@antv/f2/es/index.js",
+      "file": "@antv_f2.js",
+      "fileHash": "1a6f4195",
+      "needsInterop": false
+    },
+    "@antv/f2/lib/index": {
+      "src": "../../../../../node_modules/@antv/f2/lib/index.js",
+      "file": "@antv_f2_lib_index.js",
+      "fileHash": "33f0180d",
+      "needsInterop": true
+    },
+    "@antv/f2/lib/index.js": {
+      "src": "../../../../../node_modules/@antv/f2/lib/index.js",
+      "file": "@antv_f2_lib_index__js.js",
+      "fileHash": "a0690f85",
+      "needsInterop": true
+    },
+    "@antv/f2/lib/index.d.ts": {
+      "src": "../../../../../node_modules/@antv/f2/lib/index.d.ts",
+      "file": "@antv_f2_lib_index__d__ts.js",
+      "fileHash": "2d72c324",
+      "needsInterop": false
+    },
+    "echarts": {
+      "src": "../../../../../node_modules/echarts/index.js",
+      "file": "echarts.js",
+      "fileHash": "e0a66e38",
+      "needsInterop": false
+    }
+  },
+  "chunks": {
+    "chunk-RL65UB6W": {
+      "file": "chunk-RL65UB6W.js"
+    },
+    "chunk-EI2HVKJS": {
+      "file": "chunk-EI2HVKJS.js"
+    },
+    "chunk-6MO5ERXV": {
+      "file": "chunk-6MO5ERXV.js"
+    },
+    "chunk-6MT7EBHR": {
+      "file": "chunk-6MT7EBHR.js"
+    }
+  }
+}
