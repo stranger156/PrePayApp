@@ -276,7 +276,6 @@
               type="text" 
               placeholder="设备编号" 
               v-model="rechargeForm.deviceCode" 
-              :value="selectedDevice.code" 
               disabled
             />
           </view>

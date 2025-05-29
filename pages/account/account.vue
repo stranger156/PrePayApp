@@ -289,12 +289,16 @@ import UniSearchBar from '@dcloudio/uni-ui/lib/uni-search-bar/uni-search-bar.vue
 import UniIcons from '@dcloudio/uni-ui/lib/uni-icons/uni-icons.vue'
 import UniPopup from '@dcloudio/uni-ui/lib/uni-popup/uni-popup.vue'
 import { fetchUserList, deleteUser, updateUser, addUser } from '../../utils/api';
+import { getAuthority, getUser, getNumber } from '../../store/user'
 
 // 用户数据
 const accounts = ref([]);
 const currentUser = ref(null);
 const searchKeyword = ref('');
 const detailPopup = ref(null);
+const authority = ref('')
+const user = ref('')
+const number = ref('')
 
 // 页面加载时获取数据
 onMounted(async () => {
@@ -506,7 +510,15 @@ onMounted(async () => {
         value: user.userNumber, // 使用userName作为value
         text: user.userName  // 使用userName作为显示文本
       }));
-
+	  
+	authority.value=await getAuthority()
+	user.value=await getUser()
+	number.value=await getNumber()
+	if(authority.value === 'admin'){
+		admins.value = [{value: number.value, text: user.value}]
+		newUser.value.admin = number.value
+	}
+	
   } catch (error) {
     console.error('获取用户列表失败:', error);
     uni.showToast({
@@ -515,6 +527,14 @@ onMounted(async () => {
     });
   }
 });
+onMounted(()=>{
+	(async ()=>{
+		authority.value=await getAuthority()
+		if(authority.value === 'admin'){
+			userTypes.value = [{ value: 'user', text: '普通用户' }]
+		}
+	})()
+})
 // 新增响应式数据
 const editPopup = ref(null);
 const editUserData = ref({

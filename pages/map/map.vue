@@ -84,18 +84,20 @@
 </template>
 
 <script setup>
-import { onMounted, reactive, ref ,onUnmounted} from 'vue';
+import { onMounted, reactive, ref ,onUnmounted, onBeforeUpdate} from 'vue';
 import uniIcons from '@dcloudio/uni-ui/lib/uni-icons/uni-icons.vue'
-import { getStationList } from '../../utils/api';
-
+import { fetchCompanyList, getStationList } from '../../utils/api';
+import { getAuthority } from '../../store/user';
+import { onShow } from '@dcloudio/uni-app'
 // 响应式数据
 const selectedStation = ref(null);
 const totalStations = ref(0);
 const input=ref(null)
+const authority = ref('')
 
 const mapCenter = ref({
-  latitude: 39.9042,
-  longitude: 116.4074
+  latitude: 0,
+  longitude: 0
 });
 
 const markers = reactive([]);
@@ -127,7 +129,6 @@ const getLocation=()=>{
 	        type: 'wgs84', // 坐标类型（wgs84返回gps坐标，gcj02返回国测局坐标）
 	        altitude: true, // 获取高度信息（需要设备支持）
 	        success: (res) => {
-				
 	          mapCenter.value.latitude = res.latitude;
 	          mapCenter.value.longitude = res.longitude;
 	          markers.push({
@@ -150,34 +151,42 @@ const getLocation=()=>{
 	      })
 	
 }
-
-onMounted:{
-	getLocation()
-
-getStationList().then(res=>{
-	totalStations.value=res.data.records.length
-	res.data.records.forEach((item,index)=>{
-		markers.push({
-			id: index+2,
-			latitude: item.latitude,
-			longitude: item.longitude,
-			iconPath: '../../static/mapLogo.png',
-			width: 10,
-			height: 10,
-			 anchor: { x: 0.5, y: 1 }
-  })
-  stations.push( { 
-    phone:item.phone,
-	company:item.company,
-    id: index+1,
-	address: item.address,
-	detail: item.detail,
-	stationName: item.stationName,
-	userName: item.userName
-  })
+function start(){
+	getStationList().then(res=>{
+		console.log(res)
+		totalStations.value=res.data.records.length
+		res.data.records.forEach((item,index)=>{
+			markers.push({
+				id: index+2,
+				latitude: item.latitude,
+				longitude: item.longitude,
+				iconPath: '../../static/mapLogo.png',
+				width: 10,
+				height: 10,
+				 anchor: { x: 0.5, y: 1 }
+	  })
+	  stations.push( { 
+	    phone:item.phone,
+		company:item.company,
+	    id: index+1,
+		address: item.address,
+		detail: item.detail,
+		stationName: item.stationName,
+		userName: item.userName
+	  })
+		})
 	})
-})
 }
+
+
+onMounted(()=>{
+	
+	getLocation();
+	start();
+
+})
+
+
 </script>
 
 <style lang="scss" scoped>

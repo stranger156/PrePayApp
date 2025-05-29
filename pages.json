@@ -56,9 +56,12 @@
 		},
 		{
 			"path" : "pages/settings/settings",
-			"style" : 
+			"style" :
 			{
-				"navigationBarTitleText" : "设置"
+				"navigationBarTitleText" : "设置",
+				"navigationBarBackgroundColor": "#1E90FF",
+				"navigationBarTextStyle": "white"
+				
 			}
 		},
 		{
