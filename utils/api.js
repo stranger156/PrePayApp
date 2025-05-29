@@ -355,3 +355,15 @@ export const deleteDeviceById = async (deviceCode) => {
     }
   })
 }
+
+export const chargeDevice = async (data) => {
+  const token = await getTokenFromLocalStorage();
+  return request({
+    url: '/web/device/charge',
+    method: 'POST',
+    data,
+    headers: {
+      "token": token
+    }
+  });
+}
