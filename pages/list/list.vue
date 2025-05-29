@@ -781,14 +781,8 @@
   </view>
 </template>
 
-<<<<<<< HEAD
-<script >
-import { getStationList,getStationDevices,getDetailDevices,getDeviceInstallInfo, } from '@/utils/api';
-=======
 <script>
 import { getStationList,getStationDevices,getDetailDevices,getDeviceInstallInfo, chargeDevice, charge, updateDeviceInfo} from '@/utils/api';
->>>>>>> 8026848d91a3cf3faec480cd0e948f1b28a4044a
-
 
 export default {
   data() {

@@ -11,6 +11,8 @@ export const login = (params) => {
 };
 
 
+
+
 // 获取公司列表接口
 export const fetchCompanyList =async()=> {
 	const token = await getTokenFromLocalStorage();
@@ -272,6 +274,24 @@ export const searchSaleUsers = (params) => {
 	});
 };
 
+// 充值接口
+export const charge = async(params) => {
+	console.log(params)
+	const token = await getTokenFromLocalStorage();
+	return request({
+		url: "/web/device/charge",
+		method: 'POST',
+		headers: {
+			'token': token
+		},
+		data: {
+			'amount': params.deviceAmount,
+			'deviceName': params.deviceName,
+			'deviceNumber': params.deviceNumber
+		}
+	});
+};
+
 // 添加换热站接口
 export const addStation = async(params) => {
 	const token = await getTokenFromLocalStorage();  
@@ -341,4 +361,38 @@ export const getStationList=async()=>{
 			size:10000
 			}
 	})
+}
+
+export const deleteDeviceById = async (deviceCode) => {
+  const token = await getTokenFromLocalStorage();
+  return request({
+    url: `/web/device/${deviceCode}`,
+    method: 'DELETE',
+    headers: {
+      "token": token
+    }
+  })
+}
+
+export const chargeDevice = async (data) => {
+  const token = await getTokenFromLocalStorage();
+  return request({
+    url: '/web/device/charge',
+    method: 'POST',
+    data,
+    headers: {
+      "token": token
+    }
+  });
+}
+export const updateDeviceInfo = async (data) => {
+  const token = await getTokenFromLocalStorage();
+  return request({
+    url: '/web/device/update',
+    method: 'PUT',
+    data,
+    headers: {
+      "token": token
+    }
+  });
 }
