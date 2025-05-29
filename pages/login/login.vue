@@ -93,11 +93,7 @@ const loginButton=()=>{
       title: '用户名和密码不能为空!',
       icon: 'none'
     })
-<<<<<<< HEAD
-	return ;
-=======
-	return
->>>>>>> 8026848d91a3cf3faec480cd0e948f1b28a4044a
+	return;
   }
   login(user).then((res)=>{
 	  if(res.code===200){
