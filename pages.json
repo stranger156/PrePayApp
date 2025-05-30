@@ -6,7 +6,14 @@
     }
   },
 	"pages": [ //pages数组中第一项表示应用启动页，参考：https://uniapp.dcloud.io/collocation/pages
-
+{
+		"path" : "pages/PreLogin/PreLogin",
+		"style" : 
+		{
+			"navigationBarTitleText" : "预登录界面"
+		}
+	}
+			,
 	{
 		"path" : "pages/login/login",
 		"style" : 
@@ -24,13 +31,6 @@
 		}
 	},
 	{
-		"path" : "pages/PreLogin/PreLogin",
-		"style" : 
-		{
-			"navigationBarTitleText" : "预登录界面"
-		}
-	}
-			,{
 			"path": "pages/index/index",
 			"style": {
 				"navigationBarTitleText": "uni-app"

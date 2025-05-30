@@ -1666,6 +1666,8 @@ showPayDetail(device) {
 closeDeviceDialog() {
 	      this.showDeviceDetailDialog = false;
 	      this.selectedDevice = null;
+		  this.chartData.categories=["时间"]
+		  this.chartData.series.data=[]
 	    },
 closeInstallInfoDialog(){
 	this.showInstallInfoDialog = false;
@@ -1784,7 +1786,7 @@ closeRechargeDialog() {
 }
 
 .scroll-view {
-  height: calc(90vh - 350rpx);
+  height: calc(90vh - 200rpx);
 }
 
 .station-item {
