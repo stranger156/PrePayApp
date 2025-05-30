@@ -11,6 +11,7 @@
       <uni-search-bar 
         placeholder="输入换热站名称搜索" 
         @confirm="handleSearch"
+		@cancel="handleCancel"
         v-model="searchKey"
       />
     </view>
@@ -646,50 +647,38 @@
       </view>
 
       <!-- 所属公司 - 有下拉选择 -->
-      <view class="form-group">
-        <text class="form-label required">所属公司</text>
-        <picker 
-          class="form-picker" 
-          :value="companyIndex" 
-          :range="companyList" 
-          range-key="name" 
-          @change="handleCompanyChange"
-        >
-          <view class="picker-view">
-            {{ editForm.companyName || '请选择公司' }}
-            <uni-icons type="arrowdown" size="16" color="#999"></uni-icons>
-          </view>
-        </picker>
-      </view>
-
+    <view class="form-group">
+      <text class="form-label required">所属公司</text>
+      <input 
+        class="form-input disabled" 
+        type="text" 
+        v-model="editForm.companyName" 
+        disabled
+      />
+    </view>
       <!-- 所属站点 - 有下拉选择 -->
-      <view class="form-group">
-        <text class="form-label required">所属站点</text>
-        <picker 
-          class="form-picker" 
-          :value="stationIndex" 
-          :range="stationList" 
-          range-key="name" 
-          @change="handleStationChange"
-          :disabled="!editForm.companyName"
-        >
-          <view class="picker-view">
-            {{ editForm.deviceStation || '请选择站点' }}
-            <uni-icons type="arrowdown" size="16" color="#999"></uni-icons>
-          </view>
-        </picker>
-      </view>
+   <view class="form-group">
+     <text class="form-label required">所属站点</text>
+     <input 
+       class="form-input disabled" 
+       type="text" 
+       v-model="editForm.deviceStation" 
+       disabled
+     />
+   </view>
 
-     <view class="form-group">
-       <text class="form-label required">安装日期</text>
-       <uni-datetime-picker
-         type="date"
-         v-model="editForm.installDate"
-         @change="handleDateChange"
-         return-type="string"
-         format="yyyy-MM-dd"
-       />
-     </view>
+  <view class="form-group">
+    <text class="form-label required">安装日期</text>
+    <view class="date-picker-container">
+      <uni-datetime-picker
+        type="date"
+        v-model="editForm.installDate"
+        @change="handleDateChange"
+        return-type="string"
+        format="yyyy-MM-dd"
+      />
+    </view>
+  </view>
       <!-- 数据上传频率 -->
       <view class="form-group">
         <text class="form-label required">数据上传频率</text>
@@ -788,7 +777,14 @@ import { getStationList,getStationDevices,getDetailDevices,getDeviceInstallInfo,
 export default {
   data() {
     return {
-		
+			 originalDeviceList: [],
+			    // 当前显示的数据列表 - 用于显示过滤后的结果
+			    deviceList: [],
+			    // 搜索关键词
+			    searchKey: '',
+			    // 是否处于搜索状态
+			    isSearching: false,
+				
 		 showCustomToast: false,
 		 showEditDialog: false,
 		    editForm: {
@@ -899,9 +895,9 @@ export default {
 
 	  showRechargeDialog:false,	
 	  showInstallInfoDialog:false,
-      searchKey: '',
+      
       jumpPage: null,
-      deviceList: [],
+     
       showDetailDialog: false,
 	  showDeviceDetailDialog: false,
 	  selectedDevice: null,
@@ -961,9 +957,7 @@ export default {
 	        temp2Out: this.selectedDevice.temp2Out || ''
 	      };
 	      
-	      // 加载公司和站点数据
-	      this.loadCompanyList();
-	      this.loadDeviceData();
+	
 	      
 	      this.showEditDialog = true;
 	    },
@@ -999,7 +993,49 @@ export default {
 	      }
 	    },
 	    
-	    
+	    //搜索功能实现
+		handleCancel(){
+			this.searchKey = '';
+			this.handleSearch();
+		},
+		 // 处理搜索事件
+		  handleSearch() {
+		          // 如果搜索关键词为空，显示所有数据
+		          if (!this.searchKey.trim()) {
+		            this.clearSearch();
+		            return;
+		          }
+		      
+		          this.isSearchActive = true;
+		          
+		          // 过滤数据
+		          this.filteredData = this.originalAllData.filter(item => {
+		            // 可以根据需要搜索多个字段
+		            const stationNameMatch = item.stationName?.toLowerCase().includes(this.searchKey.toLowerCase());
+		            const companyMatch = item.company?.toLowerCase().includes(this.searchKey.toLowerCase());
+		            const addressMatch = item.address?.toLowerCase().includes(this.searchKey.toLowerCase());
+		            const personMatch = item.person?.toLowerCase().includes(this.searchKey.toLowerCase());
+		            
+		            // 任一字段匹配即可
+		            return stationNameMatch || companyMatch || addressMatch || personMatch;
+		          });
+		          
+		          // 更新分页信息
+		          this.pagination.total = this.filteredData.length;
+		          this.pagination.current = 1; // 重置到第一页
+		          
+		          // 更新显示的数据
+		          this.updateCurrentPageData();
+		          
+		          // 显示搜索结果数量
+		          uni.showToast({
+		            title: `找到 ${this.filteredData.length} 个匹配结果`,
+		            icon: 'none'
+		          });
+		        },
+		  
+		  // 加载设备数据 (假设这是您获取数据的方法)
+		
 	    
 	    // 处理公司选择变化
 	    handleCompanyChange(e) {
@@ -1047,80 +1083,91 @@ export default {
 	    // 保存设备信息
 	 // list.vue 中的 saveDeviceInfo 方法
 	 async saveDeviceInfo() {
-	   try {
-	     // 表单验证
-	     if (!this.editForm.deviceNumber) {
-	       uni.showToast({
-	         title: '请输入设备编号',
-	         icon: 'none'
-	       });
-	       return;
-	     }
-	     
-	     if (!this.editForm.deviceName) {
-	       uni.showToast({
-	         title: '请输入设备名称',
-	         icon: 'none'
-	       });
-	       return;
-	     }
-	     
-	     // 更多验证可以根据需要添加...
-	     
-	     uni.showLoading({
-	       title: '保存中...'
-	     });
-	     
-	     // 调用API函数更新设备信息
-	     const res = await updateDeviceInfo(this.editForm);
-	     
-	     if (res.code === 200) {
-			 console.log("hello")
-			 
-			 // 在保存成功时
-			 this.showCustomToast = true;
-			 setTimeout(() => {
-			   this.showCustomToast = false;
-			 }, 3000);
-	    // 确保Toast显示在最上层
-	    uni.showToast({
-	      title: '保存成功',
-	      icon: 'success',
-	      duration: 3000,
-	      position: 'top', // 显示在顶部
-	      mask: true // 添加遮罩层，防止用户点击
-	    });
-	         
-	         
-	         
-	       
-	       // 更新当前显示的设备信息
-	       this.selectedDevice = {
-	         ...this.selectedDevice,
-	         ...this.editForm
-	       };
-	       
-	       // 关闭编辑弹窗
-	       this.closeEditDialog();
-	       
-	       // 如果需要，刷新设备列表
-	
-	     } else {
-	       uni.showToast({
-	         title: res.msg || '保存失败',
-	         icon: 'none'
-	       });
-	     }
-	   } catch (error) {
-	     console.error('保存设备信息失败:', error);
-	     uni.showToast({
-	       title: '网络异常，请稍后重试',
-	       icon: 'none'
-	     });
-	   } finally {
-	     uni.hideLoading();
-	   }
-	 },
+	    try {
+	      // 表单验证
+	      if (!this.editForm.deviceNumber) {
+	        uni.showToast({
+	          title: '请输入设备编号',
+	          icon: 'none'
+	        });
+	        return;
+	      }
+	      
+	      if (!this.editForm.deviceName) {
+	        uni.showToast({
+	          title: '请输入设备名称',
+	          icon: 'none'
+	        });
+	        return;
+	      }
+	      
+	      // 更多验证可以根据需要添加...
+	      
+	     const confirmResult = await new Promise((resolve) => {
+	            uni.showModal({
+	              title: '确认保存',
+	              content: '是否确认保存设备信息？',
+	              confirmText: '确认',
+	              cancelText: '取消',
+	              success: (res) => {
+	                resolve(res.confirm);
+	              },
+	              fail: () => {
+	                resolve(false);
+	              }
+	            });
+	          });
+	          
+	          // 如果用户取消了操作
+	          if (!confirmResult) {
+	            return;
+	          }
+	      
+	      uni.showLoading({
+	        title: '保存中...'
+	      });
+	      
+	      // 调用API函数更新设备信息
+	      const res = await updateDeviceInfo(this.editForm);
+	      
+	      if (res.code === 200) {
+	        console.log("hello")
+	        
+	        // 确保Toast显示在最上层
+	        uni.showToast({
+	          title: '保存成功',
+	          icon: 'success',
+	          duration: 1000,
+	          position: 'top', // 显示在顶部
+	          mask: true // 添加遮罩层，防止用户点击
+	        });
+	        
+	        // 更新当前显示的设备信息
+	        this.selectedDevice = {
+	          ...this.editForm
+	        };
+	        
+	        // 关闭编辑弹窗
+	        this.closeEditDialog();
+	        
+	        // 如果需要，刷新设备列表
+	 
+	      } else {
+	        uni.showToast({
+	          title: res.msg || '保存失败',
+	          icon: 'none'
+	        });
+	      }
+	    } catch (error) {
+	      console.error('保存设备信息失败:', error);
+	      uni.showToast({
+	        title: '网络异常，请稍后重试',
+	        icon: 'none'
+	      });
+	    } finally {
+	      uni.hideLoading();
+	    }
+	  },
 		
 		
 		  handleDateChange(value) {
@@ -1637,41 +1684,6 @@ closeRechargeDialog() {
       this.selectedStation = null;
     },
 
-      handleSearch() {
-        // 如果搜索关键词为空，显示所有数据
-        if (!this.searchKey.trim()) {
-          this.clearSearch();
-          return;
-        }
-    
-        this.isSearchActive = true;
-        
-        // 过滤数据
-        this.filteredData = this.originalAllData.filter(item => {
-          // 可以根据需要搜索多个字段
-          const stationNameMatch = item.stationName?.toLowerCase().includes(this.searchKey.toLowerCase());
-          const companyMatch = item.company?.toLowerCase().includes(this.searchKey.toLowerCase());
-          const addressMatch = item.address?.toLowerCase().includes(this.searchKey.toLowerCase());
-          const personMatch = item.person?.toLowerCase().includes(this.searchKey.toLowerCase());
-          
-          // 任一字段匹配即可
-          return stationNameMatch || companyMatch || addressMatch || personMatch;
-        });
-        
-        // 更新分页信息
-        this.pagination.total = this.filteredData.length;
-        this.pagination.current = 1; // 重置到第一页
-        
-        // 更新显示的数据
-        this.updateCurrentPageData();
-        
-        // 显示搜索结果数量
-        uni.showToast({
-          title: `找到 ${this.filteredData.length} 个匹配结果`,
-          icon: 'none'
-        });
-      },
-
 
 	// 清除搜索
 	  clearSearch() {
@@ -1744,6 +1756,8 @@ closeRechargeDialog() {
 
 <style scoped>
 /* 原有样式保持不变... */
+
+/*搜索功能样式*/
 .container {
   padding: 20rpx;
   height: 80vh;
@@ -2242,6 +2256,11 @@ closeRechargeDialog() {
   font-size: 30rpx;
   font-weight: bold;
   color: #333;
+}
+
+.date-picker-container {
+  width: 50%;
+  display: inline-block;
 }
 
 .install-info-header {
