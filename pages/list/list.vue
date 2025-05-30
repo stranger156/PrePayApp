@@ -250,7 +250,7 @@
        :opts="chartOptions"
        canvasId="lineChart"
        canvas2d
-	   style="width:90%;"
+	   style="width:100%;"
      />
    </view>
   
@@ -317,10 +317,7 @@
               class="form-button form-button-confirm" 
               formType="submit"
 			  @tap="submitCharge"
-            >充值</button>
-			
-			
-			
+            >充值</button>	
           </view>
         </form>
       </view>
@@ -815,7 +812,7 @@ export default {
 		    },
 		    unitPrice: 10 ,
 	chartData:{
-	  categories: [],
+	  categories: ["时间"],
 	  series: [
 	      {
 	        name: '温差',
@@ -850,7 +847,7 @@ export default {
 	    position: 'top',
 	    float: 'center'     // 图例居中显示
 	  },
-	   padding: [0, 5, 0, 0], // 上、右、下、左
+	   padding: [0, 10, 0, 0], // 上、右、下、左
 	  xAxis: {
 	    disableGrid: true,
 		labelCount:4,
