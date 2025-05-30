@@ -607,12 +607,1192 @@
   color: #333333;
 }
 
-.echarts[data-v-12977466] {
+.container[data-v-0e645258] {
+  width: 30px;
+  height: 30px;
+  position: relative;
+}
+.container.loading1[data-v-0e645258] {
+  transform: rotate(45deg);
+}
+.container .shape[data-v-0e645258] {
+  position: absolute;
+  width: 10px;
+  height: 10px;
+  border-radius: 1px;
+}
+.container .shape.shape1[data-v-0e645258] {
+  left: 0;
+  background-color: #1890FF;
+}
+.container .shape.shape2[data-v-0e645258] {
+  right: 0;
+  background-color: #91CB74;
+}
+.container .shape.shape3[data-v-0e645258] {
+  bottom: 0;
+  background-color: #FAC858;
+}
+.container .shape.shape4[data-v-0e645258] {
+  bottom: 0;
+  right: 0;
+  background-color: #EE6666;
+}
+.loading1 .shape1[data-v-0e645258] {
+  animation: animation1shape1-0e645258 0.5s ease 0s infinite alternate;
+}
+@keyframes animation1shape1-0e645258 {
+from {
+    transform: translate(0, 0);
+}
+to {
+    transform: translate(16px, 16px);
+}
+}
+.loading1 .shape2[data-v-0e645258] {
+  animation: animation1shape2-0e645258 0.5s ease 0s infinite alternate;
+}
+@keyframes animation1shape2-0e645258 {
+from {
+    transform: translate(0, 0);
+}
+to {
+    transform: translate(-16px, 16px);
+}
+}
+.loading1 .shape3[data-v-0e645258] {
+  animation: animation1shape3-0e645258 0.5s ease 0s infinite alternate;
+}
+@keyframes animation1shape3-0e645258 {
+from {
+    transform: translate(0, 0);
+}
+to {
+    transform: translate(16px, -16px);
+}
+}
+.loading1 .shape4[data-v-0e645258] {
+  animation: animation1shape4-0e645258 0.5s ease 0s infinite alternate;
+}
+@keyframes animation1shape4-0e645258 {
+from {
+    transform: translate(0, 0);
+}
+to {
+    transform: translate(-16px, -16px);
+}
+}
+
+
+
+
+.container[data-v-3df48dc2] {
+  width: 30px;
+  height: 30px;
+  position: relative;
+}
+.container.loading2[data-v-3df48dc2] {
+  transform: rotate(10deg);
+}
+.container.loading2 .shape[data-v-3df48dc2] {
+  border-radius: 5px;
+}
+.container.loading2[data-v-3df48dc2]{
+  animation: rotation 1s infinite;
+}
+.container .shape[data-v-3df48dc2] {
+  position: absolute;
+  width: 10px;
+  height: 10px;
+  border-radius: 1px;
+}
+.container .shape.shape1[data-v-3df48dc2] {
+  left: 0;
+  background-color: #1890FF;
+}
+.container .shape.shape2[data-v-3df48dc2] {
+  right: 0;
+  background-color: #91CB74;
+}
+.container .shape.shape3[data-v-3df48dc2] {
+  bottom: 0;
+  background-color: #FAC858;
+}
+.container .shape.shape4[data-v-3df48dc2] {
+  bottom: 0;
+  right: 0;
+  background-color: #EE6666;
+}
+.loading2 .shape1[data-v-3df48dc2] {
+  animation: animation2shape1-3df48dc2 0.5s ease 0s infinite alternate;
+}
+@keyframes animation2shape1-3df48dc2 {
+from {
+    transform: translate(0, 0);
+}
+to {
+    transform: translate(20px, 20px);
+}
+}
+.loading2 .shape2[data-v-3df48dc2] {
+  animation: animation2shape2-3df48dc2 0.5s ease 0s infinite alternate;
+}
+@keyframes animation2shape2-3df48dc2 {
+from {
+    transform: translate(0, 0);
+}
+to {
+    transform: translate(-20px, 20px);
+}
+}
+.loading2 .shape3[data-v-3df48dc2] {
+  animation: animation2shape3-3df48dc2 0.5s ease 0s infinite alternate;
+}
+@keyframes animation2shape3-3df48dc2 {
+from {
+    transform: translate(0, 0);
+}
+to {
+    transform: translate(20px, -20px);
+}
+}
+.loading2 .shape4[data-v-3df48dc2] {
+  animation: animation2shape4-3df48dc2 0.5s ease 0s infinite alternate;
+}
+@keyframes animation2shape4-3df48dc2 {
+from {
+    transform: translate(0, 0);
+}
+to {
+    transform: translate(-20px, -20px);
+}
+}
+
+
+
+.container[data-v-27a8293c] {
+  width: 30px;
+  height: 30px;
+  position: relative;
+}
+.container.loading3[data-v-27a8293c] {
+  animation: rotation 1s infinite;
+}
+.container.loading3 .shape1[data-v-27a8293c] {
+  border-top-left-radius: 10px;
+}
+.container.loading3 .shape2[data-v-27a8293c] {
+  border-top-right-radius: 10px;
+}
+.container.loading3 .shape3[data-v-27a8293c] {
+  border-bottom-left-radius: 10px;
+}
+.container.loading3 .shape4[data-v-27a8293c] {
+  border-bottom-right-radius: 10px;
+}
+.container .shape[data-v-27a8293c] {
+  position: absolute;
+  width: 10px;
+  height: 10px;
+  border-radius: 1px;
+}
+.container .shape.shape1[data-v-27a8293c] {
+  left: 0;
+  background-color: #1890FF;
+}
+.container .shape.shape2[data-v-27a8293c] {
+  right: 0;
+  background-color: #91CB74;
+}
+.container .shape.shape3[data-v-27a8293c] {
+  bottom: 0;
+  background-color: #FAC858;
+}
+.container .shape.shape4[data-v-27a8293c] {
+  bottom: 0;
+  right: 0;
+  background-color: #EE6666;
+}
+.loading3 .shape1[data-v-27a8293c] {
+  animation: animation3shape1-27a8293c 0.5s ease 0s infinite alternate;
+}
+@keyframes animation3shape1-27a8293c {
+from {
+    transform: translate(0, 0);
+}
+to {
+    transform: translate(5px, 5px);
+}
+}
+.loading3 .shape2[data-v-27a8293c] {
+  animation: animation3shape2-27a8293c 0.5s ease 0s infinite alternate;
+}
+@keyframes animation3shape2-27a8293c {
+from {
+    transform: translate(0, 0);
+}
+to {
+    transform: translate(-5px, 5px);
+}
+}
+.loading3 .shape3[data-v-27a8293c] {
+  animation: animation3shape3-27a8293c 0.5s ease 0s infinite alternate;
+}
+@keyframes animation3shape3-27a8293c {
+from {
+    transform: translate(0, 0);
+}
+to {
+    transform: translate(5px, -5px);
+}
+}
+.loading3 .shape4[data-v-27a8293c] {
+  animation: animation3shape4-27a8293c 0.5s ease 0s infinite alternate;
+}
+@keyframes animation3shape4-27a8293c {
+from {
+    transform: translate(0, 0);
+}
+to {
+    transform: translate(-5px, -5px);
+}
+}
+
+
+.container[data-v-2e7deb83] {
+  width: 30px;
+  height: 30px;
+  position: relative;
+}
+.container.loading5 .shape[data-v-2e7deb83] {
+  width: 15px;
+  height: 15px;
+}
+.container .shape[data-v-2e7deb83] {
+  position: absolute;
+  width: 10px;
+  height: 10px;
+  border-radius: 1px;
+}
+.container .shape.shape1[data-v-2e7deb83] {
+  left: 0;
+  background-color: #1890FF;
+}
+.container .shape.shape2[data-v-2e7deb83] {
+  right: 0;
+  background-color: #91CB74;
+}
+.container .shape.shape3[data-v-2e7deb83] {
+  bottom: 0;
+  background-color: #FAC858;
+}
+.container .shape.shape4[data-v-2e7deb83] {
+  bottom: 0;
+  right: 0;
+  background-color: #EE6666;
+}
+.loading5 .shape1[data-v-2e7deb83] {
+  animation: animation5shape1-2e7deb83 2s ease 0s infinite reverse;
+}
+@keyframes animation5shape1-2e7deb83 {
+0% {
+    transform: translate(0, 0);
+}
+25% {
+    transform: translate(0, 15px);
+}
+50% {
+    transform: translate(15px, 15px);
+}
+75% {
+    transform: translate(15px, 0);
+}
+}
+.loading5 .shape2[data-v-2e7deb83] {
+  animation: animation5shape2-2e7deb83 2s ease 0s infinite reverse;
+}
+@keyframes animation5shape2-2e7deb83 {
+0% {
+    transform: translate(0, 0);
+}
+25% {
+    transform: translate(-15px, 0);
+}
+50% {
+    transform: translate(-15px, 15px);
+}
+75% {
+    transform: translate(0, 15px);
+}
+}
+.loading5 .shape3[data-v-2e7deb83] {
+  animation: animation5shape3-2e7deb83 2s ease 0s infinite reverse;
+}
+@keyframes animation5shape3-2e7deb83 {
+0% {
+    transform: translate(0, 0);
+}
+25% {
+    transform: translate(15px, 0);
+}
+50% {
+    transform: translate(15px, -15px);
+}
+75% {
+    transform: translate(0, -15px);
+}
+}
+.loading5 .shape4[data-v-2e7deb83] {
+  animation: animation5shape4-2e7deb83 2s ease 0s infinite reverse;
+}
+@keyframes animation5shape4-2e7deb83 {
+0% {
+    transform: translate(0, 0);
+}
+25% {
+    transform: translate(0, -15px);
+}
+50% {
+    transform: translate(-15px, -15px);
+}
+75% {
+    transform: translate(-15px, 0);
+}
+}
+
+
+
+.container[data-v-ef674bbb] {
+  width: 30px;
+  height: 30px;
+  position: relative;
+}
+.container.loading6[data-v-ef674bbb] {
+  animation: rotation 1s infinite;
+}
+.container.loading6 .shape[data-v-ef674bbb] {
+  width: 12px;
+  height: 12px;
+  border-radius: 2px;
+}
+.container .shape[data-v-ef674bbb] {
+  position: absolute;
+  width: 10px;
+  height: 10px;
+  border-radius: 1px;
+}
+.container .shape.shape1[data-v-ef674bbb] {
+  left: 0;
+  background-color: #1890FF;
+}
+.container .shape.shape2[data-v-ef674bbb] {
+  right: 0;
+  background-color: #91CB74;
+}
+.container .shape.shape3[data-v-ef674bbb] {
+  bottom: 0;
+  background-color: #FAC858;
+}
+.container .shape.shape4[data-v-ef674bbb] {
+  bottom: 0;
+  right: 0;
+  background-color: #EE6666;
+}
+.loading6 .shape1[data-v-ef674bbb] {
+  animation: animation6shape1-ef674bbb 2s linear 0s infinite normal;
+}
+@keyframes animation6shape1-ef674bbb {
+0% {
+    transform: translate(0, 0);
+}
+25% {
+    transform: translate(0, 18px);
+}
+50% {
+    transform: translate(18px, 18px);
+}
+75% {
+    transform: translate(18px, 0);
+}
+}
+.loading6 .shape2[data-v-ef674bbb] {
+  animation: animation6shape2-ef674bbb 2s linear 0s infinite normal;
+}
+@keyframes animation6shape2-ef674bbb {
+0% {
+    transform: translate(0, 0);
+}
+25% {
+    transform: translate(-18px, 0);
+}
+50% {
+    transform: translate(-18px, 18px);
+}
+75% {
+    transform: translate(0, 18px);
+}
+}
+.loading6 .shape3[data-v-ef674bbb] {
+  animation: animation6shape3-ef674bbb 2s linear 0s infinite normal;
+}
+@keyframes animation6shape3-ef674bbb {
+0% {
+    transform: translate(0, 0);
+}
+25% {
+    transform: translate(18px, 0);
+}
+50% {
+    transform: translate(18px, -18px);
+}
+75% {
+    transform: translate(0, -18px);
+}
+}
+.loading6 .shape4[data-v-ef674bbb] {
+  animation: animation6shape4-ef674bbb 2s linear 0s infinite normal;
+}
+@keyframes animation6shape4-ef674bbb {
+0% {
+    transform: translate(0, 0);
+}
+25% {
+    transform: translate(0, -18px);
+}
+50% {
+    transform: translate(-18px, -18px);
+}
+75% {
+    transform: translate(-18px, 0);
+}
+}
+
+
+.chartsview[data-v-a99d579b] {
+		width: 100%;
+		height: 100%;
+		display: flex;
+		flex-direction: column;
+		flex: 1;
+		justify-content: center;
+		align-items: center;
+}
+.charts-font[data-v-a99d579b]{
+		font-size: 14px;
+		color: #CCCCCC;
+		margin-top: 10px;
+}
+.charts-error[data-v-a99d579b]{
+		width: 128px;
+		height: 128px;
+		background: url("data:image/png;base64,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");
+		background-position: center;
+}
+
+
+.chartsview[data-v-0ca34aee] {
+  width: 100%;
+  height: 100%;
   display: flex;
+  flex: 1;
   justify-content: center;
   align-items: center;
 }
 
+/**
+ * 这里是uni-app内置的常用样式变量
+ *
+ * uni-app 官方扩展插件及插件市场（https://ext.dcloud.net.cn）上很多三方插件均使用了这些样式变量
+ * 如果你是插件开发者，建议你使用scss预处理，并在插件代码中直接使用这些变量（无需 import 这个文件），方便用户通过搭积木的方式开发整体风格一致的App
+ *
+ */
+/**
+ * 如果你是App开发者（插件使用者），你可以通过修改这些变量来定制自己的插件主题，实现自定义主题功能
+ *
+ * 如果你的项目同样使用了scss预处理，你也可以直接在你的 scss 代码中使用如下变量，同时无需 import 这个文件
+ */
+/* 颜色变量 */
+/* 行为相关颜色 */
+/* 文字基本颜色 */
+/* 背景颜色 */
+/* 边框颜色 */
+/* 尺寸变量 */
+/* 文字尺寸 */
+/* 图片尺寸 */
+/* Border Radius */
+/* 水平间距 */
+/* 垂直间距 */
+/* 透明度 */
+/* 文章场景相关 */
+.uni-calendar-item__weeks-box[data-v-fe34d61e] {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  margin: 1px 0;
+  position: relative;
+}
+.uni-calendar-item__weeks-box-text[data-v-fe34d61e] {
+  font-size: 14px;
+  font-weight: bold;
+  color: #001833;
+}
+.uni-calendar-item__weeks-box-item[data-v-fe34d61e] {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  width: 40px;
+  height: 40px;
+}
+.uni-calendar-item__weeks-box-circle[data-v-fe34d61e] {
+  position: absolute;
+  top: 5px;
+  right: 5px;
+  width: 8px;
+  height: 8px;
+  border-radius: 8px;
+  background-color: #dd524d;
+}
+.uni-calendar-item__weeks-box .uni-calendar-item--disable[data-v-fe34d61e] {
+  cursor: default;
+}
+.uni-calendar-item--disable .uni-calendar-item__weeks-box-text-disable[data-v-fe34d61e] {
+  color: #D1D1D1;
+}
+.uni-calendar-item--today[data-v-fe34d61e] {
+  position: absolute;
+  top: 10px;
+  right: 17%;
+  background-color: #dd524d;
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+}
+.uni-calendar-item--extra[data-v-fe34d61e] {
+  color: #dd524d;
+  opacity: 0.8;
+}
+.uni-calendar-item__weeks-box .uni-calendar-item--checked[data-v-fe34d61e] {
+  background-color: #007aff;
+  border-radius: 50%;
+  box-sizing: border-box;
+  border: 3px solid #fff;
+}
+.uni-calendar-item--checked .uni-calendar-item--checked-text[data-v-fe34d61e] {
+  color: #fff;
+}
+.uni-calendar-item--multiple .uni-calendar-item--checked-range-text[data-v-fe34d61e] {
+  color: #333;
+}
+.uni-calendar-item--multiple[data-v-fe34d61e] {
+  background-color: #F6F7FC;
+}
+.uni-calendar-item--multiple .uni-calendar-item--before-checked[data-v-fe34d61e],
+.uni-calendar-item--multiple .uni-calendar-item--after-checked[data-v-fe34d61e] {
+  background-color: #007aff;
+  border-radius: 50%;
+  box-sizing: border-box;
+  border: 3px solid #F6F7FC;
+}
+.uni-calendar-item--before-checked .uni-calendar-item--checked-text[data-v-fe34d61e],
+.uni-calendar-item--after-checked .uni-calendar-item--checked-text[data-v-fe34d61e] {
+  color: #fff;
+}
+.uni-calendar-item--before-checked-x[data-v-fe34d61e] {
+  border-top-left-radius: 50px;
+  border-bottom-left-radius: 50px;
+  box-sizing: border-box;
+  background-color: #F6F7FC;
+}
+.uni-calendar-item--after-checked-x[data-v-fe34d61e] {
+  border-top-right-radius: 50px;
+  border-bottom-right-radius: 50px;
+  background-color: #F6F7FC;
+}
+/**
+ * 这里是uni-app内置的常用样式变量
+ *
+ * uni-app 官方扩展插件及插件市场（https://ext.dcloud.net.cn）上很多三方插件均使用了这些样式变量
+ * 如果你是插件开发者，建议你使用scss预处理，并在插件代码中直接使用这些变量（无需 import 这个文件），方便用户通过搭积木的方式开发整体风格一致的App
+ *
+ */
+/**
+ * 如果你是App开发者（插件使用者），你可以通过修改这些变量来定制自己的插件主题，实现自定义主题功能
+ *
+ * 如果你的项目同样使用了scss预处理，你也可以直接在你的 scss 代码中使用如下变量，同时无需 import 这个文件
+ */
+/* 颜色变量 */
+/* 行为相关颜色 */
+/* 文字基本颜色 */
+/* 背景颜色 */
+/* 边框颜色 */
+/* 尺寸变量 */
+/* 文字尺寸 */
+/* 图片尺寸 */
+/* Border Radius */
+/* 水平间距 */
+/* 垂直间距 */
+/* 透明度 */
+/* 文章场景相关 */
+.uni-datetime-picker[data-v-eeeb8241] {
+  /* width: 100%; */
+}
+.uni-datetime-picker-view[data-v-eeeb8241] {
+  height: 130px;
+  width: 270px;
+  cursor: pointer;
+}
+.uni-datetime-picker-item[data-v-eeeb8241] {
+  height: 50px;
+  line-height: 50px;
+  text-align: center;
+  font-size: 14px;
+}
+.uni-datetime-picker-btn[data-v-eeeb8241] {
+  margin-top: 60px;
+  display: flex;
+  cursor: pointer;
+  flex-direction: row;
+  justify-content: space-between;
+}
+.uni-datetime-picker-btn-text[data-v-eeeb8241] {
+  font-size: 14px;
+  color: #007aff;
+}
+.uni-datetime-picker-btn-group[data-v-eeeb8241] {
+  display: flex;
+  flex-direction: row;
+}
+.uni-datetime-picker-cancel[data-v-eeeb8241] {
+  margin-right: 30px;
+}
+.uni-datetime-picker-mask[data-v-eeeb8241] {
+  position: fixed;
+  bottom: 0px;
+  top: 0px;
+  left: 0px;
+  right: 0px;
+  background-color: rgba(0, 0, 0, 0.4);
+  transition-duration: 0.3s;
+  z-index: 998;
+}
+.uni-datetime-picker-popup[data-v-eeeb8241] {
+  border-radius: 8px;
+  padding: 30px;
+  width: 270px;
+  background-color: #fff;
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  transition-duration: 0.3s;
+  z-index: 999;
+}
+.uni-datetime-picker-time[data-v-eeeb8241] {
+  color: grey;
+}
+.uni-datetime-picker-column[data-v-eeeb8241] {
+  height: 50px;
+}
+.uni-datetime-picker-timebox[data-v-eeeb8241] {
+  border: 1px solid #E5E5E5;
+  border-radius: 5px;
+  padding: 7px 10px;
+  box-sizing: border-box;
+  cursor: pointer;
+}
+.uni-datetime-picker-timebox-pointer[data-v-eeeb8241] {
+  cursor: pointer;
+}
+.uni-datetime-picker-disabled[data-v-eeeb8241] {
+  opacity: 0.4;
+}
+.uni-datetime-picker-text[data-v-eeeb8241] {
+  font-size: 14px;
+  line-height: 50px;
+}
+.uni-datetime-picker-sign[data-v-eeeb8241] {
+  position: absolute;
+  top: 53px;
+  /* 减掉 10px 的元素高度，兼容nvue */
+  color: #999;
+}
+.sign-left[data-v-eeeb8241] {
+  left: 86px;
+}
+.sign-right[data-v-eeeb8241] {
+  right: 86px;
+}
+.sign-center[data-v-eeeb8241] {
+  left: 135px;
+}
+.uni-datetime-picker__container-box[data-v-eeeb8241] {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-top: 40px;
+}
+.time-hide-second[data-v-eeeb8241] {
+  width: 180px;
+}
+/**
+ * 这里是uni-app内置的常用样式变量
+ *
+ * uni-app 官方扩展插件及插件市场（https://ext.dcloud.net.cn）上很多三方插件均使用了这些样式变量
+ * 如果你是插件开发者，建议你使用scss预处理，并在插件代码中直接使用这些变量（无需 import 这个文件），方便用户通过搭积木的方式开发整体风格一致的App
+ *
+ */
+/**
+ * 如果你是App开发者（插件使用者），你可以通过修改这些变量来定制自己的插件主题，实现自定义主题功能
+ *
+ * 如果你的项目同样使用了scss预处理，你也可以直接在你的 scss 代码中使用如下变量，同时无需 import 这个文件
+ */
+/* 颜色变量 */
+/* 行为相关颜色 */
+/* 文字基本颜色 */
+/* 背景颜色 */
+/* 边框颜色 */
+/* 尺寸变量 */
+/* 文字尺寸 */
+/* 图片尺寸 */
+/* Border Radius */
+/* 水平间距 */
+/* 垂直间距 */
+/* 透明度 */
+/* 文章场景相关 */
+.uni-calendar[data-v-bbebfd0f] {
+  display: flex;
+  flex-direction: column;
+}
+.uni-calendar__mask[data-v-bbebfd0f] {
+  position: fixed;
+  bottom: 0;
+  top: 0;
+  left: 0;
+  right: 0;
+  background-color: rgba(0, 0, 0, 0.4);
+  transition-property: opacity;
+  transition-duration: 0.3s;
+  opacity: 0;
+  z-index: 99;
+}
+.uni-calendar--mask-show[data-v-bbebfd0f] {
+  opacity: 1;
+}
+.uni-calendar--fixed[data-v-bbebfd0f] {
+  position: fixed;
+  bottom: calc(var(--window-bottom));
+  left: 0;
+  right: 0;
+  transition-property: transform;
+  transition-duration: 0.3s;
+  transform: translateY(460px);
+  z-index: 99;
+}
+.uni-calendar--ani-show[data-v-bbebfd0f] {
+  transform: translateY(0);
+}
+.uni-calendar__content[data-v-bbebfd0f] {
+  background-color: #fff;
+}
+.uni-calendar__content-mobile[data-v-bbebfd0f] {
+  border-top-left-radius: 10px;
+  border-top-right-radius: 10px;
+  box-shadow: 0px 0px 5px 3px rgba(0, 0, 0, 0.1);
+}
+.uni-calendar__header[data-v-bbebfd0f] {
+  position: relative;
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+  height: 50px;
+}
+.uni-calendar__header-mobile[data-v-bbebfd0f] {
+  padding: 10px;
+  padding-bottom: 0;
+}
+.uni-calendar--fixed-top[data-v-bbebfd0f] {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  border-top-color: rgba(0, 0, 0, 0.4);
+  border-top-style: solid;
+  border-top-width: 1px;
+}
+.uni-calendar--fixed-width[data-v-bbebfd0f] {
+  width: 50px;
+}
+.uni-calendar__backtoday[data-v-bbebfd0f] {
+  position: absolute;
+  right: 0;
+  top: 0.78125rem;
+  padding: 0 5px;
+  padding-left: 10px;
+  height: 25px;
+  line-height: 25px;
+  font-size: 12px;
+  border-top-left-radius: 25px;
+  border-bottom-left-radius: 25px;
+  color: #fff;
+  background-color: #f1f1f1;
+}
+.uni-calendar__header-text[data-v-bbebfd0f] {
+  text-align: center;
+  width: 100px;
+  font-size: 15px;
+  color: #666;
+}
+.uni-calendar__button-text[data-v-bbebfd0f] {
+  text-align: center;
+  width: 100px;
+  font-size: 14px;
+  color: #007aff;
+  letter-spacing: 3px;
+}
+.uni-calendar__header-btn-box[data-v-bbebfd0f] {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+  width: 50px;
+  height: 50px;
+}
+.uni-calendar__header-btn[data-v-bbebfd0f] {
+  width: 9px;
+  height: 9px;
+  border-left-color: #808080;
+  border-left-style: solid;
+  border-left-width: 1px;
+  border-top-color: #555555;
+  border-top-style: solid;
+  border-top-width: 1px;
+}
+.uni-calendar--left[data-v-bbebfd0f] {
+  transform: rotate(-45deg);
+}
+.uni-calendar--right[data-v-bbebfd0f] {
+  transform: rotate(135deg);
+}
+.uni-calendar__weeks[data-v-bbebfd0f] {
+  position: relative;
+  display: flex;
+  flex-direction: row;
+}
+.uni-calendar__weeks-item[data-v-bbebfd0f] {
+  flex: 1;
+}
+.uni-calendar__weeks-day[data-v-bbebfd0f] {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  height: 40px;
+  border-bottom-color: #F5F5F5;
+  border-bottom-style: solid;
+  border-bottom-width: 1px;
+}
+.uni-calendar__weeks-day-text[data-v-bbebfd0f] {
+  font-size: 12px;
+  color: #B2B2B2;
+}
+.uni-calendar__box[data-v-bbebfd0f] {
+  position: relative;
+  padding-bottom: 7px;
+}
+.uni-calendar__box-bg[data-v-bbebfd0f] {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+}
+.uni-calendar__box-bg-text[data-v-bbebfd0f] {
+  font-size: 200px;
+  font-weight: bold;
+  color: #999;
+  opacity: 0.1;
+  text-align: center;
+  line-height: 1;
+}
+.uni-date-changed[data-v-bbebfd0f] {
+  padding: 0 10px;
+  text-align: center;
+  color: #333;
+  border-top-color: #DCDCDC;
+  border-top-style: solid;
+  border-top-width: 1px;
+  flex: 1;
+}
+.uni-date-btn--ok[data-v-bbebfd0f] {
+  padding: 20px 15px;
+}
+.uni-date-changed--time-start[data-v-bbebfd0f] {
+  display: flex;
+  align-items: center;
+}
+.uni-date-changed--time-end[data-v-bbebfd0f] {
+  display: flex;
+  align-items: center;
+}
+.uni-date-changed--time-date[data-v-bbebfd0f] {
+  color: #999;
+  line-height: 50px;
+  margin-right: 5px;
+}
+.time-picker-style[data-v-bbebfd0f] {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+.mr-10[data-v-bbebfd0f] {
+  margin-right: 10px;
+}
+.dialog-close[data-v-bbebfd0f] {
+  position: absolute;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  padding: 0 25px;
+  margin-top: 10px;
+}
+.dialog-close-plus[data-v-bbebfd0f] {
+  width: 16px;
+  height: 2px;
+  background-color: #737987;
+  border-radius: 2px;
+  transform: rotate(45deg);
+}
+.dialog-close-rotate[data-v-bbebfd0f] {
+  position: absolute;
+  transform: rotate(-45deg);
+}
+.uni-datetime-picker--btn[data-v-bbebfd0f] {
+  border-radius: 100px;
+  height: 40px;
+  line-height: 40px;
+  background-color: #007aff;
+  color: #fff;
+  font-size: 16px;
+  letter-spacing: 2px;
+}
+.uni-datetime-picker--btn[data-v-bbebfd0f]:active {
+  opacity: 0.7;
+}
+/**
+ * 这里是uni-app内置的常用样式变量
+ *
+ * uni-app 官方扩展插件及插件市场（https://ext.dcloud.net.cn）上很多三方插件均使用了这些样式变量
+ * 如果你是插件开发者，建议你使用scss预处理，并在插件代码中直接使用这些变量（无需 import 这个文件），方便用户通过搭积木的方式开发整体风格一致的App
+ *
+ */
+/**
+ * 如果你是App开发者（插件使用者），你可以通过修改这些变量来定制自己的插件主题，实现自定义主题功能
+ *
+ * 如果你的项目同样使用了scss预处理，你也可以直接在你的 scss 代码中使用如下变量，同时无需 import 这个文件
+ */
+/* 颜色变量 */
+/* 行为相关颜色 */
+/* 文字基本颜色 */
+/* 背景颜色 */
+/* 边框颜色 */
+/* 尺寸变量 */
+/* 文字尺寸 */
+/* 图片尺寸 */
+/* Border Radius */
+/* 水平间距 */
+/* 垂直间距 */
+/* 透明度 */
+/* 文章场景相关 */
+.uni-date[data-v-9a209c07] {
+  width: 100%;
+  flex: 1;
+}
+.uni-date-x[data-v-9a209c07] {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+  border-radius: 4px;
+  background-color: #fff;
+  color: #666;
+  font-size: 14px;
+  flex: 1;
+}
+.uni-date-x .icon-calendar[data-v-9a209c07] {
+  padding-left: 3px;
+}
+.uni-date-x .range-separator[data-v-9a209c07] {
+  height: 35px;
+  padding: 0 2px;
+  line-height: 35px;
+}
+.uni-date-x--border[data-v-9a209c07] {
+  box-sizing: border-box;
+  border-radius: 4px;
+  border: 1px solid #e5e5e5;
+}
+.uni-date-editor--x[data-v-9a209c07] {
+  display: flex;
+  align-items: center;
+  position: relative;
+}
+.uni-date-editor--x .uni-date__icon-clear[data-v-9a209c07] {
+  padding-right: 3px;
+  display: flex;
+  align-items: center;
+}
+.uni-date__x-input[data-v-9a209c07] {
+  width: auto;
+  height: 35px;
+  padding-left: 5px;
+  position: relative;
+  flex: 1;
+  line-height: 35px;
+  font-size: 14px;
+  overflow: hidden;
+}
+.text-center[data-v-9a209c07] {
+  text-align: center;
+}
+.uni-date__input[data-v-9a209c07] {
+  height: 40px;
+  width: 100%;
+  line-height: 40px;
+  font-size: 14px;
+}
+.uni-date-range__input[data-v-9a209c07] {
+  text-align: center;
+  max-width: 142px;
+}
+.uni-date-picker__container[data-v-9a209c07] {
+  position: relative;
+}
+.uni-date-mask--pc[data-v-9a209c07] {
+  position: fixed;
+  bottom: 0px;
+  top: 0px;
+  left: 0px;
+  right: 0px;
+  background-color: rgba(0, 0, 0, 0);
+  transition-duration: 0.3s;
+  z-index: 996;
+}
+.uni-date-single--x[data-v-9a209c07] {
+  background-color: #fff;
+  position: absolute;
+  top: 0;
+  z-index: 999;
+  border: 1px solid #EBEEF5;
+  box-shadow: 0 2px 12px 0 rgba(0, 0, 0, 0.1);
+  border-radius: 4px;
+}
+.uni-date-range--x[data-v-9a209c07] {
+  background-color: #fff;
+  position: absolute;
+  top: 0;
+  z-index: 999;
+  border: 1px solid #EBEEF5;
+  box-shadow: 0 2px 12px 0 rgba(0, 0, 0, 0.1);
+  border-radius: 4px;
+}
+.uni-date-editor--x__disabled[data-v-9a209c07] {
+  opacity: 0.4;
+  cursor: default;
+}
+.uni-date-editor--logo[data-v-9a209c07] {
+  width: 16px;
+  height: 16px;
+  vertical-align: middle;
+}
+
+/* 添加时间 */
+.popup-x-header[data-v-9a209c07] {
+  display: flex;
+  flex-direction: row;
+}
+.popup-x-header--datetime[data-v-9a209c07] {
+  display: flex;
+  flex-direction: row;
+  flex: 1;
+}
+.popup-x-body[data-v-9a209c07] {
+  display: flex;
+}
+.popup-x-footer[data-v-9a209c07] {
+  padding: 0 15px;
+  border-top-color: #F1F1F1;
+  border-top-style: solid;
+  border-top-width: 1px;
+  line-height: 40px;
+  text-align: right;
+  color: #666;
+}
+.popup-x-footer uni-text[data-v-9a209c07]:hover {
+  color: #007aff;
+  cursor: pointer;
+  opacity: 0.8;
+}
+.popup-x-footer .confirm-text[data-v-9a209c07] {
+  margin-left: 20px;
+  color: #007aff;
+}
+.uni-date-changed[data-v-9a209c07] {
+  text-align: center;
+  color: #333;
+  border-bottom-color: #F1F1F1;
+  border-bottom-style: solid;
+  border-bottom-width: 1px;
+}
+.uni-date-changed--time uni-text[data-v-9a209c07] {
+  height: 50px;
+  line-height: 50px;
+}
+.uni-date-changed .uni-date-changed--time[data-v-9a209c07] {
+  flex: 1;
+}
+.uni-date-changed--time-date[data-v-9a209c07] {
+  color: #333;
+  opacity: 0.6;
+}
+.mr-50[data-v-9a209c07] {
+  margin-right: 50px;
+}
+
+/* picker 弹出层通用的指示小三角, todo：扩展至上下左右方向定位 */
+.uni-popper__arrow[data-v-9a209c07],
+.uni-popper__arrow[data-v-9a209c07]::after {
+  position: absolute;
+  display: block;
+  width: 0;
+  height: 0;
+  border: 6px solid transparent;
+  border-top-width: 0;
+}
+.uni-popper__arrow[data-v-9a209c07] {
+  filter: drop-shadow(0 2px 12px rgba(0, 0, 0, 0.03));
+  top: -6px;
+  left: 10%;
+  margin-right: 3px;
+  border-bottom-color: #EBEEF5;
+}
+.uni-popper__arrow[data-v-9a209c07]::after {
+  content: " ";
+  top: 1px;
+  margin-left: -6px;
+  border-bottom-color: #fff;
+}
 /**
  * 这里是uni-app内置的常用样式变量
  *
@@ -794,9 +1974,11 @@
 }
 
 /* 原有样式保持不变... */
+
+/*搜索功能样式*/
 .container[data-v-98a9e0b2] {
   padding: 0.625rem;
-  height: 90vh;
+  height: 80vh;
   background-color: #f5f5f5;
   position: relative;
 }
@@ -818,7 +2000,7 @@
   margin: 0.625rem 0;
 }
 .scroll-view[data-v-98a9e0b2] {
-  height: calc(100vh - 10.9375rem);
+  height: calc(90vh - 10.9375rem);
 }
 .station-item[data-v-98a9e0b2] {
   background: white;
@@ -875,13 +2057,13 @@
   flex-wrap: wrap;
   justify-content: center;
   align-items: center;
-  padding: 0.625rem 0.5rem;
+  padding: 2.625rem 0.5rem;
   background: white;
   /* margin: 20rpx 10rpx 120rpx 10rpx; *//* 增加底部边距，避开导航栏 */
   border-radius: 0.5rem;
   box-shadow: 0 0.0625rem 0.3125rem rgba(0, 0, 0, 0.05);
   /* position: relative; */ /* 改为相对定位，不再固定在底部 */
-  z-index: 100;
+/*  z-index: 100; */
 }
 
 /* 页码按钮样式 */
@@ -948,7 +2130,7 @@
   display: flex;
   justify-content: center;
   align-items: center;
-  z-index: 999;
+  /* z-index: 999; */
 }
 
 
@@ -963,7 +2145,7 @@
   display: flex;
   justify-content: center;
   align-items: center;
-  z-index: 1000;
+  z-index: 600;
 }
 .dialog-content[data-v-98a9e0b2] {
   background: white;
@@ -1112,8 +2294,10 @@
   color: #666;
   margin-bottom: 0.46875rem;
 }
-.form-input[data-v-98a9e0b2] {
-  width: 100%;
+
+/* 调整输入框宽度 */
+.form-input[data-v-98a9e0b2], .form-picker[data-v-98a9e0b2], .picker-view[data-v-98a9e0b2] {
+   /* 从100%减小到70%，您可以根据需要调整这个值 */
   height: 2.5rem;
   line-height: 2.5rem;
   padding: 0 0.625rem;
@@ -1123,10 +2307,35 @@
   color: #333;
   background-color: #f8f8f8;
 }
-.form-input[disabled][data-v-98a9e0b2] {
-  color: #999;
-  background-color: #f5f5f5;
-  cursor: not-allowed;
+
+/* 修改表单组布局，使输入框对齐 */
+.form-group[data-v-98a9e0b2] {
+  display: flex;
+  align-items: center;
+  margin-bottom: 0.625rem;
+}
+
+/* 调整标签宽度，保持一致性 */
+.form-label[data-v-98a9e0b2] {
+  width: 30%; /* 设置固定宽度 */
+  font-size: 0.875rem;
+  color: #333;
+}
+
+/* 确保数字输入组的样式也保持一致 */
+.number-btn[data-v-98a9e0b2] {
+  width: 1.875rem;
+  height: 1.875rem;
+  line-height: 1.75rem;
+  text-align: center;
+  border: 0.03125rem solid #ddd;
+  border-radius: 0.3125rem;
+  background-color: #f8f8f8;
+}
+.unit-text[data-v-98a9e0b2] {
+  margin-left: 0.3125rem;
+  font-size: 0.8125rem;
+  color: #666;
 }
 .form-buttons[data-v-98a9e0b2] {
   display: flex;
@@ -1211,6 +2420,10 @@
   font-size: 0.9375rem;
   font-weight: bold;
   color: #333;
+}
+.date-picker-container[data-v-98a9e0b2] {
+  width: 50%;
+  display: inline-block;
 }
 .install-info-header[data-v-98a9e0b2] {
   display: flex;
@@ -1310,7 +2523,7 @@
 /* 修改设备信息区块的样式为浅灰色背景 */
 .detail-section[data-v-98a9e0b2] {
   background-color: #f9f9f9;
-  padding: 0.46875rem 0.625rem;
+  padding: 0.46875rem 1.625rem;
   border-radius: 0.25rem;
 }
 
@@ -1336,7 +2549,7 @@
   display: flex;
   align-items: center;
   margin: 0.3125rem 0;
-  width: 100%;
+  width: 60%;
   border: 1px solid #ddd;
   border-radius: 0.25rem;
   overflow: hidden;
@@ -1391,7 +2604,7 @@
   display: flex;
   justify-content: center;
   align-items: center;
-  z-index: 9999; /* 确保是最高层级 */
+  /* z-index: 9999; /* 确保是最高层级 */
 }
 .confirm-dialog[data-v-98a9e0b2] {
   width: 80%;
@@ -1435,4 +2648,157 @@
 .delete-btn[data-v-98a9e0b2] {
   background-color: #ff4444;
   color: #fff;
+}
+.chart-container[data-v-98a9e0b2] {
+  width: 60vw;
+  height:auto; /* 使用视口高度单位 */
+  min-height: 12.5rem; /* 最小高度保障 */
+  background-color: #fff; /* 修复背景色错误 */
+  border-radius: 0.5rem;  /* 添加圆角 */
+  box-shadow: 0 0.125rem 0.75rem rgba(0,0,0,0.05); /* 添加微妙阴影 */
+  overflow: hidden;      /* 防止内容溢出 */
+  padding: 0.25rem;         /* 增加内边距 */
+}
+
+/* 编辑设备信息弹窗样式改进 */
+.edit-dialog[data-v-98a9e0b2] {
+  position: relative;
+  width: 90%;
+  max-width: 21.875rem;
+  max-height: 80vh;
+  background: #fff;
+  border-radius: 0.375rem;
+  display: flex;
+  flex-direction: column;
+  box-shadow: 0 0.3125rem 0.9375rem rgba(0, 0, 0, 0.1);
+}
+.edit-form[data-v-98a9e0b2] {
+  flex: 1;
+  padding: 0.625rem 0.9375rem;
+  overflow-y: auto;
+}
+.form-group[data-v-98a9e0b2] {
+  margin-bottom: 0.625rem;
+  display: flex;
+  align-items: center;
+}
+
+/* 修改标签区域的宽度和对齐方式 */
+.form-label[data-v-98a9e0b2] {
+  width: 5rem; /* 减小标签宽度 */
+  font-size: 0.875rem;
+  color: #333;
+  text-align: left; /* 改为左对齐 */
+  margin-right: 0.625rem;
+  flex-shrink: 0; /* 防止缩小 */
+}
+.required[data-v-98a9e0b2]::before {
+  content: '*';
+  color: #f56c6c;
+  margin-right: 0.125rem;
+}
+
+/* 调整输入框样式 */
+.picker-view[data-v-98a9e0b2] {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  height: 2.1875rem;
+  padding: 0 0.625rem;
+  border: 0.03125rem solid #ebeef5;
+  border-radius: 0.25rem;
+  background-color: #f8f9fa;
+  font-size: 0.875rem;
+}
+.number-btn[data-v-98a9e0b2] {
+  width: 1.875rem; /* 减小按钮宽度 */
+  height: 2.1875rem;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background: #f0f0f0;
+  border: 0.03125rem solid #ebeef5;
+  font-size: 1rem;
+  padding: 0;
+  margin: 0;
+}
+.minus-btn[data-v-98a9e0b2] {
+  border-radius: 0.25rem 0 0 0.25rem;
+}
+.plus-btn[data-v-98a9e0b2] {
+  border-radius: 0 0.25rem 0.25rem 0;
+}
+.number-input[data-v-98a9e0b2] {
+  flex: 0 0 2.5rem; /* 减小输入框宽度 */
+  text-align: center;
+  border-radius: 0;
+  border-left: none;
+  border-right: none;
+}
+.unit-text[data-v-98a9e0b2] {
+  margin-left: 0.46875rem;
+  font-size: 0.8125rem;
+  color: #666;
+}
+
+/* 简化底部按钮组的样式 */
+.dialog-footer[data-v-98a9e0b2] {
+  display: flex;
+  padding: 0.625rem;
+  border-top: 0.03125rem solid #ebeef5;
+}
+.footer-btn[data-v-98a9e0b2] {
+  flex: 1;
+  height: 2.5rem;
+  line-height: 2.5rem;
+  text-align: center;
+  border-radius: 0.25rem;
+  font-size: 0.875rem;
+  margin: 0 0.3125rem;
+}
+.cancel-btn[data-v-98a9e0b2] {
+  background: #f8f9fa;
+  color: #666;
+  border: 0.03125rem solid #dcdfe6;
+}
+.confirm-btn[data-v-98a9e0b2] {
+  background: #1296db;
+  color: #fff;
+}
+.custom-toast[data-v-98a9e0b2] {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+  padding-top: 10%;
+  z-index: 99999; /* 确保这个值足够大 */
+  pointer-events: none; /* 允许点击穿透 */
+}
+.custom-toast-content[data-v-98a9e0b2] {
+  background-color: rgba(0, 0, 0, 0.7);
+  color: #fff;
+  border-radius: 8px;
+  padding: 15px 20px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 10px;
+}
+.picker-view-date[data-v-98a9e0b2] {
+  width: 100%;
+  height: 2.5rem;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 0.625rem;
+  background-color: #f8f8f8;
+  border: 1px solid #ddd;
+  border-radius: 0.3125rem;
+}
+.calendar-icon[data-v-98a9e0b2] {
+  font-size: 1rem;
 }
