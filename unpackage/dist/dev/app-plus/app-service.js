@@ -31,6 +31,40 @@ if (uni.restoreGlobal) {
 }
 (function(vue) {
   "use strict";
+  const _imports_0$7 = "/static/background.png";
+  const _export_sfc = (sfc, props) => {
+    const target = sfc.__vccOpts || sfc;
+    for (const [key, val] of props) {
+      target[key] = val;
+    }
+    return target;
+  };
+  const _sfc_main$D = {
+    __name: "PreLogin",
+    setup(__props, { expose: __expose }) {
+      __expose();
+      vue.onMounted(() => {
+        setTimeout(() => {
+          uni.navigateTo({
+            url: "/pages/login/login"
+          });
+        }, 2e3);
+      });
+      const __returned__ = { onMounted: vue.onMounted, getCurrentInstance: vue.getCurrentInstance };
+      Object.defineProperty(__returned__, "__isScriptSetup", { enumerable: false, value: true });
+      return __returned__;
+    }
+  };
+  function _sfc_render$C(_ctx, _cache, $props, $setup, $data, $options) {
+    return vue.openBlock(), vue.createElementBlock("view", { class: "main" }, [
+      vue.createElementVNode("image", {
+        src: _imports_0$7,
+        alt: "",
+        class: "img"
+      })
+    ]);
+  }
+  const PagesPreLoginPreLogin = /* @__PURE__ */ _export_sfc(_sfc_main$D, [["render", _sfc_render$C], ["__scopeId", "data-v-6f7f9871"], ["__file", "C:/Users/86158/Documents/HBuilderProjects/PrePayApp/pages/PreLogin/PreLogin.vue"]]);
   const ON_SHOW = "onShow";
   const ON_LOAD = "onLoad";
   function formatAppLog(type, filename, ...args) {
@@ -507,16 +541,9 @@ if (uni.restoreGlobal) {
       }
     });
   };
-  const _imports_0$7 = "/static/passwords_icon.png";
-  const _export_sfc = (sfc, props) => {
-    const target = sfc.__vccOpts || sfc;
-    for (const [key, val] of props) {
-      target[key] = val;
-    }
-    return target;
-  };
+  const _imports_0$6 = "/static/passwords_icon.png";
   const userIcon = "/static/username_icon.png";
-  const _sfc_main$D = {
+  const _sfc_main$C = {
     __name: "login",
     setup(__props, { expose: __expose }) {
       __expose();
@@ -579,7 +606,7 @@ if (uni.restoreGlobal) {
       return __returned__;
     }
   };
-  function _sfc_render$C(_ctx, _cache, $props, $setup, $data, $options) {
+  function _sfc_render$B(_ctx, _cache, $props, $setup, $data, $options) {
     return vue.openBlock(), vue.createElementBlock("view", { class: "container" }, [
       vue.createCommentVNode(" 标题和输入框区域 "),
       vue.createElementVNode("view", { class: "input-container" }, [
@@ -604,7 +631,7 @@ if (uni.restoreGlobal) {
         vue.createElementVNode("view", { class: "input-item" }, [
           vue.createElementVNode("image", {
             style: { "margin-left": "20rpx", "width": "70rpx", "height": "70rpx" },
-            src: _imports_0$7
+            src: _imports_0$6
           }),
           vue.withDirectives(vue.createElementVNode(
             "input",
@@ -640,7 +667,7 @@ if (uni.restoreGlobal) {
       }, "24小时客户服务电话：400 858 1855")
     ]);
   }
-  const PagesLoginLogin = /* @__PURE__ */ _export_sfc(_sfc_main$D, [["render", _sfc_render$C], ["__scopeId", "data-v-e4e4508d"], ["__file", "C:/Users/86158/Documents/HBuilderProjects/PrePayApp/pages/login/login.vue"]]);
+  const PagesLoginLogin = /* @__PURE__ */ _export_sfc(_sfc_main$C, [["render", _sfc_render$B], ["__scopeId", "data-v-e4e4508d"], ["__file", "C:/Users/86158/Documents/HBuilderProjects/PrePayApp/pages/login/login.vue"]]);
   const fontData = [
     {
       "font_class": "arrow-down",
@@ -1291,7 +1318,7 @@ if (uni.restoreGlobal) {
     const reg = /^[0-9]*$/g;
     return typeof val === "number" || reg.test(val) ? val + "px" : val;
   };
-  const _sfc_main$C = {
+  const _sfc_main$B = {
     name: "UniIcons",
     emits: ["click"],
     props: {
@@ -1345,7 +1372,7 @@ if (uni.restoreGlobal) {
       }
     }
   };
-  function _sfc_render$B(_ctx, _cache, $props, $setup, $data, $options) {
+  function _sfc_render$A(_ctx, _cache, $props, $setup, $data, $options) {
     return vue.openBlock(), vue.createElementBlock(
       "text",
       {
@@ -1360,8 +1387,8 @@ if (uni.restoreGlobal) {
       /* CLASS, STYLE */
     );
   }
-  const __easycom_0$2 = /* @__PURE__ */ _export_sfc(_sfc_main$C, [["render", _sfc_render$B], ["__scopeId", "data-v-946bce22"], ["__file", "C:/Users/86158/Documents/HBuilderProjects/PrePayApp/node_modules/@dcloudio/uni-ui/lib/uni-icons/uni-icons.vue"]]);
-  const _sfc_main$B = {
+  const __easycom_0$2 = /* @__PURE__ */ _export_sfc(_sfc_main$B, [["render", _sfc_render$A], ["__scopeId", "data-v-946bce22"], ["__file", "C:/Users/86158/Documents/HBuilderProjects/PrePayApp/node_modules/@dcloudio/uni-ui/lib/uni-icons/uni-icons.vue"]]);
+  const _sfc_main$A = {
     __name: "map",
     setup(__props, { expose: __expose }) {
       __expose();
@@ -1462,7 +1489,7 @@ if (uni.restoreGlobal) {
       return __returned__;
     }
   };
-  function _sfc_render$A(_ctx, _cache, $props, $setup, $data, $options) {
+  function _sfc_render$z(_ctx, _cache, $props, $setup, $data, $options) {
     var _a;
     return vue.openBlock(), vue.createElementBlock("view", { class: "container" }, [
       vue.createCommentVNode(" 顶部统计信息 "),
@@ -1580,34 +1607,7 @@ if (uni.restoreGlobal) {
       ])
     ]);
   }
-  const PagesMapMap = /* @__PURE__ */ _export_sfc(_sfc_main$B, [["render", _sfc_render$A], ["__scopeId", "data-v-e06b858f"], ["__file", "C:/Users/86158/Documents/HBuilderProjects/PrePayApp/pages/map/map.vue"]]);
-  const _imports_0$6 = "/static/background.png";
-  const _sfc_main$A = {
-    __name: "PreLogin",
-    setup(__props, { expose: __expose }) {
-      __expose();
-      vue.onMounted(() => {
-        setTimeout(() => {
-          uni.navigateTo({
-            url: "/pages/login/login"
-          });
-        }, 2e3);
-      });
-      const __returned__ = { onMounted: vue.onMounted, getCurrentInstance: vue.getCurrentInstance };
-      Object.defineProperty(__returned__, "__isScriptSetup", { enumerable: false, value: true });
-      return __returned__;
-    }
-  };
-  function _sfc_render$z(_ctx, _cache, $props, $setup, $data, $options) {
-    return vue.openBlock(), vue.createElementBlock("view", { class: "main" }, [
-      vue.createElementVNode("img", {
-        src: _imports_0$6,
-        alt: "",
-        class: "img"
-      })
-    ]);
-  }
-  const PagesPreLoginPreLogin = /* @__PURE__ */ _export_sfc(_sfc_main$A, [["render", _sfc_render$z], ["__scopeId", "data-v-6f7f9871"], ["__file", "C:/Users/86158/Documents/HBuilderProjects/PrePayApp/pages/PreLogin/PreLogin.vue"]]);
+  const PagesMapMap = /* @__PURE__ */ _export_sfc(_sfc_main$A, [["render", _sfc_render$z], ["__scopeId", "data-v-e06b858f"], ["__file", "C:/Users/86158/Documents/HBuilderProjects/PrePayApp/pages/map/map.vue"]]);
   const _imports_0$5 = "/static/logo.png";
   const _sfc_main$z = {
     data() {
@@ -1641,7 +1641,7 @@ if (uni.restoreGlobal) {
   const _sfc_main$y = {};
   function _sfc_render$x(_ctx, _cache) {
     return vue.openBlock(), vue.createElementBlock("view", { class: "main" }, [
-      vue.createElementVNode("img", {
+      vue.createElementVNode("image", {
         src: _imports_0$4,
         alt: "",
         class: "img"
@@ -2182,6 +2182,12 @@ if (uni.restoreGlobal) {
   };
   const pages = [
     {
+      path: "pages/PreLogin/PreLogin",
+      style: {
+        navigationBarTitleText: "预登录界面"
+      }
+    },
+    {
       path: "pages/login/login",
       style: {
         navigationBarTitleText: "登录"
@@ -2193,12 +2199,6 @@ if (uni.restoreGlobal) {
         navigationBarTitleText: "地图",
         navigationBarBackgroundColor: "#1E90FF",
         navigationBarTextStyle: "white"
-      }
-    },
-    {
-      path: "pages/PreLogin/PreLogin",
-      style: {
-        navigationBarTitleText: "预登录界面"
       }
     },
     {
@@ -11239,6 +11239,8 @@ ${i3}
       closeDeviceDialog() {
         this.showDeviceDetailDialog = false;
         this.selectedDevice = null;
+        this.chartData.categories = ["时间"];
+        this.chartData.series.data = [];
       },
       closeInstallInfoDialog() {
         this.showInstallInfoDialog = false;
@@ -19024,9 +19026,9 @@ ${i3}
     );
   }
   const PagesCompanyStationListCompanyStationList = /* @__PURE__ */ _export_sfc(_sfc_main$1, [["render", _sfc_render], ["__scopeId", "data-v-de55059f"], ["__file", "C:/Users/86158/Documents/HBuilderProjects/PrePayApp/pages/company-stationList/company-stationList.vue"]]);
+  __definePage("pages/PreLogin/PreLogin", PagesPreLoginPreLogin);
   __definePage("pages/login/login", PagesLoginLogin);
   __definePage("pages/map/map", PagesMapMap);
-  __definePage("pages/PreLogin/PreLogin", PagesPreLoginPreLogin);
   __definePage("pages/index/index", PagesIndexIndex);
   __definePage("pages/more/more", PagesMoreMore);
   __definePage("pages/list/list", PagesListList);

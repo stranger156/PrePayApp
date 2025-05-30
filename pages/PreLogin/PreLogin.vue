@@ -1,6 +1,6 @@
 <template>
 	<view  class="main">
-	<img src="/static/background.png" alt="" class="img" />
+	<image src="/static/background.png" alt="" class="img" />
 	</view>
 </template>
 
