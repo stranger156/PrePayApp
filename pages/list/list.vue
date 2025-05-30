@@ -242,7 +242,7 @@
 
       <!-- 历史记录 -->
      <view class="detail-section">
-       <text class="section-title">温差历史记录（{{ selectedDevice.history?.length || 0 }}条）</text>
+       <text class="section-title">温差历史记录</text>
    <view class="chart-container">
      <qiun-data-charts 
        type="line"
