@@ -2,6 +2,9 @@
   <view class="container">
     <!-- 错误记录列表 -->
     <scroll-view scroll-y class="error-list">
+		<view class="action-buttons">
+		     <button class="btn" @click="viewLockedUser">查看登录锁定用户</button>
+		</view>
       <view 
         class="error-item" 
         v-for="(item, index) in errorList" 
@@ -31,6 +34,11 @@ export default {
     };
   },
   methods: {
+	  viewLockedUser(url) {
+	    uni.redirectTo({
+	      url: '/pages/lockedUser/lockedUser'
+	    })
+	  },
     // 获取错误日志列表
     async getErrorList() {
       try {
@@ -110,6 +118,14 @@ export default {
 
 <!-- 样式部分保持原有结构，建议补充以下优化 -->
 <style scoped>
+	.btn{
+		flex: 1;
+		padding: 10rpx;
+		border-radius: 8rpx;
+		font-size: 25rpx;
+		background: #4285f4;
+		color: white;
+	}
 	.container {
 	  display: flex;
 	  flex-direction: column;

@@ -44,6 +44,13 @@
 			}
 		},
 		{
+			"path" : "pages/lockedUser/lockedUser",
+			"style" : 
+			{
+				"navigationBarTitleText" : "登录锁定用户"
+			}
+		},
+		{
 			"path" : "pages/list/list",
 			"style": {
 			  "navigationBarTitleText": "我的换热站",
@@ -139,7 +146,7 @@
 			{
 				"navigationBarTitleText" : "换热站管理"
 			}
-		}	
+		}
 		
 	],
 	"globalStyle": {

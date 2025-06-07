@@ -13,7 +13,7 @@
           <text class="device-id">设备号：{{ item.deviceNumber }}</text>
           <text class="device-days">充值时间：{{ item.date }}</text>
         </view>
-        <text class="amount">+{{ item.rechargeAmount }}元</text>
+        <text class="amount">+{{ parseInt(item.rechargeAmount) }}天</text>
       </view>
       
       <!-- 无数据提示 -->

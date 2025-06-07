@@ -302,9 +302,6 @@
             />
             <button class="number-btn plus-btn" @tap.stop="increaseDays">+</button>
           </view>
-          <view class="price-calculation">
-            <text>预计费用: ¥{{ (rechargeForm.days * unitPrice).toFixed(2) }}</text>
-          </view>
         </view>
 		  
           <view class="form-buttons">

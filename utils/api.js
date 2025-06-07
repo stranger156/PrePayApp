@@ -396,3 +396,24 @@ export const updateDeviceInfo = async (data) => {
     }
   });
 }
+export const getLockedUser = async () => {
+  const token = await getTokenFromLocalStorage();
+  return request({
+    url: '/web/login/locked',
+    method: 'GET',
+    headers: {
+      "token": token
+    }
+  });
+}
+export const unlockUser = async (userName) => {
+	console.log(userName)
+  const token = await getTokenFromLocalStorage();
+  return request({
+    url: `/web/login/unlock/${userName}`,
+    method: 'PUT',
+    headers: {
+      "token": token
+    }
+  });
+}
