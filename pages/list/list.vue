@@ -141,7 +141,7 @@
               class="device-item"
             >
               <text class="device-name">{{ device.name }}</text>
-              <view class="device-info">
+             
                 <text>编号：{{ device.code }}</text>
                 <view class="device-actions">
                     <text 
@@ -167,7 +167,7 @@
 					  >删除设备</text>
 					  
                 </view>
-              </view>
+        <hr style="margin-top: 25rpx;"/>
             </view>
           </view>
         </scroll-view>
@@ -274,7 +274,7 @@
         </view>
         <form>
           <view class="form-item">
-            <label class="form-label">设备编号</label>
+            <label class="detail-label">设备编号：</label>
             <input 
               class="form-input" 
               type="text" 
@@ -289,22 +289,20 @@
           </view>
 		  
         <view class="form-item">
-          <label class="form-label">充值天数</label>
+          <label class="form-label">充值天数：</label>
           <view class="number-input-group">
             <button class="number-btn minus-btn" @tap.stop="decreaseDays">-</button>
             <input 
               class="form-input number-input" 
               type="number" 
               placeholder="输入天数" 
-              v-model.number="rechargeForm.days" 
-              min="1" 
+              v-model="rechargeForm.days" 
+              style="width:100rpx;"
               @input="validateDays"
             />
             <button class="number-btn plus-btn" @tap.stop="increaseDays">+</button>
           </view>
-          <view class="price-calculation">
-            <text>预计费用: ¥{{ (rechargeForm.days * unitPrice).toFixed(2) }}</text>
-          </view>
+     
         </view>
 		  
           <view class="form-buttons">
@@ -1369,11 +1367,12 @@ export default {
 	   // 增加表单验证方法
 	   validateDays() {
 	     let days = parseInt(this.rechargeForm.days);
-	     if (isNaN(days) || days < 1) {
+	     if ( days < 1) {
 	       this.rechargeForm.days = 1;
 	     } else {
 	       this.rechargeForm.days = days;
 	     }
+		 
 	   },
 	   
 	   // 增加递增/递减天数的方法
@@ -1609,10 +1608,7 @@ showPayDetail(device) {
       this.showDeviceDetailDialog = true;
       
       try {
-        console.log(device);
         const res = await getDetailDevices(device.code);
-		console.log(res.data)
-        console.log(res.data.tempDiffHistory.length)
 		let xarr=[]
 		let yarr=[]
 		for(let i=0;i<res.data.tempDiffHistory.length;i+=20){
@@ -2016,12 +2012,12 @@ closeRechargeDialog() {
 
 .device-info {
   display: flex;
-  justify-content: space-between;
   font-size: 24rpx;
   color: #666;
 }
 
 .device-actions {
+	margin-top: 10rpx;
   display: flex;
   gap: 15rpx;
 }
@@ -2029,8 +2025,9 @@ closeRechargeDialog() {
 .action-btn {
   color: #007AFF;
   text-align: center;
-  font-size: 24rpx;
-  padding: 5rpx 10rpx;
+  font-size: 25rpx;
+  margin-left: 5rpx;
+padding: 5rpx;
   border: 1rpx solid #007AFF;
   border-radius: 6rpx;
 }
@@ -2379,7 +2376,7 @@ closeRechargeDialog() {
 /* 修改设备信息区块的样式为浅灰色背景 */
 .detail-section {
   background-color: #f9f9f9;
-  padding: 0.46875rem 1.625rem;
+ padding: 20rpx 20rpx;
   border-radius: 8rpx;
 }
 
@@ -2407,7 +2404,7 @@ closeRechargeDialog() {
   align-items: center;
   margin: 10rpx 0;
   width: 60%;
-  border: 1px solid #ddd;
+/*  border: 1px solid #ddd; */
   border-radius: 8rpx;
   overflow: hidden;
   height: 80rpx;
@@ -2466,7 +2463,7 @@ closeRechargeDialog() {
   display: flex;
   justify-content: center;
   align-items: center;
-  /* z-index: 9999; /* 确保是最高层级 */
+  z-index: 9999; 
 }
 
 .confirm-dialog {
@@ -2519,7 +2516,7 @@ closeRechargeDialog() {
   color: #fff;
 }
 .chart-container {
-  width: 60vw;
+  width: 95%;
   height:auto; /* 使用视口高度单位 */
   min-height: 400rpx; /* 最小高度保障 */
   background-color: #fff; /* 修复背景色错误 */
@@ -2611,7 +2608,7 @@ closeRechargeDialog() {
 }
 
 .number-input {
-  flex: 0 0 80rpx; /* 减小输入框宽度 */
+  flex: 0 0 120rpx; /* 减小输入框宽度 */
   text-align: center;
   border-radius: 0;
   border-left: none;

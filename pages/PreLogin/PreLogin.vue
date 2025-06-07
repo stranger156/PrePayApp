@@ -5,9 +5,9 @@
 </template>
 
 <script setup>
-import { onMounted, getCurrentInstance } from 'vue';
-
-onMounted(() => {
+import { onMounted, getCurrentInstance} from 'vue';
+import { onShow } from '@dcloudio/uni-app'
+onShow(() => {
 	//实现定时页面跳转
   setTimeout(() => {
 	uni.navigateTo({
