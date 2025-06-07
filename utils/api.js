@@ -10,9 +10,6 @@ export const login = (params) => {
     });
 };
 
-
-
-
 // 获取公司列表接口
 export const fetchCompanyList =async()=> {
 	const token = await getTokenFromLocalStorage();

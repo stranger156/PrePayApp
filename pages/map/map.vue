@@ -40,14 +40,9 @@
    <view v-if="selectedStation" class="info-window">
    		 <view class="info-header">
    		    <text class="title">{{ selectedStation?.stationName || '加载中...' }}</text>
-   		   <!-- <uni-icons 
-   		       type="close" 
-   		       size="20" 
-   		       color="#999" 
-   		       @click="selectedStation = null"
-   		     ></uni-icons> -->
+   		
    		   </view>
-   		   
+   		 <!--  <button @click="openNavigation">开始导航</button> -->
    		   <view class="info-content">
    		     <view class="info-item">
    		       <text class="label">所属公司：</text>
@@ -55,7 +50,7 @@
    		     </view>
    		 		  <view class="info-item">
    		 		    <text class="label">负责人：</text>
-   		 		    <text class="value">{{ selectedStation.username }}</text>
+   		 		    <text class="value">{{ selectedStation.userName }}</text>
    		 		  </view>
    		 		  <view class="info-item">
    		 		    <text class="label">联系电话：</text>
@@ -63,7 +58,7 @@
    		 		  </view>
    		 		  <view class="info-item">
    		 		    <text class="label">详细地址：</text>
-   		 		    <text class="value">{{ selectedStation.address }}</text>
+   		 		    <text class="value" @click="openNavigation" style="color: royalblue;" >{{ selectedStation.address}}</text>
    		 		  </view>
    		 		  <view class="info-item">
    		 		    <text class="label">站点简介：</text>
@@ -94,22 +89,41 @@ const selectedStation = ref(null);
 const totalStations = ref(0);
 const input=ref(null)
 const authority = ref('')
-
+const isHover = ref(false);
 const mapCenter = ref({
   latitude: 0,
   longitude: 0
 });
 
 const markers = reactive([]);
+// 触摸开始 - 激活悬停状态
+const handleTouchStart = () => {
+  isHover.value = true;
+};
 
+// 触摸结束/取消 - 取消悬停状态
+const handleTouchEnd = () => {
+  isHover.value = false;
+};
 const stations = reactive([]);
+const openNavigation = () => {
 
+  uni.openLocation({
+    latitude:parseFloat(selectedStation.value.latitude),   // 目标纬度（必填）
+    longitude: parseFloat(selectedStation.value.longitude), // 目标经度（必填）
+    name: selectedStation.value.stationName,        // 位置名称
+    address: selectedStation.value.address, // 详细地址
+    success: () => console.log('打开地图成功'),
+    fail: (err) => console.error('打开地图失败', err)
+  });
+};
 // 处理标记点击
 const handleMarkerTap = (e) => {
 	if(e.detail.markerId===1)return 
   const markerId = e.detail.markerId;
  const station = stations.find(item => item.id === markerId);
    selectedStation.value=JSON.parse(JSON.stringify(station))
+   console.log(selectedStation.value)
     setTimeout(() => {
       selectedStation.value = {...selectedStation.value};
     }, 50);
@@ -149,7 +163,6 @@ const getLocation=()=>{
 	          });
 	        }
 	      })
-	
 }
 function start(){
 	getStationList().then(res=>{
@@ -165,14 +178,16 @@ function start(){
 				height: 10,
 				 anchor: { x: 0.5, y: 1 }
 	  })
-	  stations.push( { 
+	  stations.push({ 
 	    phone:item.phone,
 		company:item.company,
-	    id: index+1,
+	    id: index+2,
 		address: item.address,
 		detail: item.detail,
 		stationName: item.stationName,
-		userName: item.userName
+		userName: item.userName,
+		latitude: item.latitude,
+		longitude: item.longitude
 	  })
 		})
 	})
@@ -180,16 +195,15 @@ function start(){
 
 
 onMounted(()=>{
-	
 	getLocation();
 	start();
-
 })
 
 
 </script>
 
 <style lang="scss" scoped>
+
 .container {
   display: flex;
   flex-direction: column;
