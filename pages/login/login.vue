@@ -103,7 +103,7 @@ const loginButton=()=>{
 		saveNumber(res.data.userInfo.userNumber)
 		saveAuthority(res.data.userInfo.authority)
 		  uni.switchTab({
-		      url: '/pages/map/map' // 假设这是一个 tabBar 页面
+		      url: '/pages/maptest/maptest' // 假设这是一个 tabBar 页面
 		  })
 		  // uni.navigateTo({
 		  //     url: '/pages/select-location/select-location'

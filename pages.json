@@ -146,6 +146,13 @@
 			{
 				"navigationBarTitleText" : "换热站管理"
 			}
+		},
+		{
+			"path" : "pages/maptest/maptest",
+			"style" : 
+			{
+				"navigationBarTitleText" : "地图"
+			}
 		}
 		
 	],
@@ -164,7 +171,7 @@
 		 	 "fontSize": 0,   
 		 	"list": [
 		   {
-		     "pagePath": "pages/map/map",
+		     "pagePath": "pages/maptest/maptest",
 		     "iconPath": "static/map_icon_dark.png",
 		     "selectedIconPath": "/static/map_icon_blue.png"
 		   },

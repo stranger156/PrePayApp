@@ -25,8 +25,17 @@ export const fetchCompanyList =async()=> {
 		}
 	});
 };
-
-
+//获取公司状态图标颜色
+export const getStationColor = async () => {
+  const token = await getTokenFromLocalStorage();
+  return request({
+    url: '/web/stations/map',
+    method: 'GET',
+    headers: {
+      "token": token
+    }
+  });
+}
 
 
 // 添加公司接口

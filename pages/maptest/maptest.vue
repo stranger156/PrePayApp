@@ -28,7 +28,7 @@
     <view class="map-container">
      <map 
        id="stationMap"
-       style="width: 100%; height:60%;"
+       style="width: 100%; height:65%;"
        :latitude="mapCenter.latitude"
        :longitude="mapCenter.longitude"
        :markers="markers"
@@ -66,11 +66,7 @@
    		 		  </view>
    		     <view class="info-item">
    		       <text class="label">设备状态：</text>
-   		       <text class="value status-active">正常运行</text>
-   		     </view>
-   		     <view class="info-item">
-   		       <text class="label">最后上报：</text>
-   		       <text class="value">2023-08-20 14:30</text>
+   		       <text class="value status-active" :style="`color: ${getcolor(selectedStation.color)}`">{{getstatus(selectedStation.color)}}</text>
    		     </view>
    		   </view>
 </view> 
@@ -81,7 +77,7 @@
 <script setup>
 import { onMounted, reactive, ref ,onUnmounted, onBeforeUpdate} from 'vue';
 import uniIcons from '@dcloudio/uni-ui/lib/uni-icons/uni-icons.vue'
-import { fetchCompanyList, getStationDevices, getStationList } from '../../utils/api';
+import { fetchCompanyList, getStationColor, getStationDevices, getStationList } from '../../utils/api';
 import { getAuthority } from '../../store/user';
 import { onShow } from '@dcloudio/uni-app'
 // 响应式数据
@@ -96,18 +92,10 @@ const mapCenter = ref({
 });
 
 const markers = reactive([]);
-// 触摸开始 - 激活悬停状态
-const handleTouchStart = () => {
-  isHover.value = true;
-};
 
-// 触摸结束/取消 - 取消悬停状态
-const handleTouchEnd = () => {
-  isHover.value = false;
-};
 const stations = reactive([]);
+const stationList=ref(null)
 const openNavigation = () => {
-
   uni.openLocation({
     latitude:parseFloat(selectedStation.value.latitude),   // 目标纬度（必填）
     longitude: parseFloat(selectedStation.value.longitude), // 目标经度（必填）
@@ -122,13 +110,27 @@ const handleMarkerTap = (e) => {
 	if(e.detail.markerId===1)return 
   const markerId = e.detail.markerId;
  const station = stations.find(item => item.id === markerId);
-   selectedStation.value=JSON.parse(JSON.stringify(station))
-   console.log(selectedStation.value)
-    setTimeout(() => {
-      selectedStation.value = {...selectedStation.value};
-    }, 50);
+ selectedStation.value=stationList.value.find(item=>item.stationName===station.stationName)
+ selectedStation.value.color=station.color
+ mapCenter.value.latitude=selectedStation.value.latitude
+ mapCenter.value.longitude=selectedStation.value.longitude
 };
-
+const getstatus=(color)=>{
+	if(color=="红色")return "两天未上传数据"
+	if(color=="蓝色")return "停机"
+	if(color=="灰色")return "离线"
+	if(color=="绿色")return "温差绝对值大于两度"
+	if(color=="浅绿色")return "正常运行"
+	if(color=="黄色")return "余额不足"
+}
+const getcolor=(color)=>{
+	if(color=="红色")return "red"
+	if(color=="蓝色")return "blue"
+	if(color=="灰色")return "grey"
+	if(color=="绿色")return "green"
+	if(color=="浅绿色")return "lightgreen"
+	if(color=="黄色")return "yellow"
+}
 // 在script中添加
 const handleMapTap = () => {
   selectedStation.value = null;
@@ -136,7 +138,18 @@ const handleMapTap = () => {
 
 //处理输入框
 const handleEnter=()=>{
-	selectedStation.value = stations.find(item => item.address.includes(input.value.toLowerCase()))||null;
+ const station=stations.find(item => item.stationName.includes(input.value.toLowerCase()))||null;
+ if(station===null){
+	 uni.showToast({
+	   title: '无相关站点',
+	   icon: 'none'
+	 });
+	 return
+ }
+	selectedStation.value = stationList.value.find(item=>item.stationName===station.stationName)
+	 selectedStation.value.color=station.color
+	mapCenter.value.latitude=selectedStation.value.latitude
+	mapCenter.value.longitude=selectedStation.value.longitude
 }
 const getLocation=()=>{
 	 uni.getLocation({
@@ -165,41 +178,97 @@ const getLocation=()=>{
 	      })
 }
 function start(){
-	getStationList().then(res=>{
-		console.log(res)
-		totalStations.value=res.data.records.length
-		res.data.records.forEach((item,index)=>{
-			getStationDevices(item.stationName).then(res=>{
-				console.log(res.data)
-			})
+getStationColor().then(res=>{
+	totalStations.value=res.data.length;
+	res.data.forEach((item,index)=>{
+		if(item.color=="红色"){
 			markers.push({
-				id: index+2,
-				latitude: item.latitude,
-				longitude: item.longitude,
-				iconPath: '../../static/red.png',
-				width: 10,
-				height: 10,
-				 anchor: { x: 0.5, y: 1 }
-	  })
-	  stations.push({ 
-	    phone:item.phone,
-		company:item.company,
-	    id: index+2,
-		address: item.address,
-		detail: item.detail,
-		stationName: item.stationName,
-		userName: item.userName,
-		latitude: item.latitude,
-		longitude: item.longitude
-	  })
+							id: index+2,
+							latitude: item.latitude,
+							longitude: item.longitude,
+							stationName:item.stationName,
+							iconPath: '../../static/red.png',
+							width: 10,
+							height: 10,
+							 anchor: { x: 0.5, y: 1 }
+			})
+		}
+		if(item.color=="黄色"){
+			markers.push({
+							id: index+2,
+							latitude: item.latitude,
+							longitude: item.longitude,
+							stationName:item.stationName,
+							iconPath: '../../static/yellow.png',
+							width: 10,
+							height: 10,
+							 anchor: { x: 0.5, y: 1 }
+			})
+		}
+		if(item.color=="浅绿色"){
+			markers.push({
+							id: index+2,
+							latitude: item.latitude,
+							longitude: item.longitude,
+							stationName:item.stationName,
+							iconPath: '../../static/green.png',
+							width: 10,
+							height: 10,
+							 anchor: { x: 0.5, y: 1 }
+			})
+		}
+		if(item.color=="绿色"){
+			markers.push({
+							id: index+2,
+							latitude: item.latitude,
+							longitude: item.longitude,
+							stationName:item.stationName,
+							iconPath: '../../static/yellow.png',
+							width: 10,
+							height: 10,
+							 anchor: { x: 0.5, y: 1 }
+			})
+		}
+		if(item.color=="蓝色"){
+			markers.push({
+							id: index+2,
+							latitude: item.latitude,
+							longitude: item.longitude,
+							stationName:item.stationName,
+							iconPath: '../../static/blue.png',
+							width: 10,
+							height: 10,
+							 anchor: { x: 0.5, y: 1 }
+			})
+		}
+		if(item.color=="灰色"){
+			markers.push({
+							id: index+2,
+							latitude: item.latitude,
+							longitude: item.longitude,
+							stationName:item.stationName,
+							iconPath: '../../static/grey.png',
+							width: 10,
+							height: 10,
+							 anchor: { x: 0.5, y: 1 }
+			})
+		}
+		stations.push({
+		  id: index+2,
+		  color:item.color,
+		  stationName:item.stationName
 		})
 	})
+})
 }
 
 
 onMounted(()=>{
 	getLocation();
 	start();
+	getStationList().then(res=>{
+		stationList.value=res.data.records
+	})
 })
 // onShow(()=>{
 // 	start();
