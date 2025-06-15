@@ -213,10 +213,9 @@
 
 				  <!-- 地址 -->
 				  <view class="form-item">
-					  <text class="label">* 换热站地址</text>
+					  <text class="label">换热站地址</text>
 					  <uni-easyinput 
 						  v-model="editForm.address" 
-						  :disabled="true"
 					  />
 					  <text class="tip" v-if="editForm.longitude">地址已通过经纬度自动填充</text>
 				  </view>
@@ -461,7 +460,6 @@ const submitEdit = async () => {
     const requiredFields = [
         { field: 'userName', name: '负责人' },
         { field: 'phone', name: '联系方式' },
-        { field: 'address', name: '地址' },
 		{ field: 'detail', name: '换热站简介'}
     ]
     
