@@ -159,6 +159,7 @@
                       <text 
                         class="action-btn" 
                         @tap.stop="showPayDetail(device)"
+						v-if="ifshow"
                       >充值</text>
 					  
 					<text 
@@ -766,11 +767,13 @@
 </template>
 
 <script>
+import { getAuthority } from '../../store/user';
 import { getStationList,getStationDevices,getDetailDevices,getDeviceInstallInfo, chargeDevice, charge, updateDeviceInfo} from '@/utils/api';
 
 export default {
   data() {
     return {
+		ifshow:false,
 			 originalDeviceList: [],
 			    // 当前显示的数据列表 - 用于显示过滤后的结果
 			    deviceList: [],
@@ -1740,11 +1743,22 @@ closeRechargeDialog() {
         this.pagination.current = targetPage;
         this.jumpPage = null;
         this.updateCurrentPageData();
-      }
+      },
+	  async getResult(){
+	  	const result=await getAuthority();
+		if(result==='superadmin'){
+			this.ifshow=true
+		}
+	  }
     },
+
   onLoad() {
+	 
     this.loadDeviceData();
+this.getResult()
+
   }
+  
 };
 </script>
 
